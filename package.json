@@ -1,12 +1,15 @@
 {
   "name": "noor-landingpage",
+  "homepage": "https://noor-landingPage.github.io/noor-landingPage",
   "version": "0.1.0",
   "private": true,
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist"
   },
   "dependencies": {
     "framer-motion": "^12.38.0",

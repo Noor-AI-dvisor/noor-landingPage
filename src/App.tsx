@@ -22,10 +22,8 @@ export default function App() {
         background: "var(--pg)",
       }}
     >
-      {/* <PageBackground /> */}
       <Nav />
       <HeroSection />
-      {/* <ProblemSection /> */}
       <SolutionSection />
       <WhoSection />
       <EarlyAccessSection />

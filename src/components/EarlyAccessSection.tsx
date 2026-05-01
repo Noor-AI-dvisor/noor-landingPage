@@ -168,7 +168,7 @@ export default function EarlyAccessSection() {
             ))}
           </motion.div>
 
-          <motion.div
+          {/* <motion.div
             variants={fadeUp}
             style={{
               marginTop: 40,
@@ -225,6 +225,7 @@ export default function EarlyAccessSection() {
               </div>
             </div>
           </motion.div>
+         */}
         </motion.div>
 
         {/* Right: Form card */}

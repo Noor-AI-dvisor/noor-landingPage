@@ -122,7 +122,7 @@ export default function Nav() {
           }}
         >
           <img
-            src="/logo-horizontal.png"
+            src={`${import.meta.env.BASE_URL}logo-horizontal.png`}
             alt="Noor"
             style={{ height: 32, width: "auto", maxWidth: 140, objectFit: "contain" }}
           />

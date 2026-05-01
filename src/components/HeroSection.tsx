@@ -1,7 +1,6 @@
 import { useRef, useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { EASE_SPRING, stagger, fadeUp, scrollTo } from "@/lib/motion";
-import SectionBadge from "@/components/SectionBadge";
 import WhoSection from "./WhoSection";
 import HeroAppMock from "./HeroAppMock";
 
@@ -9,10 +8,12 @@ function HeroInner({
   compact = false,
   noConstrainHeight = false,
   isMobile = false,
+  mockScale = 1,
 }: {
   compact?: boolean;
   noConstrainHeight?: boolean;
   isMobile?: boolean;
+  mockScale?: number;
 }) {
   return (
     <section
@@ -30,10 +31,8 @@ function HeroInner({
         paddingLeft: compact ? "clamp(16px, 4vw, 48px)" : "clamp(24px, 8vw, 120px)",
         paddingRight: compact ? "clamp(16px, 4vw, 48px)" : "clamp(24px, 8vw, 120px)",
         display: "grid",
-        gridTemplateColumns: compact
-          ? "1fr 1fr"
-          : "repeat(auto-fit, minmax(min(100%, 520px), 1fr))",
-        gap: compact ? "clamp(16px, 3vw, 40px)" : "clamp(56px, 7vw, 112px)",
+        gridTemplateColumns: "1fr 1fr",
+        gap: compact ? "clamp(16px, 3vw, 40px)" : "clamp(40px, 5vw, 80px)",
         alignItems: "center",
         overflowY: noConstrainHeight ? "visible" : "hidden",
         ...(isMobile && { display: "flex", flexDirection: "column", alignItems: "center" }),
@@ -47,24 +46,39 @@ function HeroInner({
         style={isMobile ? { display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center" } : {}}
       >
         <motion.div variants={fadeUp}>
-          <SectionBadge
-            label={compact ? "AI Career + Skills for Schools" : "AI Career + Skills Companion for Schools"}
-          />
+          <span
+            style={{
+              display: "inline-block",
+              fontSize: 11,
+              fontWeight: 800,
+              letterSpacing: "0.14em",
+              textTransform: "uppercase",
+              color: "var(--lb-c)",
+              background: "var(--lb-bg)",
+              border: "1px solid var(--lb-br)",
+              borderRadius: 9999,
+              padding: "5px 14px",
+              marginBottom: 24,
+            }}
+          >
+            {compact ? "AI Career + Skills for Schools" : "AI Career + Skills Companion for Schools"}
+          </span>
         </motion.div>
 
         <motion.h1
           variants={fadeUp}
           style={{
-            fontWeight: 900,
+            fontFamily: "Instrument Serif, serif",
             color: "var(--t-h)",
             width: "100%",
-            fontSize: compact ? "clamp(26px, 3.2vw, 44px)" : "clamp(38px, 4.8vw, 64px)",
-            lineHeight: 1.04,
-            letterSpacing: compact ? "-1.5px" : "-2.5px",
-            marginBottom: compact ? 14 : 22,
+            fontSize: compact ? "clamp(26px, 3.2vw, 44px)" : "clamp(34px, 4.5vw, 58px)",
+            lineHeight: 1.12,
+            letterSpacing: "-0.02em",
+            marginBottom: compact ? 14 : 20,
           }}
         >
-          Noor <span className="animate-shimmer">AI Career & Skills</span>
+          Noor{" "}
+          <em style={{ color: "var(--a)", fontStyle: "italic" }}>AI Career & Skills</em>
           <br />
           Companion for Schools
         </motion.h1>
@@ -74,9 +88,9 @@ function HeroInner({
           style={{
             color: "var(--t-b)",
             fontWeight: 500,
-            lineHeight: 1.78,
-            fontSize: compact ? "clamp(12px, 1vw, 14px)" : "clamp(15px, 1.15vw, 17px)",
-            maxWidth: compact ? 340 : 480,
+            lineHeight: 1.75,
+            fontSize: compact ? "clamp(12px, 1vw, 14px)" : "clamp(15px, 1.1vw, 17px)",
+            maxWidth: compact ? 340 : 520,
             marginBottom: compact ? 24 : 38,
             ...(isMobile && { margin: "0 auto", marginBottom: compact ? 24 : 38 }),
           }}
@@ -156,9 +170,12 @@ function HeroInner({
                 alignItems: "center",
                 gap: 7,
                 borderRadius: 9999,
-                background: "var(--card-active)",
+                background: "var(--card)",
                 border: "1px solid var(--card-border)",
                 padding: compact ? "5px 10px" : "6px 14px",
+                backdropFilter: "blur(12px)",
+                WebkitBackdropFilter: "blur(12px)",
+                boxShadow: "0 2px 16px var(--card-shadow)",
               }}
             >
               <span style={{ fontSize: compact ? 12 : 14 }}>{chip.icon}</span>
@@ -206,7 +223,11 @@ function HeroInner({
       </motion.div>
 
       {/* Right – App mockup */}
-      {!isMobile && <HeroAppMock compact={compact} />}
+      {!isMobile && (
+        <div style={{ zoom: mockScale, transformOrigin: "center right" }}>
+          <HeroAppMock compact={compact} />
+        </div>
+      )}
     </section>
   );
 }
@@ -223,7 +244,7 @@ export default function HeroSection() {
     const update = () => {
       const w = window.innerWidth;
       setScreenWidth(w);
-      isMobileRef.current = w < 1024;
+      isMobileRef.current = w < 1048;
     };
     update();
     window.addEventListener("resize", update);
@@ -311,8 +332,12 @@ export default function HeroSection() {
     return () => window.removeEventListener("noor:splitAndGo", onSplitAndGo);
   }, []);
 
-  const isMobile = screenWidth < 1024;
-  const isCompact = screenWidth < 1060;
+  const isMobile = screenWidth < 1048;
+  const isCompact = screenWidth < 1200;
+  const mockScale =
+    screenWidth >= 1344
+      ? 1
+      : Math.max(0.62, 0.62 + ((screenWidth - 1048) / (1344 - 1048)) * 0.38);
 
   if (isMobile) {
     return (
@@ -366,7 +391,7 @@ export default function HeroSection() {
           transform: `translateX(${-progress * 50}%)`,
         }}
       >
-        <HeroInner compact={isCompact} isMobile={isMobile} />
+        <HeroInner compact={isCompact} isMobile={isMobile} mockScale={mockScale} />
       </div>
 
       {/* Right door */}
@@ -383,7 +408,7 @@ export default function HeroSection() {
           transform: `translateX(${progress * 50}%)`,
         }}
       >
-        <HeroInner compact={isCompact} />
+        <HeroInner compact={isCompact} mockScale={mockScale} />
       </div>
     </div>
   );

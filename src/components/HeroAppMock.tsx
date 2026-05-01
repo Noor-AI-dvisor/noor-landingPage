@@ -58,7 +58,7 @@ export default function HeroAppMock({
         >
           <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
             <img
-              src="/logo-primary.png"
+              src={`${import.meta.env.BASE_URL}logo-primary.png`}
               alt="Noor"
               style={{
                 height: compact ? 32 : 48,

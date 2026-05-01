@@ -1,7 +1,7 @@
 import { useRef, useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { EASE_SPRING, stagger, fadeUp, scrollTo } from "@/lib/motion";
-import WhoSection from "./WhoSection";
+import ProblemSection from "./ProblemSection";
 import HeroAppMock from "./HeroAppMock";
 
 function HeroInner({
@@ -20,7 +20,7 @@ function HeroInner({
       style={{
         position: "relative",
         zIndex: 10,
-        background: "var(--hero-bg)",
+        background: isMobile ? "var(--pg)" : "var(--hero-bg)",
         height: noConstrainHeight ? "auto" : "100dvh",
         paddingTop: noConstrainHeight
           ? "calc(64px + clamp(40px, 6vh, 72px))"
@@ -28,14 +28,22 @@ function HeroInner({
         paddingBottom: noConstrainHeight
           ? "clamp(48px, 6vh, 72px)"
           : "clamp(64px, 9vh, 104px)",
-        paddingLeft: compact ? "clamp(16px, 4vw, 48px)" : "clamp(24px, 8vw, 120px)",
-        paddingRight: compact ? "clamp(16px, 4vw, 48px)" : "clamp(24px, 8vw, 120px)",
+        paddingLeft: compact
+          ? "clamp(16px, 4vw, 48px)"
+          : "clamp(24px, 8vw, 120px)",
+        paddingRight: compact
+          ? "clamp(16px, 4vw, 48px)"
+          : "clamp(24px, 8vw, 120px)",
         display: "grid",
         gridTemplateColumns: "1fr 1fr",
         gap: compact ? "clamp(16px, 3vw, 40px)" : "clamp(40px, 5vw, 80px)",
         alignItems: "center",
         overflowY: noConstrainHeight ? "visible" : "hidden",
-        ...(isMobile && { display: "flex", flexDirection: "column", alignItems: "center" }),
+        ...(isMobile && {
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "flex-start",
+        }),
       }}
     >
       {/* Left */}
@@ -43,42 +51,34 @@ function HeroInner({
         initial="hidden"
         animate="show"
         variants={stagger}
-        style={isMobile ? { display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center" } : {}}
+        style={
+          isMobile
+            ? {
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "flex-start",
+              }
+            : {}
+        }
       >
-        <motion.div variants={fadeUp}>
-          <span
-            style={{
-              display: "inline-block",
-              fontSize: 11,
-              fontWeight: 800,
-              letterSpacing: "0.14em",
-              textTransform: "uppercase",
-              color: "var(--lb-c)",
-              background: "var(--lb-bg)",
-              border: "1px solid var(--lb-br)",
-              borderRadius: 9999,
-              padding: "5px 14px",
-              marginBottom: 24,
-            }}
-          >
-            {compact ? "AI Career + Skills for Schools" : "AI Career + Skills Companion for Schools"}
-          </span>
-        </motion.div>
-
         <motion.h1
           variants={fadeUp}
           style={{
             fontFamily: "Instrument Serif, serif",
             color: "var(--t-h)",
             width: "100%",
-            fontSize: compact ? "clamp(26px, 3.2vw, 44px)" : "clamp(34px, 4.5vw, 58px)",
+            fontSize: compact
+              ? "clamp(26px, 3.2vw, 44px)"
+              : "clamp(34px, 4.5vw, 58px)",
             lineHeight: 1.12,
             letterSpacing: "-0.02em",
             marginBottom: compact ? 14 : 20,
           }}
         >
           Noor{" "}
-          <em style={{ color: "var(--a)", fontStyle: "italic" }}>AI Career & Skills</em>
+          <em style={{ color: "var(--a)", fontStyle: "italic" }}>
+            AI Career & Skills
+          </em>
           <br />
           Companion for Schools
         </motion.h1>
@@ -89,10 +89,15 @@ function HeroInner({
             color: "var(--t-b)",
             fontWeight: 500,
             lineHeight: 1.75,
-            fontSize: compact ? "clamp(12px, 1vw, 14px)" : "clamp(15px, 1.1vw, 17px)",
+            fontSize: compact
+              ? "clamp(12px, 1vw, 14px)"
+              : "clamp(15px, 1.1vw, 17px)",
             maxWidth: compact ? 340 : 520,
             marginBottom: compact ? 24 : 38,
-            ...(isMobile && { margin: "0 auto", marginBottom: compact ? 24 : 38 }),
+            ...(isMobile && {
+              margin: "0 auto",
+              marginBottom: compact ? 24 : 38,
+            }),
           }}
         >
           An AI-powered advisor that helps students aged 14–18 choose the right
@@ -111,7 +116,10 @@ function HeroInner({
         >
           <motion.button
             onClick={() => scrollTo("early-access")}
-            whileHover={{ scale: 1.03, boxShadow: "0 10px 28px rgba(29,158,117,0.4)" }}
+            whileHover={{
+              scale: 1.03,
+              boxShadow: "0 10px 28px rgba(29,158,117,0.4)",
+            }}
             whileTap={{ scale: 0.97 }}
             style={{
               border: "none",
@@ -124,13 +132,18 @@ function HeroInner({
               borderRadius: 10,
               padding: compact ? "11px 22px" : "15px 34px",
               fontSize: compact ? 12 : 14,
+              ...(isMobile && { marginTop: 20 }),
             }}
           >
             Request a free demo →
           </motion.button>
           <motion.button
             onClick={() => scrollTo("solution")}
-            whileHover={{ borderColor: "#1D9E75", color: "#1D9E75", background: "#F0FDF4" }}
+            whileHover={{
+              borderColor: "#1D9E75",
+              color: "#1D9E75",
+              background: "#F0FDF4",
+            }}
             whileTap={{ scale: 0.97 }}
             style={{
               border: "1.5px solid var(--card-border)",
@@ -142,6 +155,7 @@ function HeroInner({
               borderRadius: 10,
               padding: compact ? "11px 22px" : "15px 34px",
               fontSize: compact ? 12 : 14,
+              ...(isMobile && { marginTop: 20 }),
             }}
           >
             See How It Works
@@ -179,7 +193,13 @@ function HeroInner({
               }}
             >
               <span style={{ fontSize: compact ? 12 : 14 }}>{chip.icon}</span>
-              <span style={{ fontWeight: 700, color: "var(--t-b)", fontSize: compact ? 10 : 12 }}>
+              <span
+                style={{
+                  fontWeight: 700,
+                  color: "var(--t-b)",
+                  fontSize: compact ? 10 : 12,
+                }}
+              >
                 {chip.text}
               </span>
             </div>
@@ -213,7 +233,14 @@ function HeroInner({
                 border: `1px solid ${b.color}28`,
               }}
             >
-              <div style={{ width: 5, height: 5, borderRadius: 9999, background: b.color }} />
+              <div
+                style={{
+                  width: 5,
+                  height: 5,
+                  borderRadius: 9999,
+                  background: b.color,
+                }}
+              />
               <span style={{ fontSize: 11, fontWeight: 700, color: b.color }}>
                 {b.label}
               </span>
@@ -256,7 +283,11 @@ export default function HeroSection() {
       if (doneRef.current || isMobileRef.current) return;
       e.preventDefault();
       const raw =
-        e.deltaMode === 1 ? e.deltaY * 40 : e.deltaMode === 2 ? e.deltaY * 600 : e.deltaY;
+        e.deltaMode === 1
+          ? e.deltaY * 40
+          : e.deltaMode === 2
+            ? e.deltaY * 600
+            : e.deltaY;
       const next = Math.max(0, Math.min(1, progressRef.current + raw / 500));
       progressRef.current = next;
       setProgress(next);
@@ -343,7 +374,7 @@ export default function HeroSection() {
     return (
       <div style={{ position: "relative", zIndex: 20 }}>
         <HeroInner compact={false} noConstrainHeight isMobile={isMobile} />
-        <WhoSection />
+        <ProblemSection />
       </div>
     );
   }
@@ -353,7 +384,14 @@ export default function HeroSection() {
   const revealRadius = (1 - progress) * 28;
 
   return (
-    <div style={{ height: "100dvh", position: "relative", zIndex: 20, overflow: "hidden" }}>
+    <div
+      style={{
+        height: "100dvh",
+        position: "relative",
+        zIndex: 20,
+        overflow: "hidden",
+      }}
+    >
       {/* Reveal layer — Who section teaser */}
       <div
         style={{
@@ -374,7 +412,7 @@ export default function HeroSection() {
           borderRadius: revealRadius,
         }}
       >
-        <WhoSection />
+        <ProblemSection />
       </div>
 
       {/* Left door */}
@@ -391,7 +429,11 @@ export default function HeroSection() {
           transform: `translateX(${-progress * 50}%)`,
         }}
       >
-        <HeroInner compact={isCompact} isMobile={isMobile} mockScale={mockScale} />
+        <HeroInner
+          compact={isCompact}
+          isMobile={isMobile}
+          mockScale={mockScale}
+        />
       </div>
 
       {/* Right door */}

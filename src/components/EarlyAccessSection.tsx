@@ -13,7 +13,7 @@ const BENEFITS = [
 const LIGHT_AVATARS = [
   { bg: "#1D9E75", emoji: "🏫" },
   { bg: "#2B43BD", emoji: "🎓" },
-  { bg: "#4FD1C5", emoji: "🌍" },
+  { bg: "#87D5CF", emoji: "🌍" },
   { bg: "#F59E0B", emoji: "⭐" },
 ];
 
@@ -36,7 +36,7 @@ export default function EarlyAccessSection() {
     if (!email) return;
     const subject = encodeURIComponent("Early Access Request — Noor AI");
     const body = encodeURIComponent(
-      `Contact email: ${email}\n\nInterested in a free pilot.`,
+      `Contact email: ${email}\n\nInterested in a free Demo.`,
     );
     window.location.href = `mailto:nooraiadvisor@gmail.com?subject=${subject}&body=${body}`;
     setSubmitted(true);
@@ -103,7 +103,8 @@ export default function EarlyAccessSection() {
           >
             Ready to bringge
             <br />
-            <em style={{ color: "var(--a)", fontStyle: "italic" }}>Noor</em> to your school?
+            <em style={{ color: "var(--a)", fontStyle: "italic" }}>Noor</em> to
+            your school?
           </motion.h2>
 
           <motion.p
@@ -117,13 +118,19 @@ export default function EarlyAccessSection() {
               fontWeight: 500,
             }}
           >
-            We&apos;re running free pilots with selected schools right now. Be
+            We&apos;re running free Demos with selected schools right now. Be
             among the first to see Noor in action — no commitment required.
           </motion.p>
 
-          <motion.div variants={fadeUp} style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+          <motion.div
+            variants={fadeUp}
+            style={{ display: "flex", flexDirection: "column", gap: 16 }}
+          >
             {BENEFITS.map((b) => (
-              <div key={b} style={{ display: "flex", alignItems: "center", gap: 20 }}>
+              <div
+                key={b}
+                style={{ display: "flex", alignItems: "center", gap: 20 }}
+              >
                 <div
                   style={{
                     width: 22,
@@ -147,7 +154,14 @@ export default function EarlyAccessSection() {
                     />
                   </svg>
                 </div>
-                <span style={{ fontSize: 14, color: "var(--t-b)", fontWeight: 500, lineHeight: 1.4 }}>
+                <span
+                  style={{
+                    fontSize: 14,
+                    color: "var(--t-b)",
+                    fontWeight: 500,
+                    lineHeight: 1.4,
+                  }}
+                >
                   {b}
                 </span>
               </div>
@@ -189,10 +203,24 @@ export default function EarlyAccessSection() {
               ))}
             </div>
             <div>
-              <div style={{ fontSize: 13, fontWeight: 700, color: "var(--t-h)", lineHeight: 1.3 }}>
+              <div
+                style={{
+                  fontSize: 13,
+                  fontWeight: 700,
+                  color: "var(--t-h)",
+                  lineHeight: 1.3,
+                }}
+              >
                 20+ schools exploring early access
               </div>
-              <div style={{ fontSize: 11, color: "var(--t-s)", fontWeight: 500, marginTop: 2 }}>
+              <div
+                style={{
+                  fontSize: 11,
+                  color: "var(--t-s)",
+                  fontWeight: 500,
+                  marginTop: 2,
+                }}
+              >
                 Join the waitlist today
               </div>
             </div>
@@ -219,7 +247,8 @@ export default function EarlyAccessSection() {
                 padding: "56px 40px",
                 textAlign: "center",
                 border: "1px solid var(--card-border)",
-                boxShadow: "0 20px 60px rgba(29,158,117,0.1),0 4px 16px var(--card-shadow)",
+                boxShadow:
+                  "0 20px 60px rgba(29,158,117,0.1),0 4px 16px var(--card-shadow)",
               }}
             >
               <div style={{ fontSize: 56, marginBottom: 20 }}>🎉</div>
@@ -233,9 +262,11 @@ export default function EarlyAccessSection() {
               >
                 You&apos;re on the list!
               </h3>
-              <p style={{ fontSize: 15, color: "var(--t-b)", lineHeight: 1.75 }}>
+              <p
+                style={{ fontSize: 15, color: "var(--t-b)", lineHeight: 1.75 }}
+              >
                 We&apos;ll reach out within <strong>48 hours</strong> to discuss
-                your school&apos;s free pilot. Exciting things ahead!
+                your school&apos;s free Demo. Exciting things ahead!
               </p>
             </motion.div>
           ) : (
@@ -247,7 +278,8 @@ export default function EarlyAccessSection() {
                 borderRadius: 28,
                 padding: "44px 40px",
                 border: "1px solid var(--card-border)",
-                boxShadow: "0 20px 60px rgba(29,158,117,0.08),0 4px 20px var(--card-shadow)",
+                boxShadow:
+                  "0 20px 60px rgba(29,158,117,0.08),0 4px 20px var(--card-shadow)",
               }}
             >
               <div style={{ textAlign: "center", marginBottom: 32 }}>
@@ -261,14 +293,24 @@ export default function EarlyAccessSection() {
                     marginBottom: 8,
                   }}
                 >
-                  Request your free pilot
+                  Request your free Demo
                 </h3>
-                <p style={{ fontSize: 13, color: "var(--t-s)", fontWeight: 500, lineHeight: 1.5 }}>
+                <p
+                  style={{
+                    fontSize: 13,
+                    color: "var(--t-s)",
+                    fontWeight: 500,
+                    lineHeight: 1.5,
+                  }}
+                >
                   No credit card · No setup fee · Reply within 48 hrs
                 </p>
               </div>
 
-              <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+              <form
+                onSubmit={handleSubmit}
+                style={{ display: "flex", flexDirection: "column", gap: 14 }}
+              >
                 <input
                   type="email"
                   required
@@ -288,12 +330,17 @@ export default function EarlyAccessSection() {
                     background: "var(--in-bg)",
                     transition: "border-color 0.2s, box-shadow 0.2s",
                     border: `1.5px solid ${focused ? "var(--a-teal)" : "var(--in-border)"}`,
-                    boxShadow: focused ? "0 0 0 4px rgba(79,209,197,0.12)" : "none",
+                    boxShadow: focused
+                      ? "0 0 0 4px rgba(79,209,197,0.12)"
+                      : "none",
                   }}
                 />
                 <motion.button
                   type="submit"
-                  whileHover={{ y: -2, boxShadow: "0 16px 40px rgba(29,158,117,0.35)" }}
+                  whileHover={{
+                    y: -2,
+                    boxShadow: "0 16px 40px rgba(29,158,117,0.35)",
+                  }}
                   whileTap={{ scale: 0.98 }}
                   style={{
                     width: "100%",
@@ -307,18 +354,34 @@ export default function EarlyAccessSection() {
                     fontFamily: "Montserrat, sans-serif",
                     letterSpacing: "0.01em",
                     boxShadow: "0 6px 20px rgba(29,158,117,0.28)",
-                    background: "linear-gradient(135deg, #1D9E75 0%, #15896A 100%)",
+                    background:
+                      "linear-gradient(135deg, #1D9E75 0%, #15896A 100%)",
                   }}
                 >
-                  Request Free Pilot →
+                  Request Free Demo →
                 </motion.button>
-                <div style={{ display: "flex", gap: 14, justifyContent: "center", flexWrap: "wrap", paddingTop: 4 }}>
+                <div
+                  style={{
+                    display: "flex",
+                    gap: 14,
+                    justifyContent: "center",
+                    flexWrap: "wrap",
+                    paddingTop: 4,
+                  }}
+                >
                   {[
                     "✅ No credit card",
                     "📅 Flexible timing",
                     "🤝 Onboarding included",
                   ].map((t) => (
-                    <span key={t} style={{ fontSize: 11, color: "var(--t-s)", fontWeight: 600 }}>
+                    <span
+                      key={t}
+                      style={{
+                        fontSize: 11,
+                        color: "var(--t-s)",
+                        fontWeight: 600,
+                      }}
+                    >
                       {t}
                     </span>
                   ))}

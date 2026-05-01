@@ -2,14 +2,30 @@ import { motion } from "framer-motion";
 import { stagger, fadeUp } from "@/lib/motion";
 
 const PROBLEM_ITEMS = [
-  { emoji: "😕", title: "Students guess, not choose", accent: "#F97316",
-    desc: 'Most teens pick subjects based on friends or "what seems easier" — not a clear link to their strengths or future careers.' },
-  { emoji: "⏳", title: "Counsellors are stretched", accent: "#EF4444",
-    desc: "One counsellor supports hundreds of students — repeating the same basic conversations instead of doing meaningful guidance." },
-  { emoji: "📄", title: "Static tools for dynamic choices", accent: "#8B5CF6",
-    desc: "Subject options live in long PDFs. There's no interactive way to test the fit between a student's profile and their future options." },
-  { emoji: "📊", title: "Leadership has no visibility", accent: "#3B82F6",
-    desc: "School leaders can't easily see which cohorts are confident, which domains are in demand, or who still needs support." },
+  {
+    emoji: "😕",
+    title: "Students guess, not choose",
+    accent: "#F97316",
+    desc: 'Most teens pick subjects based on friends or "what seems easier" — not a clear link to their strengths or future careers.',
+  },
+  {
+    emoji: "⏳",
+    title: "Counsellors are stretched",
+    accent: "#EF4444",
+    desc: "One counsellor supports hundreds of students — repeating the same basic conversations instead of doing meaningful guidance.",
+  },
+  {
+    emoji: "📄",
+    title: "Static tools for dynamic choices",
+    accent: "#8B5CF6",
+    desc: "Subject options live in long PDFs. There's no interactive way to test the fit between a student's profile and their future options.",
+  },
+  {
+    emoji: "📊",
+    title: "Leadership has no visibility",
+    accent: "#3B82F6",
+    desc: "School leaders can't easily see which cohorts are confident, which domains are in demand, or who still needs support.",
+  },
 ];
 
 export default function ProblemSection() {
@@ -18,8 +34,6 @@ export default function ProblemSection() {
       id="problem"
       style={{
         background: "transparent",
-        borderTop: "1px solid var(--divider)",
-        minHeight: "100dvh",
         display: "flex",
         alignItems: "center",
         padding: "80px 5vw",
@@ -27,9 +41,19 @@ export default function ProblemSection() {
         zIndex: 10,
       }}
     >
-      <div style={{ maxWidth: 1080, margin: "0 auto", width: "100%" }}>
-        <motion.div initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.2 }} variants={stagger}>
-
+      <div
+        style={{
+          maxWidth: 1080,
+          margin: "0 auto",
+          width: "100%",
+        }}
+      >
+        <motion.div
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, amount: 0.2 }}
+          variants={stagger}
+        >
           <motion.div variants={fadeUp} style={{ marginBottom: 64 }}>
             <span
               style={{
@@ -60,7 +84,9 @@ export default function ProblemSection() {
               }}
             >
               Subject choice is broken —{" "}
-              <em style={{ color: "var(--a)", fontStyle: "italic" }}>and schools know it.</em>
+              <em style={{ color: "var(--a)", fontStyle: "italic" }}>
+                and schools know it.
+              </em>
             </h2>
             <p
               style={{
@@ -71,8 +97,9 @@ export default function ProblemSection() {
                 fontWeight: 500,
               }}
             >
-              Students make life-defining decisions with one meeting, a PDF booklet, and a guess.
-              The current system is failing them — and counsellors.
+              Students make life-defining decisions with one meeting, a PDF
+              booklet, and a guess. The current system is failing them — and
+              counsellors.
             </p>
           </motion.div>
 
@@ -88,7 +115,11 @@ export default function ProblemSection() {
                 key={p.title}
                 variants={fadeUp}
                 transition={{ delay: i * 0.08 }}
-                whileHover={{ y: -3, boxShadow: `0 12px 32px ${p.accent}22`, borderColor: `${p.accent}35` }}
+                whileHover={{
+                  y: -3,
+                  boxShadow: `0 12px 32px ${p.accent}22`,
+                  borderColor: `${p.accent}35`,
+                }}
                 style={{
                   background: "var(--card)",
                   backdropFilter: "blur(12px)",
@@ -114,7 +145,9 @@ export default function ProblemSection() {
                     background: `linear-gradient(180deg,${p.accent} 0%,${p.accent}40 100%)`,
                   }}
                 />
-                <div style={{ fontSize: 32, marginBottom: 20, paddingLeft: 8 }}>{p.emoji}</div>
+                <div style={{ fontSize: 32, marginBottom: 20, paddingLeft: 8 }}>
+                  {p.emoji}
+                </div>
                 <h3
                   style={{
                     fontSize: 17,
@@ -127,13 +160,19 @@ export default function ProblemSection() {
                 >
                   {p.title}
                 </h3>
-                <p style={{ fontSize: 14, color: "var(--t-b)", lineHeight: 1.75, paddingLeft: 8 }}>
+                <p
+                  style={{
+                    fontSize: 14,
+                    color: "var(--t-b)",
+                    lineHeight: 1.75,
+                    paddingLeft: 8,
+                  }}
+                >
                   {p.desc}
                 </p>
               </motion.div>
             ))}
           </div>
-
         </motion.div>
       </div>
     </section>

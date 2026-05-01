@@ -324,7 +324,7 @@ export default function HeroAppMock({
                 style={{
                   height: "100%",
                   borderRadius: 2,
-                  background: "linear-gradient(90deg, #1D9E75, #4FD1C5)",
+                  background: "linear-gradient(90deg, #1D9E75, #87D5CF)",
                 }}
               />
             </div>
@@ -612,7 +612,7 @@ export default function HeroAppMock({
               display: "flex",
               alignItems: "center",
               gap: 8,
-              background: "linear-gradient(135deg, #1D9E75, #4FD1C5)",
+              background: "linear-gradient(135deg, #1D9E75, #87D5CF)",
               animationDelay: "-6s",
             }}
           >

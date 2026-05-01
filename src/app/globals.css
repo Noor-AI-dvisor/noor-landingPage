@@ -3,7 +3,7 @@
 /* ── Design tokens ── */
 :root {
   /* Page */
-  --pg: #f0faf7;
+  --pg: #eef3f2;
   --hero-bg: linear-gradient(
     155deg,
     #f2fdf8 0%,
@@ -116,7 +116,6 @@ html * {
     color 0.25s,
     box-shadow 0.25s;
 }
-
 
 *,
 *::before,

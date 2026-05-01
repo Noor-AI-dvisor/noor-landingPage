@@ -23,43 +23,14 @@ export const HeroContent = memo(function HeroContent({
       variants={stagger}
       style={
         mobile
-          ? { display: "flex", flexDirection: "column", alignItems: "flex-start" }
+          ? {
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "flex-start",
+            }
           : {}
       }
     >
-      {/* Badge — shown only on mobile */}
-      {showBadge && (
-        <motion.div variants={fadeUp} style={{ marginBottom: 24 }}>
-          <div
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: 7,
-              background: "var(--card-active)",
-              border: "1.5px solid #9FE1CB",
-              borderRadius: 100,
-              padding: "6px 14px",
-              fontSize: 12,
-              fontWeight: 700,
-              color: "#1D9E75",
-              letterSpacing: "0.02em",
-              boxShadow: "0 2px 8px #9FE1CB44",
-            }}
-          >
-            <span
-              style={{
-                width: 6,
-                height: 6,
-                borderRadius: "50%",
-                background: "#1D9E75",
-                flexShrink: 0,
-              }}
-            />
-            AI Career &amp; Skills Companion for Schools
-          </div>
-        </motion.div>
-      )}
-
       {/* Heading */}
       <motion.h1
         variants={fadeUp}
@@ -78,7 +49,12 @@ export const HeroContent = memo(function HeroContent({
         }}
       >
         Noor{" "}
-        <em style={{ color: mobile ? "#1D9E75" : "var(--a)", fontStyle: "italic" }}>
+        <em
+          style={{
+            color: mobile ? "#1D9E75" : "var(--a)",
+            fontStyle: "italic",
+          }}
+        >
           AI Career &amp; Skills
         </em>
         <br />

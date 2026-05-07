@@ -3,59 +3,30 @@ import logoDark from "../assets/images/logo-horizontal-dark.png";
 
 export default function Footer({ theme }: { theme: "light" | "dark" }) {
   return (
-    <footer
-      style={{
-        borderTop: "1px solid var(--divider)",
-        position: "relative",
-        zIndex: 10,
-        padding: "clamp(32px,5vh,56px) clamp(24px,8vw,120px)",
-      }}
-    >
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          flexWrap: "wrap",
-          gap: 20,
-        }}
-      >
-        <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
-          {theme === "dark" ? (
-            <img src={logoDark} alt="Noor" className="nav-logo-icon" />
-          ) : (
-            <img src={logo} alt="Noor" className="nav-logo-icon" />
-          )}
-          <p
-            style={{
-              fontSize: 12,
-              color: "var(--t-s)",
-              fontFamily: "Instrument Serif, serif",
-              fontStyle: "italic",
-            }}
-          >
+    <footer className="relative z-10 border-t border-[var(--divider)] px-[clamp(24px,8vw,120px)] py-[clamp(32px,5vh,56px)]">
+      <div className="flex items-center justify-between flex-wrap gap-5">
+
+        <div className="flex flex-col gap-1 w-fit">
+          <img
+            src={theme === "dark" ? logoDark : logo}
+            alt="Noor"
+            className="h-12 w-auto object-contain"
+          />
+          <p className="text-[12px] text-[var(--t-s)] font-display italic">
             From curiosity to capability.
           </p>
         </div>
 
-        <p style={{ fontSize: 12, color: "var(--t-s)", fontWeight: 600 }}>
-          © 2026 Noor · Student-safe & private.
+        <p className="text-[12px] text-[var(--t-s)] font-semibold">
+          © 2026 Noor · Student-safe &amp; private.
         </p>
 
-        <div style={{ display: "flex", gap: 24 }}>
+        <div className="flex gap-6">
           {["Privacy", "Terms", "Contact"].map((link) => (
             <a
               key={link}
               href="#"
-              style={{
-                fontSize: 13,
-                color: "var(--t-b)",
-                fontWeight: 600,
-                textDecoration: "none",
-                transition: "color 0.2s ease",
-              }}
-              onMouseEnter={(e) => (e.currentTarget.style.color = "var(--a)")}
-              onMouseLeave={(e) => (e.currentTarget.style.color = "var(--t-b)")}
+              className="text-[13px] text-[var(--t-b)] font-semibold no-underline transition-colors duration-200 hover:text-[var(--a)]"
             >
               {link}
             </a>

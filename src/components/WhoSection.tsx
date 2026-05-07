@@ -31,57 +31,57 @@ const CARDS = [
 
 export default function WhoSection() {
   return (
-    <section id="who" className="who-section upgraded">
-      <div className="who-header-block">
-        <span className="who-eyebrow">Who It’s For</span>
+    <section
+      id="who"
+      className="py-24 px-6 bg-[var(--bg)] text-center transition-[background] duration-300"
+    >
+      {/* Header */}
+      <div className="max-w-[640px] mx-auto mb-14">
+        <span className="inline-flex items-center gap-1.5 px-3 py-[5px] bg-[var(--amber-bg)] border border-[rgba(245,158,11,0.2)] rounded-full text-[0.72rem] font-semibold text-accent-amber tracking-[0.08em] uppercase mb-5">
+          Who It's For
+        </span>
 
-        <h2 className="who-h2">
-          Designed for <em>everyone</em> inside the school ecosystem.
+        <h2 className="font-display text-[clamp(1.5rem,3vw,2.2rem)] font-medium leading-[1.3] text-[var(--text-h)] mb-5">
+          Designed for <em className="italic">everyone</em> inside the school ecosystem.
         </h2>
 
-        <p className="who-body">
-          Whether you're a student, parent, counsellor, or school leader — Noor
-          was built with your needs in mind.
+        <p className="text-base leading-[1.75] text-[var(--text-b)]">
+          Whether you're a student, parent, counsellor, or school leader — Noor was built with your needs in mind.
         </p>
       </div>
 
-      <div className="who-grid">
+      {/* Cards grid */}
+      <div className="max-w-5xl mx-auto grid grid-cols-[repeat(auto-fit,minmax(240px,1fr))] gap-5">
         {CARDS.map((card, i) => (
           <div
             key={card.role}
-            className="who-card"
+            className="relative bg-[var(--card-bg)] border border-[var(--card-border)] rounded-[18px] p-7 text-left overflow-hidden shadow-card transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_12px_40px_rgba(0,0,0,0.12)] opacity-0 translate-y-[30px] scale-[0.97] animate-fade-up-scale"
             style={{ animationDelay: `${0.2 + i * 0.15}s` }}
           >
+            {/* Accent bar */}
             <div
-              className="who-accent-bar"
-              style={{
-                background: `linear-gradient(180deg, ${card.accent}, transparent)`,
-              }}
+              className="absolute left-0 top-0 bottom-0 w-[3px] rounded-[18px_0_0_18px]"
+              style={{ background: `linear-gradient(180deg, ${card.accent}, transparent)` }}
             />
 
+            {/* Icon */}
             <div
-              className="who-icon"
-              style={{
-                background: `${card.accent}15`,
-                borderColor: `${card.accent}30`,
-              }}
+              className="w-[52px] h-[52px] rounded-[14px] flex items-center justify-center text-2xl mb-4 border"
+              style={{ background: `${card.accent}15`, borderColor: `${card.accent}30` }}
             >
               {card.emoji}
             </div>
 
+            {/* Role badge */}
             <div
-              className="who-role"
-              style={{
-                color: card.accent,
-                background: `${card.accent}12`,
-                borderColor: `${card.accent}25`,
-              }}
+              className="inline-block px-2.5 py-1 rounded-full text-[10px] font-extrabold tracking-[0.06em] mb-3 border"
+              style={{ color: card.accent, background: `${card.accent}12`, borderColor: `${card.accent}25` }}
             >
               {card.role}
             </div>
 
-            <h3>{card.subtitle}</h3>
-            <p>{card.desc}</p>
+            <h3 className="text-[15px] font-bold text-[var(--text-h)] mb-2">{card.subtitle}</h3>
+            <p className="text-[13.5px] leading-[1.7] text-[var(--text-b)]">{card.desc}</p>
           </div>
         ))}
       </div>

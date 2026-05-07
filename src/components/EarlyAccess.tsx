@@ -9,8 +9,10 @@ const BENEFITS = [
 
 const EarlyAccessSection: React.FC = () => {
   const [email, setEmail] = useState('')
-  const [submitted, setSubmitted] = useState(false)
   const [focused, setFocused] = useState(false)
+  const [msg, setMsg] = useState<{ text: string; color: string } | null>(null)
+  const [sending, setSending] = useState(false)
+  const [inputDisabled, setInputDisabled] = useState(false)
   const sectionRef = useRef<HTMLElement>(null)
   const leftRef   = useRef<HTMLDivElement>(null)
   const rightRef  = useRef<HTMLDivElement>(null)
@@ -32,13 +34,32 @@ const EarlyAccessSection: React.FC = () => {
     return () => observer.disconnect()
   }, [])
 
-  const handleSubmit = (e: React.SyntheticEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault()
-    if (!email) return
-    const subject = encodeURIComponent('Early Access Request — Noor AI')
-    const body = encodeURIComponent(`Contact email: ${email}\n\nInterested in a free Demo.`)
-    window.location.href = `mailto:nooraiadvisor@gmail.com?subject=${subject}&body=${body}`
-    setSubmitted(true)
+    if (!email || !email.includes('@')) {
+      setMsg({ text: '⚠️ Please enter a valid email.', color: '#F5C842' })
+      return
+    }
+    setSending(true)
+    setMsg({ text: 'Sending…', color: 'var(--muted)' })
+    try {
+      const res = await fetch('https://formspree.io/f/xgonkjne', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify({ email }),
+      })
+      if (res.ok) {
+        setMsg({ text: "🎉 Thank you! We'll be in touch within 48 hours.", color: '#2EC4B6' })
+        setEmail('')
+        setInputDisabled(true)
+      } else {
+        setMsg({ text: '⚠️ Something went wrong. Please email us directly at nooraiadvisor@gmail.com.', color: '#F5C842' })
+      }
+    } catch {
+      setMsg({ text: '⚠️ Network error. Please email us at nooraiadvisor@gmail.com.', color: '#F5C842' })
+    } finally {
+      setSending(false)
+    }
   }
 
   return (
@@ -70,43 +91,40 @@ const EarlyAccessSection: React.FC = () => {
 
         {/* Right: form card */}
         <div className="ea-right" ref={rightRef}>
-          {submitted ? (
-            <div className="ea-card ea-card-success">
-              <div className="ea-success-emoji">🎉</div>
-              <h3 className="ea-card-title">You're on the list!</h3>
-              <p className="ea-card-body">
-                We'll reach out within <strong>48 hours</strong> to discuss your school's free Demo. Exciting things ahead!
-              </p>
+          <div className="ea-card">
+            <div className="ea-card-top">
+              <div className="ea-card-emoji">🌟</div>
+              <h3 className="ea-card-title">Request your free Demo</h3>
+              <p className="ea-card-sub">No credit card · No setup fee · Reply within 48 hrs</p>
             </div>
-          ) : (
-            <div className="ea-card">
-              <div className="ea-card-top">
-                <div className="ea-card-emoji">🌟</div>
-                <h3 className="ea-card-title">Request your free Demo</h3>
-                <p className="ea-card-sub">No credit card · No setup fee · Reply within 48 hrs</p>
+            <form className="ea-form" onSubmit={handleSubmit}>
+              <input
+                id="email-input"
+                type="email"
+                required
+                placeholder="Your school email address"
+                value={email}
+                disabled={inputDisabled}
+                onChange={e => setEmail(e.target.value)}
+                onFocus={() => setFocused(true)}
+                onBlur={() => setFocused(false)}
+                className={`ea-input${focused ? ' focused' : ''}`}
+              />
+              <button type="submit" className="btn-primary ea-submit" disabled={sending || inputDisabled}>
+                {sending ? 'Sending…' : 'Request Free Demo →'}
+              </button>
+              {msg && (
+                <p id="form-msg" className="ea-form-msg" style={{ color: msg.color }}>
+                  {msg.text}
+                </p>
+              )}
+              <div className="ea-trust-row">
+                {['✅ No credit card', '📅 Flexible timing', '🤝 Onboarding included'].map(t => (
+                  <span key={t} className="ea-trust-badge">{t}</span>
+                ))}
               </div>
-              <form className="ea-form" onSubmit={handleSubmit}>
-                <input
-                  type="email"
-                  required
-                  placeholder="Your school email address"
-                  value={email}
-                  onChange={e => setEmail(e.target.value)}
-                  onFocus={() => setFocused(true)}
-                  onBlur={() => setFocused(false)}
-                  className={`ea-input${focused ? ' focused' : ''}`}
-                />
-                <button type="submit" className="btn-primary ea-submit">
-                  Request Free Demo →
-                </button>
-                <div className="ea-trust-row">
-                  {['✅ No credit card', '📅 Flexible timing', '🤝 Onboarding included'].map(t => (
-                    <span key={t} className="ea-trust-badge">{t}</span>
-                  ))}
-                </div>
-              </form>
-            </div>
-          )}
+            </form>
+          </div>
         </div>
 
       </div>

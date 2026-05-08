@@ -3,6 +3,30 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script>
+      (function () {
+        var isTouchPrimary = window.matchMedia('(pointer: coarse)').matches;
+
+        function applyZoom() {
+          var dpr = window.devicePixelRatio || 1;
+          // Desktop only — mobile/tablet retina is already handled by the viewport meta tag.
+          document.documentElement.style.zoom = (!isTouchPrimary && dpr > 1)
+            ? String(1 / dpr)
+            : '1';
+        }
+
+        applyZoom();
+
+        // Re-apply whenever the OS display scale changes (no page reload needed).
+        (function watchDpr() {
+          var mq = window.matchMedia('(resolution: ' + window.devicePixelRatio + 'dppx)');
+          mq.addEventListener('change', function () {
+            applyZoom();
+            watchDpr(); // re-register with the new DPR value
+          }, { once: true });
+        })();
+      })();
+    </script>
     <title>Noor — AI Career & Skills Companion</title>
     <meta
       name="description"
@@ -18,6 +42,6 @@
     <link rel="stylesheet" crossorigin href="/noor-landingPage/assets/index-KEuI2Sup.css">
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root"></div>
   </body>
 </html>

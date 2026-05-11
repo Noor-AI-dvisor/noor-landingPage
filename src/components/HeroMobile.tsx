@@ -7,10 +7,6 @@ const HeroMobile: React.FC = () => {
       id="hero-mobile"
       className="lg:hidden flex flex-col justify-center min-h-screen px-6 pt-[100px] pb-[60px] relative overflow-hidden bg-[var(--bg)] transition-[background] duration-300"
     >
-      {/* Background blobs */}
-      <div className="absolute w-[280px] h-[280px] rounded-full bg-accent opacity-35 blur-[60px] -top-[60px] -right-[80px] animate-blob-float" />
-      <div className="absolute w-[200px] h-[200px] rounded-full bg-accent-2 opacity-35 blur-[60px] bottom-[60px] -left-[60px] animate-blob-float [animation-delay:-3s]" />
-      <div className="absolute w-[150px] h-[150px] rounded-full bg-accent-amber opacity-35 blur-[60px] top-[40%] -right-[40px] animate-blob-float [animation-delay:-5s]" />
 
       <div className="relative z-10 max-w-[480px] mx-auto w-full">
 

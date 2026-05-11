@@ -3,27 +3,34 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light" />
     <script>
       (function () {
-        var isTouchPrimary = window.matchMedia('(pointer: coarse)').matches;
+        var isTouchPrimary = window.matchMedia("(pointer: coarse)").matches;
+        if (isTouchPrimary) return;
 
         function applyZoom() {
           var dpr = window.devicePixelRatio || 1;
-          // Desktop only — mobile/tablet retina is already handled by the viewport meta tag.
-          document.documentElement.style.zoom = (!isTouchPrimary && dpr > 1)
+          var isFractional = dpr > 1 && Math.abs(dpr - Math.round(dpr)) > 0.01;
+          document.documentElement.style.zoom = isFractional
             ? String(1 / dpr)
-            : '1';
+            : "1";
         }
 
         applyZoom();
 
-        // Re-apply whenever the OS display scale changes (no page reload needed).
         (function watchDpr() {
-          var mq = window.matchMedia('(resolution: ' + window.devicePixelRatio + 'dppx)');
-          mq.addEventListener('change', function () {
-            applyZoom();
-            watchDpr(); // re-register with the new DPR value
-          }, { once: true });
+          var mq = window.matchMedia(
+            "(resolution: " + window.devicePixelRatio + "dppx)",
+          );
+          mq.addEventListener(
+            "change",
+            function () {
+              applyZoom();
+              watchDpr();
+            },
+            { once: true },
+          );
         })();
       })();
     </script>
@@ -38,10 +45,10 @@
       href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,300;1,9..40,400&family=Playfair+Display:ital,wght@0,400;0,500;1,400&display=swap"
       rel="stylesheet"
     />
-    <script type="module" crossorigin src="/noor-landingPage/assets/index-RlnyoFRQ.js"></script>
-    <link rel="stylesheet" crossorigin href="/noor-landingPage/assets/index-KEuI2Sup.css">
+    <script type="module" crossorigin src="/noor-landingPage/assets/index-CzHx1Q9T.js"></script>
+    <link rel="stylesheet" crossorigin href="/noor-landingPage/assets/index-BJVKPXTE.css">
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root"></div>
   </body>
 </html>

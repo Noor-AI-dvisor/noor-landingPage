@@ -79,8 +79,6 @@ const ProblemSection: React.FC = () => {
       ref={sectionRef}
       className="min-h-screen bg-[var(--bg)] grid grid-cols-1 md:grid-cols-2 items-center gap-[clamp(40px,6vw,100px)] px-[clamp(24px,6vw,80px)] md:px-0 md:pl-[clamp(100px,17vw,300px)] md:pr-[clamp(64px,13vw,220px)] py-[clamp(48px,6vh,72px)] pb-[100px] relative overflow-hidden transition-[background] duration-300 max-w-[2800px] mx-auto"
     >
-      {/* Decorative radial */}
-      <div className="absolute -top-[100px] -right-[100px] w-[500px] h-[500px] rounded-full pointer-events-none" style={{ background: 'radial-gradient(circle, rgba(43,67,189,0.08) 0%, transparent 70%)' }} />
 
       {/* Left */}
       <div className="problem-left flex flex-col" ref={leftRef}>

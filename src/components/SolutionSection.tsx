@@ -1,243 +1,169 @@
-import { useState, useRef } from "react";
-import { motion, AnimatePresence, useInView } from "framer-motion";
-import { EASE_OUT, stagger, fadeUp } from "@/lib/motion";
-import { useTheme } from "@/lib/theme";
+import React, { useEffect, useRef, useState } from 'react'
 
-const LIGHT_ITEMS = [
-  { n: "01", title: "AI-guided conversation",     color: "#4FD1C5", icon: "💬",
-    desc: "Students chat with Noor in a friendly, structured way and receive a personalised Study Pathway Card — subjects, career themes, and key skills.",
-    detail: "Noor asks 12–15 carefully designed questions covering academic preferences, personal strengths, extracurricular interests, and career aspirations. The conversation adapts based on each response — no forms, no boxes to tick. About 5 minutes and feels completely natural." },
-  { n: "02", title: "Career domains that feel real", color: "#1D9E75", icon: "🌐",
-    desc: "Noor groups futures into teen-friendly domains (Tech Wizards, Creators & Storytellers, Mind & Health Heroes) — not a long job list.",
-    detail: "Instead of 800 job titles, Noor maps futures into 12 engaging career domains designed for Gen Z. Each includes real career examples, salary ranges, and the skills employers actually look for — making the future feel tangible, not abstract." },
-  { n: "03", title: "Gamified skills journeys",    color: "#F59E0B", icon: "⭐",
-    desc: "Short 10-minute missions, badges, and progress bars — each tied to the 11 employability skills students will actually need.",
-    detail: "Every mission is built around evidence-based learning science: spaced repetition, active recall, and immediate feedback. Students earn real credentials they can add to their portfolio. Missions are tied to career domains so every minute is purposeful." },
-  { n: "04", title: "Counsellor dashboard",       color: "#2B43BD", icon: "📊",
-    desc: "Counsellors see who's ready, who needs help, and which career domains are trending — without extra admin work.",
-    detail: "Real-time cohort analytics: confidence levels per year group, popular career domains, students who haven't completed their assessment, and flags for students needing additional support — all visible in under 60 seconds." },
-];
+const FEATURES = [
+  {
+    num: '01', icon: '💬',
+    borderColor: '#1d9e75',
+    title: 'AI-guided conversation',
+    desc: 'Noor engages students through natural, adaptive dialogue — uncovering interests, strengths, and aspirations at their own pace.',
+    more: "Unlike static quizzes, Noor's conversations evolve. Each session builds on the last, creating a rich, longitudinal picture of every student's journey. Students feel heard, not assessed.",
+  },
+  {
+    num: '02', icon: '🌐',
+    borderColor: '#22c55e',
+    title: 'Career domains that feel real',
+    desc: 'Explore 11 real-world career domains with authentic stories, day-in-the-life experiences, and subject pathway maps.',
+    more: "Each domain is curated with UK-specific labour market data, growth projections, and diverse role models. Students discover careers they never knew existed — and connect them to subjects they're studying today.",
+  },
+  {
+    num: '03', icon: '⭐',
+    borderColor: '#f59e0b',
+    title: 'Gamified skills journeys',
+    desc: 'Bite-sized 10-minute missions build transferable skills across communication, critical thinking, creativity, and more.',
+    more: 'Students earn points, unlock badges, and track their progress across a skills map that schools can see. Completion rates are dramatically higher than traditional career learning programmes.',
+  },
+  {
+    num: '04', icon: '📊',
+    borderColor: '#3b82f6',
+    title: 'Counsellor dashboard',
+    desc: 'Powerful analytics give counsellors and leaders real-time visibility into student career readiness and engagement.',
+    more: 'Filter by year group, subject option group, or at-risk students. Spot intervention opportunities early, evidence destination data, and demonstrate the impact of your careers programme — all in one place.',
+  },
+]
 
-const DARK_ITEMS = [
-  { ...LIGHT_ITEMS[0], color: "#38C9BC" },
-  { ...LIGHT_ITEMS[1], color: "#25C48A" },
-  { ...LIGHT_ITEMS[2], color: "#FFC933" },
-  { ...LIGHT_ITEMS[3], color: "#4F6FE8" },
-];
+const SolutionSection: React.FC = () => {
+  const cardRef        = useRef<HTMLDivElement>(null)
+  const arcCircleRef   = useRef<SVGCircleElement>(null)
+  const ripple1Ref     = useRef<HTMLDivElement>(null)
+  const ripple2Ref     = useRef<HTMLDivElement>(null)
+  const [statusText, setStatusText]     = useState('Initialising AI…')
+  const [statusReady, setStatusReady]   = useState(false)
+  const [typewriterText, setTypewriterText] = useState('')
+  const [openCard, setOpenCard]         = useState<number | null>(null)
+  const hasAnimated = useRef(false)
+  const typewriterTarget = "Your school's AI guidance companion — illuminating every student's path."
 
-export default function SolutionSection() {
-  const [expanded, setExpanded] = useState<string | null>(null);
-  const sectionRef = useRef(null);
-  const isInView   = useInView(sectionRef, { once: true, amount: 0.25 });
-  const { theme }  = useTheme();
-  const items      = theme === "dark" ? DARK_ITEMS : LIGHT_ITEMS;
+  useEffect(() => {
+    const card = cardRef.current
+    if (!card) return
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (!entries[0].isIntersecting || hasAnimated.current) return
+        hasAnimated.current = true
+        card.classList.add('visible')
+
+        setTimeout(() => {
+          arcCircleRef.current?.classList.add('drawn')
+        }, 400)
+
+        setTimeout(() => {
+          setStatusText('Noor is ready ✓')
+          setStatusReady(true)
+          ripple1Ref.current?.classList.add('burst')
+          ripple2Ref.current?.classList.add('burst2')
+        }, 1800)
+
+        setTimeout(() => {
+          let i = 0
+          setTypewriterText('')
+          const tw = setInterval(() => {
+            i++
+            setTypewriterText(typewriterTarget.slice(0, i))
+            if (i >= typewriterTarget.length) clearInterval(tw)
+          }, 30)
+        }, 2200)
+      },
+      { threshold: 0.15 }
+    )
+
+    observer.observe(card)
+    return () => observer.disconnect()
+  }, [])
+
+  const toggleCard = (i: number) => setOpenCard(prev => (prev === i ? null : i))
 
   return (
     <section
-      id="solution"
-      ref={sectionRef}
-      style={{
-        background: "transparent",
-        borderTop: "1px solid var(--divider)",
-        position: "relative",
-        zIndex: 10,
-        padding: "clamp(72px,10vh,112px) clamp(24px,8vw,120px)",
-      }}
+      id="solution-wrap"
+      className="py-[clamp(80px,10vh,120px)] px-[clamp(24px,5vw,60px)] bg-[var(--bg)] transition-[background] duration-300"
     >
-      <motion.div initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.15 }} variants={stagger}>
+      <div className="solution-card max-w-[1200px] mx-auto relative bg-[var(--sol-bg)] border border-[var(--sol-border)] rounded-[32px] px-[clamp(48px,5vw,88px)] py-[clamp(64px,8vh,96px)] shadow-[inset_0_1px_0_rgba(255,255,255,0.65),0_8px_48px_rgba(0,0,0,0.07),0_32px_80px_rgba(0,0,0,0.05),0_0_0_1px_var(--sol-border)]" ref={cardRef}>
 
-        <motion.div variants={fadeUp} style={{ textAlign: "center", marginBottom: "clamp(52px,7vh,80px)" }}>
-          <span
-            style={{
-              display: "inline-block",
-              fontSize: 11,
-              fontWeight: 800,
-              letterSpacing: "0.14em",
-              textTransform: "uppercase",
-              color: "var(--lb-c)",
-              background: "var(--lb-bg)",
-              border: "1px solid var(--lb-br)",
-              borderRadius: 9999,
-              padding: "5px 14px",
-              marginBottom: 24,
-            }}
-          >
-            Our Solution
-          </span>
-          <h2
-            style={{
-              fontFamily: "Instrument Serif, serif",
-              fontSize: "clamp(32px,4.2vw,56px)",
-              color: "var(--t-h)",
-              letterSpacing: "-0.02em",
-              lineHeight: 1.1,
-              marginBottom: 20,
-            }}
-          >
-            Meet <em style={{ color: "var(--a)", fontStyle: "italic" }}>Noor</em> — your school&apos;s AI guidance companion.
-          </h2>
-          <p
-            style={{
-              fontSize: "clamp(15px,1.15vw,17px)",
-              color: "var(--t-b)",
-              maxWidth: 560,
-              margin: "0 auto",
-              lineHeight: 1.75,
-              fontWeight: 500,
-            }}
-          >
-            Noor means <span style={{ color: "var(--a)", fontWeight: 700 }}>&ldquo;light&rdquo;</span> in Arabic. Our mission is to illuminate every student&apos;s path — using AI, data, and personalised learning.
-          </p>
-          <p style={{ fontSize: 11, color: "var(--t-s)", fontWeight: 600, marginTop: 12 }}>
-            Click any card to learn more
-          </p>
-        </motion.div>
-
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit,minmax(min(100%,260px),1fr))",
-            gap: "clamp(14px,2vw,22px)",
-          }}
-        >
-          {items.map((item, i) => (
-            <motion.div
-              key={item.n}
-              initial={{ opacity: 0, y: 32, scale: 0.97 }}
-              animate={isInView ? { opacity: 1, y: 0, scale: 1 } : {}}
-              transition={{ duration: 0.65, delay: 0.2 + i * 0.15, ease: [0.25, 1, 0.5, 1] }}
-              whileHover={{ y: -3, boxShadow: `0 14px 36px ${item.color}22`, borderColor: `${item.color}40` }}
-              onClick={() => setExpanded(expanded === item.n ? null : item.n)}
-              style={{
-                borderRadius: 18,
-                position: "relative",
-                overflow: "hidden",
-                cursor: "pointer",
-                backdropFilter: "blur(12px)",
-                WebkitBackdropFilter: "blur(12px)",
-                padding: "clamp(26px,3.5vh,36px) clamp(22px,2.5vw,28px)",
-                background: expanded === item.n ? "var(--card-active)" : "var(--card)",
-                border: `1.5px solid ${expanded === item.n ? item.color + "45" : "var(--card-border)"}`,
-                boxShadow: expanded === item.n ? `0 8px 28px ${item.color}18` : "0 2px 16px var(--card-shadow)",
-              }}
-            >
-              <div
-                style={{
-                  position: "absolute",
-                  top: 0,
-                  left: 0,
-                  bottom: 0,
-                  width: 3,
-                  borderTopLeftRadius: 18,
-                  borderBottomLeftRadius: 18,
-                  background: `linear-gradient(180deg,${item.color} 0%,${item.color}45 100%)`,
-                  opacity: expanded === item.n ? 1 : 0.4,
-                  transition: "opacity 0.3s",
-                }}
-              />
-              <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 20, paddingLeft: 8 }}>
-                <div
-                  style={{
-                    width: 46,
-                    height: 46,
-                    borderRadius: 13,
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    fontSize: 22,
-                    border: "1px solid",
-                    background: `${item.color}18`,
-                    borderColor: `${item.color}28`,
-                  }}
-                >
-                  {item.icon}
-                </div>
-                <span
-                  style={{
-                    fontSize: 36,
-                    fontWeight: 900,
-                    lineHeight: 1,
-                    letterSpacing: "-2px",
-                    userSelect: "none",
-                    color: `${item.color}35`,
-                  }}
-                >
-                  {item.n}
-                </span>
-              </div>
-              <h3
-                style={{
-                  fontSize: "clamp(15px,1.2vw,17px)",
-                  fontWeight: 800,
-                  color: "var(--t-h)",
-                  marginBottom: 10,
-                  letterSpacing: "-0.2px",
-                  lineHeight: 1.3,
-                  paddingLeft: 8,
-                }}
-              >
-                {item.title}
-              </h3>
-              <p
-                style={{
-                  fontSize: "clamp(13px,0.9vw,14px)",
-                  color: "var(--t-b)",
-                  lineHeight: 1.75,
-                  fontWeight: 500,
-                  paddingLeft: 8,
-                }}
-              >
-                {item.desc}
-              </p>
-              <AnimatePresence>
-                {expanded === item.n && (
-                  <motion.div
-                    initial={{ opacity: 0, height: 0 }}
-                    animate={{ opacity: 1, height: "auto" }}
-                    exit={{ opacity: 0, height: 0 }}
-                    transition={{ duration: 0.32, ease: EASE_OUT }}
-                    style={{ overflow: "hidden" }}
-                  >
-                    <div
-                      style={{
-                        marginTop: 14,
-                        paddingTop: 14,
-                        paddingLeft: 8,
-                        borderTop: "1px solid",
-                        borderColor: `${item.color}22`,
-                      }}
-                    >
-                      <p
-                        style={{
-                          fontSize: "clamp(12px,0.85vw,13px)",
-                          color: "var(--t-b)",
-                          lineHeight: 1.75,
-                          fontWeight: 500,
-                        }}
-                      >
-                        {item.detail}
-                      </p>
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-              <div style={{ display: "flex", alignItems: "center", gap: 5, marginTop: 14, paddingLeft: 8 }}>
-                <span style={{ fontSize: 11, fontWeight: 700, color: item.color }}>
-                  {expanded === item.n ? "Show less" : "Learn more"}
-                </span>
-                <motion.svg
-                  width="11" height="11" viewBox="0 0 24 24" fill="none"
-                  animate={{ rotate: expanded === item.n ? 180 : 0 }}
-                  transition={{ duration: 0.22 }}
-                >
-                  <path d="M6 9l6 6 6-6" stroke={item.color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
-                </motion.svg>
-              </div>
-            </motion.div>
-          ))}
+        {/* Eyebrow */}
+        <div className="flex justify-start mb-10">
+          <div className="inline-flex items-center gap-1.5 px-[13px] py-[5px] bg-[var(--accent-dim)] border border-[rgba(29,158,117,0.22)] rounded-full text-[11px] font-bold text-accent tracking-[0.1em] uppercase">
+            ✦ Our Solution
+          </div>
         </div>
 
-      </motion.div>
+        {/* Intro */}
+        <div className="text-center mb-14">
+          {/* Arc heading */}
+          <div className="relative inline-flex items-center justify-center mb-5">
+            <h2 className="font-display text-[clamp(2.4rem,4.5vw,3.6rem)] font-medium text-[var(--text-h)] relative z-10">
+              Meet{' '}
+              <span className="relative inline-block">
+                <em className="italic text-accent">Noor</em>
+                <svg className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 overflow-visible pointer-events-none" width="120" height="120" viewBox="0 0 120 120">
+                  <circle className="arc-track-circle" cx="60" cy="60" r="54" />
+                  <circle className="arc-draw-circle" ref={arcCircleRef} cx="60" cy="60" r="54" transform="rotate(-90 60 60)" />
+                </svg>
+              </span>
+            </h2>
+          </div>
+
+          {/* Ripple + status */}
+          <div className="relative inline-flex items-center justify-center mb-4">
+            <div className="ripple-ring" ref={ripple1Ref} />
+            <div className="ripple-ring" ref={ripple2Ref} />
+            <div className="flex items-center justify-center gap-1.5 mt-2 text-[0.82rem] text-[var(--text-light)]">
+              <span className={`status-dot${statusReady ? ' ready' : ''}`} />
+              <span>{statusText}</span>
+            </div>
+          </div>
+
+          {/* Typewriter */}
+          <p className="text-[1.25rem] text-[var(--text-b)] leading-[1.65] max-w-[640px] mx-auto mb-3">
+            {typewriterText}
+            <span style={{ display: 'inline-block', width: 2, height: '1em', background: 'var(--accent)', marginLeft: 1, animation: 'pulse 1s ease-in-out infinite', verticalAlign: 'text-bottom' }} />
+          </p>
+          <p className="text-[0.92rem] text-[var(--text-light)] italic">Noor means 'light' in Arabic.</p>
+        </div>
+
+        {/* Feature grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          {FEATURES.map((f, i) => (
+            <div
+              key={i}
+              className="bg-[var(--card-bg)] border border-[var(--card-border)] rounded-2xl p-[22px_20px] relative overflow-hidden cursor-pointer transition-all duration-200 hover:-translate-y-[3px] hover:shadow-[0_8px_32px_rgba(0,0,0,0.1)] border-l-[3px]"
+              style={{ borderLeftColor: f.borderColor }}
+              onClick={() => toggleCard(i)}
+            >
+              {/* Subtle glow */}
+              <div className="absolute inset-0 rounded-2xl pointer-events-none" style={{ background: `radial-gradient(circle at 20% 20%, ${f.borderColor}0a, transparent 60%)` }} />
+
+              <div className="text-[0.72rem] font-bold text-[var(--text-light)] tracking-[0.1em] mb-2.5 relative z-10">{f.num}</div>
+              <div className="text-[1.6rem] mb-2.5 relative z-10">{f.icon}</div>
+              <div className="text-[1.05rem] font-bold text-[var(--text-h)] mb-[7px] relative z-10">{f.title}</div>
+              <div className="text-[0.9rem] leading-[1.6] text-[var(--text-b)] relative z-10">{f.desc}</div>
+
+              <div className={`feature-more${openCard === i ? ' open' : ''}`}>
+                {f.more}
+              </div>
+
+              <button
+                className="inline-flex items-center gap-1 mt-2.5 text-[0.83rem] font-medium text-accent bg-none border-none cursor-pointer p-0 transition-colors hover:text-[#179065] relative z-10"
+                onClick={e => { e.stopPropagation(); toggleCard(i) }}
+              >
+                {openCard === i ? 'Show less ↑' : 'Learn more ↓'}
+              </button>
+            </div>
+          ))}
+        </div>
+      </div>
     </section>
-  );
+  )
 }
+
+export default SolutionSection

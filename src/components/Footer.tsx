@@ -1,53 +1,31 @@
-export default function Footer() {
+import logo from "../assets/images/logo-horizontal.png";
+import logoDark from "../assets/images/logo-horizontal-dark.png";
+
+export default function Footer({ theme }: { theme: "light" | "dark" }) {
   return (
-    <footer
-      style={{
-        borderTop: "1px solid var(--divider)",
-        background: "transparent",
-        position: "relative",
-        zIndex: 10,
-        padding: "clamp(32px,5vh,56px) clamp(24px,8vw,120px)",
-      }}
-    >
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          flexWrap: "wrap",
-          gap: 20,
-        }}
-      >
-        <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+    <footer className="hidden lg:block relative z-10 border-t border-[var(--divider)] px-[clamp(24px,8vw,120px)] py-[clamp(32px,5vh,56px)]">
+      <div className="flex items-center justify-between flex-wrap gap-5">
+        <div className="flex flex-col gap-1 w-fit">
           <img
-            src={`${import.meta.env.BASE_URL}logo-horizontal.png`}
+            src={theme === "dark" ? logoDark : logo}
             alt="Noor"
-            style={{ height: 32, width: "auto", maxWidth: 140, objectFit: "contain" }}
+            className="h-12 w-auto object-contain"
           />
-          <p
-            style={{
-              fontSize: 12,
-              color: "var(--t-s)",
-              fontFamily: "Instrument Serif, serif",
-              fontStyle: "italic",
-            }}
-          >
+          <p className="hidden lg:block text-[12px] text-[var(--t-s)] font-display italic">
             From curiosity to capability.
           </p>
         </div>
 
-        <p style={{ fontSize: 12, color: "var(--t-s)", fontWeight: 600 }}>
+        <p className="hidden lg:block text-[12px] text-[var(--t-s)] font-semibold">
           © 2026 Noor · Student-safe &amp; private.
         </p>
 
-        <div style={{ display: "flex", gap: 24 }}>
+        <div className="hidden lg:flex gap-6">
           {["Privacy", "Terms", "Contact"].map((link) => (
             <a
               key={link}
               href="#"
-              style={{ fontSize: 13, color: "var(--t-b)", fontWeight: 600, textDecoration: "none" }}
-              onMouseEnter={(e) => (e.currentTarget.style.color = "var(--a)")}
-              onMouseLeave={(e) => (e.currentTarget.style.color = "var(--t-b)")}
+              className="text-[13px] text-[var(--t-b)] font-semibold no-underline transition-colors duration-200 hover:text-[var(--a)]"
             >
               {link}
             </a>

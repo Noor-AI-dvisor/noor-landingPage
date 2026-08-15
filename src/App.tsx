@@ -1,33 +1,47 @@
-import PageBackground from "@/components/PageBackground";
-import Nav from "@/components/Nav";
-import HeroSection from "@/components/HeroSection";
-import ProblemSection from "@/components/ProblemSection";
-import SolutionSection from "@/components/SolutionSection";
-import HowItWorksSection from "@/components/HowItWorksSection";
-import WhoSection from "@/components/WhoSection";
-import EarlyAccessSection from "@/components/EarlyAccessSection";
-import Footer from "@/components/Footer";
+import { useState, useEffect, useCallback } from "react";
+import Nav from "./components/Nav";
+import HeroStage from "./components/HeroStage";
+import HeroMobile from "./components/HeroMobile";
+import ProblemSection from "./components/ProblemSection";
+import SolutionSection from "./components/SolutionSection";
+import EarlyAccessSection from "./components/EarlyAccess";
+import WhoSection from "./components/WhoSection";
+import Footer from "./components/Footer";
 
-if (typeof window !== "undefined") {
-  history.scrollRestoration = "manual";
-  window.scrollTo(0, 0);
-}
+type Theme = "light" | "dark";
 
-export default function App() {
+function App() {
+  const [theme, setTheme] = useState<Theme>(() => {
+    const stored = localStorage.getItem("noor-theme") as Theme | null;
+    if (stored) return stored;
+    // if (window.matchMedia("(prefers-color-scheme: dark)").matches)
+    //   return "dark";
+    return "light";
+  });
+
+  useEffect(() => {
+    document.documentElement.setAttribute("data-theme", theme);
+    localStorage.setItem("noor-theme", theme);
+  }, [theme]);
+
+  const toggleTheme = useCallback(() => {
+    setTheme((prev) => (prev === "light" ? "dark" : "light"));
+  }, []);
+
   return (
-    <div
-      style={{
-        fontFamily: "Montserrat, sans-serif",
-        minHeight: "100dvh",
-        background: "var(--pg)",
-      }}
-    >
-      <Nav />
-      <HeroSection />
+    <>
+      <Nav theme={theme} toggleTheme={toggleTheme} />
+      <div id="home">
+        <HeroStage />
+        <HeroMobile />
+      </div>
+      <ProblemSection />
       <SolutionSection />
       <WhoSection />
       <EarlyAccessSection />
-      <Footer />
-    </div>
+      <Footer theme={theme} />
+    </>
   );
 }
+
+export default App;

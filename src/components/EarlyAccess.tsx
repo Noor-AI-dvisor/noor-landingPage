@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
+import { SparkleIcon, CalendarIcon, UsersIcon, CheckIcon } from './Icons'
 
 const BENEFITS = [
   'Personalised AI guidance for every student',
@@ -105,7 +106,7 @@ const EarlyAccessSection: React.FC = () => {
         <div className="ea-right" ref={rightRef}>
           <div className="bg-[var(--glass-bg)] backdrop-blur-2xl border border-[var(--glass-border)] rounded-[28px] px-10 py-11 shadow-glass">
             <div className="text-center mb-7">
-              <div className="text-[32px] mb-3">🌟</div>
+              <SparkleIcon className="w-8 h-8 mx-auto mb-3 text-[var(--accent-amber)]" />
               <h3 className="font-display text-[clamp(20px,2vw,26px)] font-medium leading-[1.2] text-[var(--text-h)] mb-2">
                 Request your free Demo
               </h3>
@@ -138,8 +139,15 @@ const EarlyAccessSection: React.FC = () => {
                 </p>
               )}
               <div className="flex gap-3 justify-center flex-wrap pt-1">
-                {['✅ No credit card', '📅 Flexible timing', '🤝 Onboarding included'].map(t => (
-                  <span key={t} className="text-[11px] font-semibold text-[var(--text-light)]">{t}</span>
+                {[
+                  { Icon: CheckIcon, label: 'No credit card' },
+                  { Icon: CalendarIcon, label: 'Flexible timing' },
+                  { Icon: UsersIcon, label: 'Onboarding included' },
+                ].map(({ Icon, label }) => (
+                  <span key={label} className="inline-flex items-center gap-1 text-[11px] font-semibold text-[var(--text-light)]">
+                    <Icon className="w-3 h-3 shrink-0" />
+                    {label}
+                  </span>
                 ))}
               </div>
             </form>

@@ -1,28 +1,29 @@
 import React, { useEffect, useRef } from 'react'
+import { HelpCircleIcon, HourglassIcon, DocumentIcon, ChartBarIcon } from './Icons'
 
 const TIMELINE_DELAYS = [0, 320, 620, 900]
 
 const ITEMS = [
   {
-    emoji: '😕', color: '#F97316',
+    Icon: HelpCircleIcon, color: '#F97316',
     label: 'Awareness',
     title: 'Students guess, not choose',
     desc: 'Most teens pick subjects based on friends or "what seems easier" — not a clear link to their strengths or future careers.',
   },
   {
-    emoji: '⏳', color: '#EF4444',
+    Icon: HourglassIcon, color: '#EF4444',
     label: 'Capacity',
     title: 'Counsellors are stretched',
     desc: 'One counsellor supports hundreds of students — repeating the same basic conversations instead of doing meaningful guidance.',
   },
   {
-    emoji: '📄', color: '#8B5CF6',
+    Icon: DocumentIcon, color: '#8B5CF6',
     label: 'Tools',
     title: 'Static tools for dynamic choices',
     desc: "Subject options live in long PDFs. There's no interactive way to test the fit between a student's profile and their future options.",
   },
   {
-    emoji: '📊', color: '#3B82F6',
+    Icon: ChartBarIcon, color: '#3B82F6',
     label: 'Visibility',
     title: 'Leadership has no visibility',
     desc: "School leaders can't easily see which cohorts are confident, which domains are in demand, or who still needs support.",
@@ -115,7 +116,7 @@ const ProblemSection: React.FC = () => {
             ref={el => { itemRefs.current[i] = el }}
           >
             <div className="timeline-dot" style={{ color: item.color }}>
-              {item.emoji}
+              <item.Icon className="w-3 h-3" />
             </div>
             <div className="text-[12px] font-bold tracking-[0.08em] uppercase mb-[5px] opacity-70" style={{ color: item.color }}>
               {item.label}

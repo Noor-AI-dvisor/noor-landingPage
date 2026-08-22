@@ -1,27 +1,29 @@
+import { BackpackIcon, CompassIcon, BuildingIcon, UsersIcon } from "./Icons";
+
 const CARDS = [
   {
-    emoji: "🎒",
+    Icon: BackpackIcon,
     role: "Students",
     subtitle: "Grade 9–12 Students",
     desc: "Get a personalised study plan and unlock gamified skill missions tied to your actual future — not just exam results.",
     accent: "var(--accent)",
   },
   {
-    emoji: "🧭",
+    Icon: CompassIcon,
     role: "Schools",
     subtitle: "Counsellors & Heads of Year",
     desc: "Stop repeating the same meeting. Let Noor handle initial guidance so you can focus on the students who truly need you.",
     accent: "#4FD1C5",
   },
   {
-    emoji: "🏫",
+    Icon: BuildingIcon,
     role: "Leadership",
     subtitle: "School Leaders",
     desc: "Get a clear cohort view: who's confident, who needs support, which career domains are trending in your school this year.",
     accent: "var(--accent-2)",
   },
   {
-    emoji: "👨‍👩‍👧",
+    Icon: UsersIcon,
     role: "Parents",
     subtitle: "Parents & Families",
     desc: "See your child's pathway, skill progress, and subject choices in one place — with AI-backed clarity, not guesswork.",
@@ -68,10 +70,10 @@ export default function WhoSection() {
 
             {/* Icon */}
             <div
-              className="w-[58px] h-[58px] rounded-[14px] flex items-center justify-center text-[1.75rem] mb-5 border"
+              className="w-[58px] h-[58px] rounded-[14px] flex items-center justify-center mb-5 border"
               style={{ background: `${card.accent}15`, borderColor: `${card.accent}30` }}
             >
-              {card.emoji}
+              <card.Icon className="w-6 h-6" style={{ color: card.accent }} />
             </div>
 
             {/* Role badge */}

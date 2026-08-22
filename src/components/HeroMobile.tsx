@@ -1,6 +1,13 @@
 import React from 'react'
 import AppMock from './AppMock'
 import badgeButterfly from '../assets/images/badge-butterfly.png'
+import { GraduationCapIcon, BoltIcon, TrophyIcon } from './Icons'
+
+const CHIPS = [
+  { Icon: GraduationCapIcon, label: 'Ages 14–18' },
+  { Icon: BoltIcon, label: '10-min missions' },
+  { Icon: TrophyIcon, label: '11 skill domains' },
+]
 
 const HeroMobile: React.FC = () => {
   return (
@@ -24,8 +31,8 @@ const HeroMobile: React.FC = () => {
           </span>
         </div>
 
-        <h1 className="font-display text-[clamp(1.8rem,6vw,2.8rem)] font-medium leading-[1.2] mb-4 text-[var(--text-h)]">
-          Noor <em className="italic text-accent">AI Career &amp; Skills</em><br />
+        <h1 className="font-sans text-[clamp(1.8rem,6vw,2.8rem)] font-bold leading-[1.2] tracking-[-0.02em] mb-4 text-[var(--text-h)]">
+          Noor <em className="not-italic font-normal font-display text-accent">AI Career &amp; Skills</em><br />
           Companion for Schools
         </h1>
 
@@ -49,9 +56,10 @@ const HeroMobile: React.FC = () => {
         </div>
 
         <div className="flex flex-wrap gap-2 mb-7">
-          {['🎓 Ages 14–18', '⚡ 10-min missions', '🏆 11 skill domains'].map((chip) => (
-            <span key={chip} className="px-3 py-[5px] bg-[var(--glass-bg)] backdrop-blur-md border border-[var(--glass-border)] rounded-full text-[0.78rem] font-medium text-[var(--text-b)]">
-              {chip}
+          {CHIPS.map(({ Icon, label }) => (
+            <span key={label} className="inline-flex items-center gap-1.5 px-3 py-[5px] bg-[var(--glass-bg)] backdrop-blur-md border border-[var(--glass-border)] rounded-full text-[0.78rem] font-medium text-[var(--text-b)]">
+              <Icon className="w-3.5 h-3.5 text-accent shrink-0" />
+              {label}
             </span>
           ))}
         </div>

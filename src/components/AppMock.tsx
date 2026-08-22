@@ -95,8 +95,8 @@ const AppMock: React.FC<AppMockProps> = ({ compact = false }) => {
         {!compact && (
           <div className="bg-[var(--amber-bg)] rounded-xl px-[14px] py-[11px] border border-[rgba(245,158,11,0.2)] transition-[background] duration-300">
             <div className="flex items-center justify-between mb-2">
-              <span className="text-[11.5px] font-bold text-[#b45309]">Skills Progress</span>
-              <span className="text-[11.5px] font-bold text-[#b45309]">3 / 11 domains</span>
+              <span className="text-[11.5px] font-bold text-[var(--amber-text-strong)]">Skills Progress</span>
+              <span className="text-[11.5px] font-bold text-[var(--amber-text-strong)]">3 / 11 domains</span>
             </div>
             <div className="h-[5px] bg-[rgba(245,158,11,0.18)] rounded-full overflow-hidden">
               <div className="h-full w-[27%] rounded-full bg-[#f59e0b]" />

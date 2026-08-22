@@ -1,6 +1,13 @@
 import React from 'react'
 import AppMock from './AppMock'
 import badgeButterfly from '../assets/images/badge-butterfly.png'
+import { GraduationCapIcon, BoltIcon, TrophyIcon, FlameIcon, BrainIcon, StarIcon } from './Icons'
+
+const CHIPS = [
+  { Icon: GraduationCapIcon, label: 'Ages 14–18' },
+  { Icon: BoltIcon, label: '10-min missions' },
+  { Icon: TrophyIcon, label: '11 skill domains' },
+]
 
 const HeroStage: React.FC = () => {
   const scrollTo = (id: string) => {
@@ -47,9 +54,10 @@ const HeroStage: React.FC = () => {
         </div>
 
         <div className="flex flex-wrap gap-2 mb-7">
-          {['🎓 Ages 14–18', '⚡ 10-min missions', '🏆 11 skill domains'].map((chip) => (
-            <span key={chip} className="px-3 py-[5px] bg-[var(--glass-bg)] backdrop-blur-md border border-[var(--glass-border)] rounded-full text-[0.78rem] font-medium text-[var(--text-b)]">
-              {chip}
+          {CHIPS.map(({ Icon, label }) => (
+            <span key={label} className="inline-flex items-center gap-1.5 px-3 py-[5px] bg-[var(--glass-bg)] backdrop-blur-md border border-[var(--glass-border)] rounded-full text-[0.78rem] font-medium text-[var(--text-b)]">
+              <Icon className="w-3.5 h-3.5 text-accent shrink-0" />
+              {label}
             </span>
           ))}
         </div>
@@ -75,13 +83,15 @@ const HeroStage: React.FC = () => {
         <div className="relative w-full max-w-[480px]">
           {/* Streak badge */}
           <div className="absolute top-[24%] -left-16 bg-[var(--glass-bg-strong)] backdrop-blur-xl border border-[var(--glass-border)] rounded-xl px-[14px] py-[9px] shadow-badge-float flex flex-col text-[11px] z-10 animate-badge-float">
-            <div className="font-bold text-[var(--text-h)] flex items-center gap-1 text-[12px]">🔥 3-day streak</div>
+            <div className="font-bold text-[var(--text-h)] flex items-center gap-1.5 text-[12px]">
+              <FlameIcon className="w-3.5 h-3.5 text-[var(--accent-amber)] shrink-0" /> 3-day streak
+            </div>
             <div className="text-[9.5px] font-semibold tracking-[0.06em] uppercase text-[var(--text-light)] mt-0.5">Keep going!</div>
           </div>
 
           {/* Match badge */}
           <div className="absolute -right-3 top-[45%] bg-[var(--text-h)] text-[var(--bg)] rounded-[10px] px-3 py-2 flex items-center gap-[7px] text-[11px] font-bold shadow-badge-float whitespace-nowrap z-10 animate-badge-float [animation-delay:-3s] transition-[background,color] duration-300">
-            <span className="text-[16px]">🧠</span>
+            <BrainIcon className="w-4 h-4 shrink-0" />
             <div>
               <div>AI matched</div>
               <div className="font-medium opacity-65 text-[10px]">3 career paths</div>
@@ -90,7 +100,9 @@ const HeroStage: React.FC = () => {
 
           {/* Points badge */}
           <div className="absolute -bottom-3 -left-3 bg-[var(--glass-bg-strong)] backdrop-blur-xl border border-[var(--glass-border)] rounded-xl px-[13px] py-2 flex items-center gap-2 shadow-badge-float text-[11px] z-10 animate-badge-float [animation-delay:-1.5s]">
-            <div className="w-7 h-7 rounded-lg bg-[#fef3c7] flex items-center justify-center text-sm">⭐</div>
+            <div className="w-7 h-7 rounded-lg bg-[#fef3c7] flex items-center justify-center">
+              <StarIcon className="w-3.5 h-3.5 text-[var(--accent-amber)]" />
+            </div>
             <div>
               <div className="font-bold text-[var(--text-h)] text-[13px]">120 pts</div>
               <div className="text-[9.5px] font-semibold tracking-[0.06em] uppercase text-[var(--text-light)]">This week</div>

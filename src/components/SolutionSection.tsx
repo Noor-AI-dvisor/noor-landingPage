@@ -1,29 +1,30 @@
 import React, { useEffect, useRef, useState } from 'react'
+import { ChatIcon, GlobeIcon, StarIcon, ChartBarIcon } from './Icons'
 
 const FEATURES = [
   {
-    num: '01', icon: '💬',
+    num: '01', Icon: ChatIcon,
     borderColor: '#1d9e75',
     title: 'AI-guided conversation',
     desc: 'Noor engages students through natural, adaptive dialogue — uncovering interests, strengths, and aspirations at their own pace.',
     more: "Unlike static quizzes, Noor's conversations evolve. Each session builds on the last, creating a rich, longitudinal picture of every student's journey. Students feel heard, not assessed.",
   },
   {
-    num: '02', icon: '🌐',
+    num: '02', Icon: GlobeIcon,
     borderColor: '#22c55e',
     title: 'Career domains that feel real',
     desc: 'Explore 11 real-world career domains with authentic stories, day-in-the-life experiences, and subject pathway maps.',
     more: "Each domain is curated with UK-specific labour market data, growth projections, and diverse role models. Students discover careers they never knew existed — and connect them to subjects they're studying today.",
   },
   {
-    num: '03', icon: '⭐',
+    num: '03', Icon: StarIcon,
     borderColor: '#f59e0b',
     title: 'Gamified skills journeys',
     desc: 'Bite-sized 10-minute missions build transferable skills across communication, critical thinking, creativity, and more.',
     more: 'Students earn points, unlock badges, and track their progress across a skills map that schools can see. Completion rates are dramatically higher than traditional career learning programmes.',
   },
   {
-    num: '04', icon: '📊',
+    num: '04', Icon: ChartBarIcon,
     borderColor: '#3b82f6',
     title: 'Counsellor dashboard',
     desc: 'Powerful analytics give counsellors and leaders real-time visibility into student career readiness and engagement.',
@@ -147,7 +148,9 @@ const SolutionSection: React.FC = () => {
               <div className="absolute inset-0 rounded-2xl pointer-events-none" style={{ background: `radial-gradient(circle at 20% 20%, ${f.borderColor}0a, transparent 60%)` }} />
 
               <div className="text-[0.72rem] font-bold text-[var(--text-light)] tracking-[0.1em] mb-2.5 relative z-10">{f.num}</div>
-              <div className="text-[1.6rem] mb-2.5 relative z-10">{f.icon}</div>
+              <div className="mb-2.5 relative z-10">
+                <f.Icon className="w-6 h-6" style={{ color: f.borderColor }} />
+              </div>
               <div className="text-[1.05rem] font-bold text-[var(--text-h)] mb-[7px] relative z-10">{f.title}</div>
               <div className="text-[0.9rem] leading-[1.6] text-[var(--text-b)] relative z-10">{f.desc}</div>
 

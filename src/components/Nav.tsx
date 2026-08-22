@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import logo from "../assets/images/logo-horizontal.png";
 import logoDark from "../assets/images/logo-horizontal-dark.png";
+import { SunIcon, MoonIcon } from "./Icons";
 
 interface NavProps {
   theme: string;
@@ -37,13 +38,18 @@ const Nav: React.FC<NavProps> = ({ theme, toggleTheme }) => {
   }, []);
 
   useEffect(() => {
-    const pill = pillRefs.current[activeIdx];
-    const container = pillsRef.current;
-    if (pill && container) {
-      const cr = container.getBoundingClientRect();
-      const pr = pill.getBoundingClientRect();
-      setHighlightStyle({ left: pr.left - cr.left, width: pr.width });
-    }
+    const updateHighlight = () => {
+      const pill = pillRefs.current[activeIdx];
+      const container = pillsRef.current;
+      if (pill && container) {
+        const cr = container.getBoundingClientRect();
+        const pr = pill.getBoundingClientRect();
+        setHighlightStyle({ left: pr.left - cr.left, width: pr.width });
+      }
+    };
+    updateHighlight();
+    window.addEventListener("resize", updateHighlight);
+    return () => window.removeEventListener("resize", updateHighlight);
   }, [activeIdx]);
 
   const handleNavClick = (id: string, idx: number) => {
@@ -100,16 +106,7 @@ const Nav: React.FC<NavProps> = ({ theme, toggleTheme }) => {
             onClick={toggleTheme}
             title="Toggle theme"
           >
-            {theme === "dark" ? (
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none">
-                <circle cx="12" cy="12" r="4" stroke="currentColor" strokeWidth="2" />
-                <path d="M12 2v2M12 20v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M2 12h2M20 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-              </svg>
-            ) : (
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none">
-                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            )}
+            {theme === "dark" ? <SunIcon className="w-[15px] h-[15px]" /> : <MoonIcon className="w-[15px] h-[15px]" />}
           </button>
 
           <button
@@ -175,7 +172,7 @@ const Nav: React.FC<NavProps> = ({ theme, toggleTheme }) => {
             className="w-[38px] h-[38px] rounded-full border border-[var(--border-s)] bg-[var(--pill-bg)] text-[var(--text-b)] cursor-pointer flex items-center justify-center"
             onClick={toggleTheme}
           >
-            {theme === "dark" ? "☀️" : "🌙"}
+            {theme === "dark" ? <SunIcon className="w-4 h-4" /> : <MoonIcon className="w-4 h-4" />}
           </button>
         </div>
 

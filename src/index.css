@@ -21,8 +21,8 @@
   --border-s: rgba(0, 0, 0, 0.11);
   --text-h: #1a1f2e;
   --text-b: #4a5568;
-  --text-light: #8896a6;
-  --muted: #8896a6;
+  --text-light: #64707d;
+  --muted: #64707d;
   --card-bg: #ffffff;
   --card-border: rgba(0, 0, 0, 0.08);
   --card-shadow: 0 4px 24px rgba(0, 0, 0, 0.07);
@@ -31,12 +31,13 @@
   --shadow-nav: 0 2px 32px rgba(0, 0, 0, 0.08);
   --mint-bg: #e8f8f2;
   --amber-bg: #fef3c7;
+  --amber-text-strong: #b45309;
   --problem-bg: #f0f4ff;
   --arc-track: rgba(29, 158, 117, 0.15);
   --sol-bg: rgba(255, 255, 255, 0.72);
   --sol-border: rgba(29, 158, 117, 0.18);
   --divider: rgba(0, 0, 0, 0.08);
-  --t-s: #8896a6;
+  --t-s: #64707d;
   --t-b: #4a5568;
   --a: #1d9e75;
 
@@ -67,7 +68,7 @@
   --border-s: rgba(255, 255, 255, 0.12);
   --text-h: #f0f0ec;
   --text-b: #8d9db0;
-  --text-light: #5a6678;
+  --text-light: #7a8494;
   --card-bg: #1a1f2e;
   --card-border: rgba(255, 255, 255, 0.09);
   --card-shadow: 0 4px 24px rgba(0, 0, 0, 0.35);
@@ -76,13 +77,15 @@
   --shadow-nav: 0 2px 32px rgba(0, 0, 0, 0.5);
   --mint-bg: #0e2a1e;
   --amber-bg: #2a1f08;
+  --amber-text-strong: #d97706;
   --problem-bg: #0e1228;
   --arc-track: rgba(29, 158, 117, 0.12);
   --sol-bg: rgba(16, 22, 18, 0.78);
   --sol-border: rgba(29, 158, 117, 0.22);
   --divider: rgba(255, 255, 255, 0.08);
-  --t-s: #5a6678;
+  --t-s: #7a8494;
   --t-b: #8d9db0;
+  --muted: #7a8494;
 
   /* ── Glassmorphism ── */
   --mesh-1: rgba(37, 196, 138, 0.22);

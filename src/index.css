@@ -39,6 +39,23 @@
   --t-s: #8896a6;
   --t-b: #4a5568;
   --a: #1d9e75;
+
+  /* ── Glassmorphism ── */
+  --mesh-1: rgba(29, 158, 117, 0.13);
+  --mesh-2: rgba(43, 67, 189, 0.1);
+  --mesh-3: rgba(245, 158, 11, 0.09);
+  --mesh-base: #f4f9f9;
+  --glass-bg: rgba(255, 255, 255, 0.68);
+  --glass-bg-strong: rgba(255, 255, 255, 0.88);
+  --glass-border: rgba(255, 255, 255, 0.75);
+  --glass-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.8) inset,
+    0 8px 32px rgba(15, 23, 42, 0.08),
+    0 2px 8px rgba(15, 23, 42, 0.04);
+  --glass-shadow-hover:
+    0 1px 0 rgba(255, 255, 255, 0.85) inset,
+    0 20px 56px rgba(15, 23, 42, 0.12),
+    0 4px 16px rgba(29, 158, 117, 0.1);
 }
 
 [data-theme="dark"] {
@@ -66,6 +83,23 @@
   --divider: rgba(255, 255, 255, 0.08);
   --t-s: #5a6678;
   --t-b: #8d9db0;
+
+  /* ── Glassmorphism ── */
+  --mesh-1: rgba(37, 196, 138, 0.22);
+  --mesh-2: rgba(79, 111, 232, 0.22);
+  --mesh-3: rgba(255, 201, 51, 0.12);
+  --mesh-base: #0f1117;
+  --glass-bg: rgba(22, 27, 38, 0.55);
+  --glass-bg-strong: rgba(16, 20, 28, 0.82);
+  --glass-border: rgba(255, 255, 255, 0.09);
+  --glass-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.04) inset,
+    0 8px 32px rgba(0, 0, 0, 0.42),
+    0 2px 8px rgba(0, 0, 0, 0.3);
+  --glass-shadow-hover:
+    0 1px 0 rgba(255, 255, 255, 0.06) inset,
+    0 24px 64px rgba(0, 0, 0, 0.5),
+    0 4px 16px rgba(37, 196, 138, 0.14);
 }
 
 /* ── BASE */
@@ -90,8 +124,11 @@ body {
 /* ── SHARED BUTTONS */
 @layer components {
   .btn-primary {
-    @apply font-sans px-8 py-[15px] bg-accent text-white border-none rounded-[10px] text-[14px] font-bold tracking-[0.01em] cursor-pointer transition-all duration-200;
-    box-shadow: 0 4px 16px var(--accent-glow);
+    @apply font-sans px-8 py-[15px] text-white border-none rounded-[10px] text-[14px] font-bold tracking-[0.01em] cursor-pointer transition-all duration-200;
+    background: linear-gradient(135deg, #1d9e75 0%, #16855f 100%);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.25),
+      0 4px 16px var(--accent-glow);
   }
   .btn-primary:hover {
     transform: scale(1.03);
@@ -107,7 +144,7 @@ body {
   }
 
   .btn-secondary {
-    @apply font-sans px-8 py-[15px] bg-[var(--pill-active)] text-[var(--text-b)] border-[1.5px] border-[var(--border-s)] rounded-[10px] text-[14px] font-semibold cursor-pointer transition-all duration-200;
+    @apply font-sans px-8 py-[15px] bg-[var(--glass-bg)] backdrop-blur-md text-[var(--text-b)] border-[1.5px] border-[var(--glass-border)] rounded-[10px] text-[14px] font-semibold cursor-pointer transition-all duration-200;
   }
   .btn-secondary:hover {
     border-color: var(--accent);
@@ -116,6 +153,55 @@ body {
   }
   .btn-secondary:active {
     transform: scale(0.97);
+  }
+
+  /* Tailwind's shadow-[...] arbitrary value misreads a comma/var()-based
+     value as a shadow *color* instead of the full shadow list, so glass
+     shadows need plain classes instead. */
+  .shadow-glass {
+    box-shadow: var(--glass-shadow);
+  }
+  .shadow-glass-interactive {
+    box-shadow: var(--glass-shadow);
+    transition:
+      box-shadow 0.2s,
+      transform 0.2s;
+  }
+  .shadow-glass-interactive:hover {
+    box-shadow: var(--glass-shadow-hover);
+  }
+  .shadow-glass-hover-only:hover {
+    box-shadow: var(--glass-shadow-hover);
+  }
+  .shadow-badge-float {
+    box-shadow:
+      0 16px 36px rgba(15, 23, 42, 0.22),
+      0 4px 12px rgba(15, 23, 42, 0.12),
+      var(--glass-shadow);
+  }
+  .text-shimmer {
+    background: linear-gradient(
+      90deg,
+      var(--accent) 0%,
+      var(--accent-2) 25%,
+      var(--accent) 50%,
+      var(--accent-2) 75%,
+      var(--accent) 100%
+    );
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: shimmerText 3.5s linear infinite;
+  }
+}
+
+@keyframes shimmerText {
+  0% {
+    background-position: 200% center;
+  }
+  100% {
+    background-position: -200% center;
   }
 }
 
@@ -358,12 +444,6 @@ body {
   opacity: 1;
 }
 
-/* ── DARK MODE OVERRIDES */
-[data-theme="dark"] .problem-eyebrow-pill {
-  background: rgba(43, 67, 189, 0.18) !important;
-  color: #7b93f0 !important;
-  border-color: rgba(43, 67, 189, 0.3) !important;
-}
 
 /* ── KEYFRAMES */
 @keyframes statusPulse {

@@ -77,14 +77,20 @@ const ProblemSection: React.FC = () => {
     <section
       id="problem"
       ref={sectionRef}
-      className="min-h-screen bg-[var(--bg)] grid grid-cols-1 md:grid-cols-2 items-center gap-[clamp(40px,6vw,100px)] px-[clamp(24px,6vw,80px)] md:px-0 md:pl-[clamp(100px,17vw,300px)] md:pr-[clamp(64px,13vw,220px)] py-[clamp(48px,6vh,72px)] pb-[100px] relative overflow-hidden transition-[background] duration-300 max-w-[2800px] mx-auto"
+      className="min-h-screen bg-transparent grid grid-cols-1 md:grid-cols-2 items-center gap-[clamp(40px,6vw,100px)] px-[clamp(24px,6vw,80px)] md:px-0 md:pl-[clamp(100px,17vw,300px)] md:pr-[clamp(64px,13vw,220px)] py-[clamp(48px,6vh,72px)] pb-[100px] relative overflow-hidden transition-[background] duration-300 max-w-[2800px] mx-auto"
     >
 
       {/* Left */}
       <div className="problem-left flex flex-col" ref={leftRef}>
-        <div className="problem-eyebrow-pill inline-flex items-center gap-[7px] px-[13px] py-[5px] rounded-full text-[11px] font-bold tracking-[0.12em] uppercase mb-6 w-fit border" style={{ background: 'rgba(43,67,189,0.1)', color: '#2b43bd', borderColor: 'rgba(43,67,189,0.2)' }}>
-          <svg width="7" height="7" viewBox="0 0 7 7"><circle cx="3.5" cy="3.5" r="3.5" fill="currentColor"/></svg>
-          The Problem
+        <div
+          className="inline-flex items-center gap-2 pl-4 pr-6 py-[7px] mb-6 w-fit"
+          style={{
+            background: 'linear-gradient(135deg, #2B43BD 0%, #1B2C7A 100%)',
+            clipPath: 'polygon(0 0, calc(100% - 10px) 0, 100% 50%, calc(100% - 10px) 100%, 0 100%)',
+          }}
+        >
+          <span className="w-[6px] h-[6px] rounded-full bg-white animate-pulse-dot shrink-0" />
+          <span className="text-[11px] font-bold tracking-[0.14em] uppercase text-white">The Problem</span>
         </div>
 
         <h2 className="font-display text-[clamp(38px,4.2vw,62px)] font-normal leading-[1.12] tracking-[-0.02em] text-[var(--text-h)] mb-5">

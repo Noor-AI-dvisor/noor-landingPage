@@ -65,7 +65,7 @@ const EarlyAccessSection: React.FC = () => {
     <section
       id="early-access"
       ref={sectionRef}
-      className="py-[clamp(80px,12vh,140px)] px-[clamp(24px,6vw,80px)] md:px-[clamp(64px,13vw,220px)] bg-[var(--bg)] border-t border-[var(--border)] relative overflow-hidden transition-[background] duration-300"
+      className="py-[clamp(80px,12vh,140px)] px-[clamp(24px,6vw,80px)] md:px-[clamp(64px,13vw,220px)] bg-transparent border-t border-[var(--border)] relative overflow-hidden transition-[background] duration-300"
     >
       {/* Decorative radial */}
       <div className="absolute -bottom-[120px] -left-[120px] w-[480px] h-[480px] rounded-full pointer-events-none" style={{ background: 'radial-gradient(circle, rgba(29,158,117,0.07) 0%, transparent 70%)' }} />
@@ -74,8 +74,9 @@ const EarlyAccessSection: React.FC = () => {
 
         {/* Left: copy */}
         <div className="ea-left flex flex-col" ref={leftRef}>
-          <div className="inline-flex items-center gap-1.5 px-[14px] py-[5px] bg-[var(--accent-dim)] border border-[rgba(29,158,117,0.22)] rounded-full text-[11px] font-bold text-accent tracking-[0.1em] uppercase mb-6 w-fit">
-            ✦ Limited Early Access
+          <div className="inline-flex items-center gap-2 px-[14px] py-[6px] rounded-full bg-[var(--glass-bg)] backdrop-blur-md border border-[var(--glass-border)] shadow-glass mb-6 w-fit">
+            <span className="text-[13px] text-accent">✦</span>
+            <span className="text-shimmer text-[11px] font-bold tracking-[0.1em] uppercase">Limited Early Access</span>
           </div>
 
           <h2 className="font-display text-[clamp(36px,4vw,58px)] font-normal leading-[1.1] tracking-[-0.02em] text-[var(--text-h)] mb-5">
@@ -102,7 +103,7 @@ const EarlyAccessSection: React.FC = () => {
 
         {/* Right: form card */}
         <div className="ea-right" ref={rightRef}>
-          <div className="bg-[var(--sol-bg)] border border-[var(--sol-border)] rounded-[28px] px-10 py-11 shadow-[inset_0_1px_0_rgba(255,255,255,0.6),0_8px_48px_rgba(0,0,0,0.07),0_0_0_1px_var(--sol-border)]">
+          <div className="bg-[var(--glass-bg)] backdrop-blur-2xl border border-[var(--glass-border)] rounded-[28px] px-10 py-11 shadow-glass">
             <div className="text-center mb-7">
               <div className="text-[32px] mb-3">🌟</div>
               <h3 className="font-display text-[clamp(20px,2vw,26px)] font-medium leading-[1.2] text-[var(--text-h)] mb-2">

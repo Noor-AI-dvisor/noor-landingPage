@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
+import AmbientBackground from "./components/AmbientBackground";
 import Nav from "./components/Nav";
 import HeroStage from "./components/HeroStage";
 import HeroMobile from "./components/HeroMobile";
@@ -30,16 +31,19 @@ function App() {
 
   return (
     <>
-      <Nav theme={theme} toggleTheme={toggleTheme} />
-      <div id="home">
-        <HeroStage />
-        <HeroMobile />
+      <AmbientBackground />
+      <div className="relative z-10">
+        <Nav theme={theme} toggleTheme={toggleTheme} />
+        <div id="home">
+          <HeroStage />
+          <HeroMobile />
+        </div>
+        <ProblemSection />
+        <SolutionSection />
+        <WhoSection />
+        <EarlyAccessSection />
+        <Footer theme={theme} />
       </div>
-      <ProblemSection />
-      <SolutionSection />
-      <WhoSection />
-      <EarlyAccessSection />
-      <Footer theme={theme} />
     </>
   );
 }

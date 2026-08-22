@@ -33,12 +33,14 @@ export default function WhoSection() {
   return (
     <section
       id="who"
-      className="py-28 px-[clamp(24px,5vw,64px)] bg-[var(--bg)] text-center transition-[background] duration-300"
+      className="py-28 px-[clamp(24px,5vw,64px)] bg-transparent text-center transition-[background] duration-300"
     >
       {/* Header */}
       <div className="max-w-[700px] mx-auto mb-14">
-        <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-[var(--amber-bg)] border border-[rgba(245,158,11,0.2)] rounded-full text-[0.78rem] font-semibold text-accent-amber tracking-[0.08em] uppercase mb-5">
-          Who It's For
+        <span className="inline-flex items-center gap-2 mb-5 text-[0.78rem] font-bold tracking-[0.18em] uppercase text-accent-amber">
+          <span aria-hidden="true" className="font-normal opacity-45 text-[1rem]">[</span>
+          Who It&apos;s For
+          <span aria-hidden="true" className="font-normal opacity-45 text-[1rem]">]</span>
         </span>
 
         <h2 className="font-display text-[clamp(1.75rem,3.2vw,2.6rem)] font-medium leading-[1.3] text-[var(--text-h)] mb-5">
@@ -55,7 +57,7 @@ export default function WhoSection() {
         {CARDS.map((card, i) => (
           <div
             key={card.role}
-            className="relative bg-[var(--card-bg)] border border-[var(--card-border)] rounded-[18px] p-8 text-left overflow-hidden shadow-card transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_14px_44px_rgba(0,0,0,0.12)] opacity-0 translate-y-[30px] scale-[0.97] animate-fade-up-scale"
+            className="relative bg-[var(--glass-bg-strong)] backdrop-blur-xl border border-[var(--glass-border)] rounded-[18px] p-8 text-left overflow-hidden shadow-glass-interactive transition-all duration-200 hover:-translate-y-1 opacity-0 translate-y-[30px] scale-[0.97] animate-fade-up-scale"
             style={{ animationDelay: `${0.2 + i * 0.15}s` }}
           >
             {/* Accent bar */}

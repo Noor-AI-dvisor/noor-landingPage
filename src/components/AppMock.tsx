@@ -8,10 +8,10 @@ interface AppMockProps {
 const AppMock: React.FC<AppMockProps> = ({ compact = false }) => {
   return (
     <div
-      className={`bg-[var(--card-bg)] border border-[var(--card-border)] rounded-[18px] overflow-hidden text-[13px] transition-all duration-300 ${
+      className={`bg-[var(--glass-bg-strong)] backdrop-blur-2xl border border-[var(--glass-border)] rounded-[18px] overflow-hidden text-[13px] transition-all duration-300 ${
         compact
-          ? "mt-8 shadow-card"
-          : "w-full shadow-[0_8px_48px_rgba(0,0,0,0.1),0_2px_8px_rgba(0,0,0,0.06)] hover:-translate-y-1 hover:shadow-[0_32px_80px_rgba(0,0,0,0.1),0_8px_24px_rgba(29,158,117,0.12)]"
+          ? "mt-8 shadow-glass"
+          : "w-full shadow-glass-interactive hover:-translate-y-1"
       }`}
     >
       {/* Header */}

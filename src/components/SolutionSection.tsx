@@ -86,14 +86,17 @@ const SolutionSection: React.FC = () => {
   return (
     <section
       id="solution-wrap"
-      className="py-[clamp(80px,10vh,120px)] px-[clamp(24px,5vw,60px)] bg-[var(--bg)] transition-[background] duration-300"
+      className="py-[clamp(80px,10vh,120px)] px-[clamp(24px,5vw,60px)] bg-transparent transition-[background] duration-300"
     >
-      <div className="solution-card max-w-[1200px] mx-auto relative bg-[var(--sol-bg)] border border-[var(--sol-border)] rounded-[32px] px-[clamp(48px,5vw,88px)] py-[clamp(64px,8vh,96px)] shadow-[inset_0_1px_0_rgba(255,255,255,0.65),0_8px_48px_rgba(0,0,0,0.07),0_32px_80px_rgba(0,0,0,0.05),0_0_0_1px_var(--sol-border)]" ref={cardRef}>
+      <div className="solution-card max-w-[1200px] mx-auto relative bg-[var(--glass-bg)] backdrop-blur-2xl border border-[var(--glass-border)] rounded-[32px] px-[clamp(48px,5vw,88px)] py-[clamp(64px,8vh,96px)] shadow-glass" ref={cardRef}>
 
         {/* Eyebrow */}
         <div className="flex justify-start mb-10">
-          <div className="inline-flex items-center gap-1.5 px-[13px] py-[5px] bg-[var(--accent-dim)] border border-[rgba(29,158,117,0.22)] rounded-full text-[11px] font-bold text-accent tracking-[0.1em] uppercase">
-            ✦ Our Solution
+          <div className="inline-flex items-center gap-2 px-[14px] py-[6px] rounded-full bg-[var(--glass-bg)] backdrop-blur-md border border-[var(--glass-border)] shadow-glass w-fit">
+            <svg className="animate-spin" width="13" height="13" viewBox="0 0 24 24" fill="none">
+              <circle cx="12" cy="12" r="9" stroke="var(--accent)" strokeWidth="2.5" strokeDasharray="26 30" strokeLinecap="round" />
+            </svg>
+            <span className="text-[11px] font-bold tracking-[0.1em] uppercase text-accent">Our Solution</span>
           </div>
         </div>
 
@@ -136,7 +139,7 @@ const SolutionSection: React.FC = () => {
           {FEATURES.map((f, i) => (
             <div
               key={i}
-              className="bg-[var(--card-bg)] border border-[var(--card-border)] rounded-2xl p-[22px_20px] relative overflow-hidden cursor-pointer transition-all duration-200 hover:-translate-y-[3px] hover:shadow-[0_8px_32px_rgba(0,0,0,0.1)] border-l-[3px]"
+              className="bg-[var(--glass-bg-strong)] backdrop-blur-xl border border-[var(--glass-border)] rounded-2xl p-[22px_20px] relative overflow-hidden cursor-pointer transition-all duration-200 hover:-translate-y-[3px] shadow-glass-hover-only border-l-[3px]"
               style={{ borderLeftColor: f.borderColor }}
               onClick={() => toggleCard(i)}
             >

@@ -4,36 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="color-scheme" content="light" />
-    <script>
-      (function () {
-        var isTouchPrimary = window.matchMedia("(pointer: coarse)").matches;
-        if (isTouchPrimary) return;
 
-        function applyZoom() {
-          var dpr = window.devicePixelRatio || 1;
-          var isFractional = dpr > 1 && Math.abs(dpr - Math.round(dpr)) > 0.01;
-          document.documentElement.style.zoom = isFractional
-            ? String(1 / dpr)
-            : "1";
-        }
-
-        applyZoom();
-
-        (function watchDpr() {
-          var mq = window.matchMedia(
-            "(resolution: " + window.devicePixelRatio + "dppx)",
-          );
-          mq.addEventListener(
-            "change",
-            function () {
-              applyZoom();
-              watchDpr();
-            },
-            { once: true },
-          );
-        })();
-      })();
-    </script>
     <title>Noor — AI Career & Skills Companion</title>
     <meta
       name="description"

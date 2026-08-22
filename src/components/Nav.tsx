@@ -57,7 +57,7 @@ const Nav: React.FC<NavProps> = ({ theme, toggleTheme }) => {
   return (
     <>
       {/* ── Nav bar */}
-      <nav className="fixed top-0 left-0 right-0 z-[1000] h-16 px-6 flex items-center justify-between bg-[var(--surface-s)] backdrop-blur-xl border-b border-[var(--border)] shadow-nav transition-transform duration-300">
+      <nav className="fixed top-0 left-0 right-0 z-[1000] h-16 px-6 flex items-center justify-between bg-[var(--glass-bg-strong)] backdrop-blur-2xl border-b border-[var(--glass-border)] shadow-nav transition-transform duration-300">
 
         {/* Logo */}
         <div className="flex items-center gap-2 cursor-pointer select-none group" onClick={handleBackToTop}>
@@ -143,7 +143,7 @@ const Nav: React.FC<NavProps> = ({ theme, toggleTheme }) => {
 
       {/* ── Mobile drawer */}
       <div
-        className={`fixed top-0 right-0 w-[min(320px,85vw)] h-screen bg-[var(--surface-s)] backdrop-blur-2xl border-l border-[var(--border)] z-[999] flex flex-col p-6 transition-transform duration-[350ms] ease-[cubic-bezier(0.4,0,0.2,1)] lg:hidden ${
+        className={`fixed top-0 right-0 w-[min(320px,85vw)] h-screen bg-[var(--glass-bg-strong)] backdrop-blur-2xl border-l border-[var(--glass-border)] z-[999] flex flex-col p-6 transition-transform duration-[350ms] ease-[cubic-bezier(0.4,0,0.2,1)] lg:hidden ${
           drawerOpen ? "translate-x-0" : "translate-x-full"
         }`}
       >

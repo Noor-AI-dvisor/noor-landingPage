@@ -2,17 +2,17 @@ import type { Config } from 'tailwindcss'
 
 export default {
   content: ['./index.html', './src/**/*.{ts,tsx}'],
-  darkMode: ['selector', '[data-theme="dark"]'],
   theme: {
     extend: {
       colors: {
         accent: 'var(--accent)',
+        'accent-soft': 'var(--accent-soft)',
         'accent-2': 'var(--accent-2)',
         'accent-amber': 'var(--accent-amber)',
       },
       fontFamily: {
-        sans: ['"DM Sans"', 'sans-serif'],
-        display: ['"Playfair Display"', 'serif'],
+        sans: ['"Montserrat"', 'sans-serif'],
+        display: ['"Montserrat"', 'sans-serif'],
       },
       animation: {
         'status-pulse': 'statusPulse 1.5s ease-in-out infinite',

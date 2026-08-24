@@ -1,8 +1,7 @@
 export default function AmbientBackground() {
   return (
     <div
-      className="fixed inset-0 z-0 overflow-hidden pointer-events-none"
-      style={{ background: "var(--mesh-base)" }}
+      className="fixed inset-0 z-0 overflow-hidden pointer-events-none bg-wash"
       aria-hidden="true"
     >
       <div

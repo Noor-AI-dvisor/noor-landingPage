@@ -1,35 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react'
-
-const FEATURES = [
-  {
-    num: 1,
-    title: 'AI-guided conversation',
-    desc: 'Noor engages students through natural, adaptive dialogue — uncovering interests, strengths, and aspirations at their own pace.',
-    more: "Unlike static quizzes, Noor's conversations evolve. Each session builds on the last, creating a rich, longitudinal picture of every student's journey. Students feel heard, not assessed.",
-  },
-  {
-    num: 2,
-    title: 'Career domains that feel real',
-    desc: 'Explore 11 real-world career domains with authentic stories, day-in-the-life experiences, and subject pathway maps.',
-    more: "Each domain is curated with UK-specific labour market data, growth projections, and diverse role models. Students discover careers they never knew existed — and connect them to subjects they're studying today.",
-  },
-  {
-    num: 3,
-    title: 'Gamified skills journeys',
-    desc: 'Bite-sized 10-minute missions build transferable skills across communication, critical thinking, creativity, and more.',
-    more: 'Students earn points, unlock badges, and track their progress across a skills map that schools can see. Completion rates are dramatically higher than traditional career learning programmes.',
-  },
-  {
-    num: 4,
-    title: 'Counsellor dashboard',
-    desc: 'Powerful analytics give counsellors and leaders real-time visibility into student career readiness and engagement.',
-    more: 'Filter by year group, subject option group, or at-risk students. Spot intervention opportunities early, evidence destination data, and demonstrate the impact of your careers programme — all in one place.',
-  },
-]
-
-const DOMAIN_TAGS = ['Healthcare', 'Creative & Media', 'Green Energy', 'Tech & Data']
+import { useScrubReveal } from '../hooks/useScrollConnect'
+import { SOLUTION_FEATURES as FEATURES, DOMAIN_TAGS } from '../data/sections'
 
 const SolutionSection: React.FC = () => {
+  const sectionRef      = useRef<HTMLElement>(null)
   const introRef        = useRef<HTMLDivElement>(null)
   const rowRefs         = useRef<(HTMLDivElement | null)[]>([])
   const ripple1Ref      = useRef<HTMLDivElement>(null)
@@ -39,6 +13,8 @@ const SolutionSection: React.FC = () => {
   const [typewriterText, setTypewriterText] = useState('')
   const hasAnimated = useRef(false)
   const typewriterTarget = "Your school's AI guidance companion — illuminating every student's path."
+
+  useScrubReveal(sectionRef)
 
   useEffect(() => {
     const intro = introRef.current
@@ -90,8 +66,8 @@ const SolutionSection: React.FC = () => {
   return (
     <section
       id="solution-wrap"
+      ref={sectionRef}
       className="relative py-[clamp(96px,12vh,150px)] px-[clamp(24px,5vw,60px)] bg-transparent overflow-hidden"
-      style={{ background: 'linear-gradient(180deg, transparent, rgba(232,248,241,0.6) 40%, transparent)' }}
     >
       <div className="max-w-[1140px] mx-auto relative">
 

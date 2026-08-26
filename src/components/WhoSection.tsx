@@ -1,40 +1,19 @@
-import { BackpackIcon, CompassIcon, BuildingIcon, UsersIcon } from "./Icons";
-
-const CARDS = [
-  {
-    Icon: BackpackIcon,
-    role: "Students",
-    subtitle: "Grade 9–12 Students",
-    desc: "Get a personalised study plan and unlock gamified skill missions tied to your actual future — not just exam results.",
-    accent: "var(--accent)",
-  },
-  {
-    Icon: CompassIcon,
-    role: "Schools",
-    subtitle: "Counsellors & Heads of Year",
-    desc: "Stop repeating the same meeting. Let Noor handle initial guidance so you can focus on the students who truly need you.",
-    accent: "var(--accent-2)",
-  },
-  {
-    Icon: BuildingIcon,
-    role: "Leadership",
-    subtitle: "School Leaders",
-    desc: "Get a clear cohort view: who's confident, who needs support, which career domains are trending in your school this year.",
-    accent: "#0d6e5f",
-  },
-  {
-    Icon: UsersIcon,
-    role: "Parents",
-    subtitle: "Parents & Families",
-    desc: "See your child's pathway, skill progress, and subject choices in one place — with AI-backed clarity, not guesswork.",
-    accent: "var(--accent-amber)",
-  },
-];
+import { useRef } from "react";
+import { useScrubReveal } from "../hooks/useScrollConnect";
+import { WHO_CARDS as CARDS } from "../data/sections";
 
 export default function WhoSection() {
+  const sectionRef = useRef<HTMLElement>(null);
+  // Measured at 828px tall — taller than a 720-768px-high laptop viewport, so
+  // pinning it (usePinnedReveal) clips the heading/badge under the fixed nav
+  // and pushes the bottom of the card grid off-screen for the whole hold
+  // duration. useScrubReveal fades/rises it in during normal scroll instead.
+  useScrubReveal(sectionRef);
+
   return (
     <section
       id="who"
+      ref={sectionRef}
       className="py-28 px-[clamp(24px,5vw,64px)] bg-transparent text-center"
     >
       {/* Header */}

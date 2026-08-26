@@ -1,34 +1,8 @@
 import React, { useEffect, useRef } from 'react'
-import { HelpCircleIcon, HourglassIcon, DocumentIcon, ChartBarIcon } from './Icons'
+import { useScrubReveal } from '../hooks/useScrollConnect'
+import { PROBLEM_ITEMS as ITEMS } from '../data/sections'
 
 const TIMELINE_DELAYS = [0, 160, 320, 480]
-
-const ITEMS = [
-  {
-    Icon: HelpCircleIcon, color: 'var(--accent)', tilt: 'l' as const,
-    label: 'Awareness',
-    title: 'Students guess, not choose',
-    desc: 'Most teens pick subjects based on friends or "what seems easier" — not a clear link to their strengths or future careers.',
-  },
-  {
-    Icon: HourglassIcon, color: 'var(--accent-2)', tilt: 'r' as const,
-    label: 'Capacity',
-    title: 'Counsellors are stretched',
-    desc: 'One counsellor supports hundreds of students — repeating the same basic conversations instead of doing meaningful guidance.',
-  },
-  {
-    Icon: DocumentIcon, color: 'var(--accent)', tilt: 'l' as const,
-    label: 'Tools',
-    title: 'Static tools for dynamic choices',
-    desc: "Subject options live in long PDFs. There's no interactive way to test the fit between a student's profile and their future options.",
-  },
-  {
-    Icon: ChartBarIcon, color: 'var(--accent-2)', tilt: 'r' as const,
-    label: 'Visibility',
-    title: 'Leadership has no visibility',
-    desc: "School leaders can't easily see which cohorts are confident, which domains are in demand, or who still needs support.",
-  },
-]
 
 // Cascading offsets copied from the reference design so cards drift right
 // as they descend, capped so they never overflow the section.
@@ -50,6 +24,8 @@ const ProblemSection: React.FC = () => {
   const stackRef   = useRef<HTMLDivElement>(null)
   const itemRefs   = useRef<(HTMLDivElement | null)[]>([])
   const firedRef   = useRef(false)
+
+  useScrubReveal(sectionRef)
 
   useEffect(() => {
     const section = sectionRef.current
@@ -82,15 +58,6 @@ const ProblemSection: React.FC = () => {
       ref={sectionRef}
       className="relative bg-transparent px-[clamp(24px,6vw,80px)] py-[clamp(96px,12vh,150px)] overflow-hidden max-w-[2800px] mx-auto"
     >
-      <div
-        className="absolute rounded-full pointer-events-none"
-        style={{ top: '-140px', right: '-120px', width: 460, height: 460, background: 'radial-gradient(circle, var(--mesh-2), transparent 65%)', filter: 'blur(20px)' }}
-      />
-      <div
-        className="absolute rounded-full pointer-events-none"
-        style={{ bottom: '-160px', left: '-100px', width: 420, height: 420, background: 'radial-gradient(circle, var(--mesh-1), transparent 65%)', filter: 'blur(20px)' }}
-      />
-
       <div className="max-w-[1140px] mx-auto relative">
         {/* Header row */}
         <div className="problem-left grid grid-cols-1 md:grid-cols-2 gap-10 items-end" ref={leftRef}>

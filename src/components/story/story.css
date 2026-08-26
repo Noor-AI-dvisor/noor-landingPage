@@ -1,0 +1,606 @@
+/* ── ROOT / SCROLL WRAPPER ─────────────────────────────────────────── */
+.story-root {
+  position: relative;
+}
+
+.story-wrapper {
+  position: relative;
+}
+
+.story-anchor {
+  position: absolute;
+  left: 0;
+  width: 1px;
+  height: 1px;
+  pointer-events: none;
+}
+
+.story-stage {
+  position: sticky;
+  top: 0;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  background: linear-gradient(180deg, var(--bg) 0%, #f5fbf9 55%, #ffffff 100%);
+}
+
+.story-canvas {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.story-grid {
+  position: absolute;
+  inset: 6%;
+  z-index: 1;
+  pointer-events: none;
+  border-radius: 32px;
+  background-image:
+    linear-gradient(rgba(15, 168, 143, 0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(15, 168, 143, 0.07) 1px, transparent 1px);
+  background-size: 46px 46px;
+}
+
+/* ── PROGRESS RAIL (fixed, right edge) ─────────────────────────────── */
+.story-progress-nav {
+  position: absolute;
+  right: 28px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 6;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.story-progress-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(14, 47, 44, 0.18);
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  position: relative;
+  transition: all 0.25s;
+}
+
+.story-progress-dot.active {
+  background: var(--accent);
+  transform: scale(1.3);
+  box-shadow: 0 0 0 4px var(--accent-dim);
+}
+
+.story-progress-dot-tip {
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  white-space: nowrap;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-h);
+  background: var(--glass-bg-strong);
+  padding: 4px 10px;
+  border-radius: 999px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s;
+  box-shadow: var(--glass-shadow);
+}
+
+.story-progress-dot:hover .story-progress-dot-tip {
+  opacity: 1;
+}
+
+/* ── PANELS (absolute-stacked, crossfaded by scroll position) ─────── */
+.story-panel {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 96px clamp(24px, 5vw, 96px) 56px;
+  opacity: 0;
+  pointer-events: none;
+  will-change: opacity, transform;
+}
+
+.story-panel-hero {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.story-panel-inner {
+  width: 100%;
+  max-width: 1180px;
+  margin: 0 auto;
+}
+
+.story-header {
+  text-align: center;
+  max-width: 720px;
+  margin: 0 auto 40px;
+}
+
+.story-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 18px;
+  border-radius: 999px;
+  background: rgba(15, 168, 143, 0.1);
+  border: 1px solid rgba(15, 168, 143, 0.3);
+  color: var(--accent);
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 18px;
+}
+
+.story-title {
+  font-size: clamp(28px, 3.6vw, 44px);
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  color: var(--text-h);
+  margin: 0 0 12px;
+}
+
+.story-title-highlight {
+  color: var(--accent);
+}
+
+.story-sub {
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--text-b);
+  margin: 0;
+}
+
+/* ── TWO-COLUMN LAYOUT: rail | content card ────────────────────────── */
+.story-columns {
+  display: grid;
+  grid-template-columns: 250px 1fr;
+  gap: 52px;
+  align-items: center;
+  width: 100%;
+}
+
+.story-columns--early {
+  grid-template-columns: 330px 1fr;
+  align-items: start;
+}
+
+@media (max-width: 1279px) {
+  .story-columns,
+  .story-columns--early {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+}
+
+/* ── RAIL (numbered list + growing connector line) ─────────────────── */
+.story-rail {
+  min-width: 210px;
+}
+
+.story-rail-track {
+  position: absolute;
+  left: 12px;
+  top: 13px;
+  bottom: 13px;
+  width: 2px;
+  border-radius: 2px;
+  background: rgba(15, 168, 143, 0.16);
+  overflow: hidden;
+}
+
+.story-rail-fill {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 0%;
+  background: linear-gradient(180deg, var(--accent), var(--accent-2));
+}
+
+.story-rail-dots {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.story-rail-dot {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  opacity: 0.4;
+  transition: opacity 0.3s;
+}
+
+.story-rail-dot.active {
+  opacity: 1;
+}
+
+.story-rail-dot-marker {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: #fff;
+  border: 2px solid var(--border-s);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: 800;
+  color: var(--text-light);
+  flex-shrink: 0;
+  position: relative;
+  z-index: 1;
+  transition: all 0.3s;
+}
+
+.story-rail-dot.active .story-rail-dot-marker {
+  background: linear-gradient(135deg, var(--accent), var(--accent-soft));
+  border-color: transparent;
+  color: #fff;
+  box-shadow: 0 8px 18px -6px var(--accent-glow-h);
+  transform: scale(1.14);
+}
+
+.story-rail-dot-label {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-b);
+}
+
+.story-rail-dot.active .story-rail-dot-label {
+  color: var(--text-h);
+}
+
+/* ── CONTENT CARD (problem / solution / who) ───────────────────────── */
+.story-card {
+  position: relative;
+  background: linear-gradient(170deg, rgba(255, 255, 255, 0.92), rgba(240, 250, 246, 0.85));
+  border: 1px solid var(--glass-border);
+  border-radius: 26px;
+  padding: clamp(28px, 3vw, 44px);
+  box-shadow: var(--glass-shadow);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  overflow: hidden;
+  text-align: left;
+}
+
+.story-card-index {
+  position: absolute;
+  top: 4px;
+  right: 20px;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  font-size: 72px;
+}
+
+.story-card-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 16px;
+}
+
+.story-card-title {
+  margin: 0 0 12px;
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  color: var(--text-h);
+}
+
+.story-card-desc {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.65;
+  color: var(--text-b);
+}
+
+.story-card-more {
+  margin: 12px 0 0;
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--text-light);
+}
+
+.story-card--split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 28px;
+  align-items: center;
+}
+
+@media (max-width: 900px) {
+  .story-card--split {
+    grid-template-columns: 1fr;
+  }
+}
+
+.story-feature-num {
+  width: 40px;
+  height: 40px;
+  border-radius: 13px;
+  background: linear-gradient(135deg, var(--accent), var(--accent-soft));
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 16px;
+  box-shadow: 0 10px 22px -8px var(--accent-glow-h);
+  margin-bottom: 16px;
+}
+
+.story-who-card {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 420px;
+  margin: 0 auto;
+}
+
+.story-who-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid;
+  margin-bottom: 18px;
+}
+
+/* ── EARLY ACCESS (single persistent panel; rail + desc advance live) */
+.story-panel-early {
+  z-index: 3;
+}
+
+.story-early-desc-stack {
+  position: relative;
+  min-height: 76px;
+  margin-top: 22px;
+}
+
+.story-early-desc {
+  position: absolute;
+  inset: 0;
+  font-size: 15px;
+  line-height: 1.65;
+  color: var(--text-b);
+  opacity: 0;
+}
+
+.story-early-desc:first-child {
+  opacity: 1;
+}
+
+/* ── HERO ───────────────────────────────────────────────────────────── */
+.story-panel-hero .story-panel-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.story-hero-textblock {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: clamp(28px, 4vw, 48px) clamp(24px, 6vw, 56px);
+  margin-bottom: 8px;
+  border-radius: 28px;
+  background: var(--glass-bg-strong);
+  backdrop-filter: blur(22px);
+  -webkit-backdrop-filter: blur(22px);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+}
+
+.story-eyebrow-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 22px;
+  padding: 9px 18px;
+  border-radius: 999px;
+  background: var(--glass-bg);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 8px 20px -12px rgba(15, 168, 143, 0.3);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--accent);
+}
+
+.story-status-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  background: var(--accent);
+  flex-shrink: 0;
+  animation: story-scroll-pulse 1.8s ease-in-out infinite;
+}
+
+.story-hero-title {
+  font-size: clamp(2rem, 4.6vw, 3.4rem);
+  line-height: 1.1;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--text-h);
+  max-width: 780px;
+  margin: 0 0 16px;
+}
+
+.story-hero-title span {
+  color: var(--accent);
+}
+
+.story-hero-sub {
+  font-size: 1.05rem;
+  line-height: 1.6;
+  color: var(--text-b);
+  max-width: 500px;
+  margin: 0 0 28px;
+}
+
+.story-cta-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 22px;
+}
+
+.story-chip-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 30px;
+}
+
+.story-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  border-radius: 999px;
+  background: var(--glass-bg);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid var(--glass-border);
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: var(--text-b);
+}
+
+.story-scroll-hint {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-light);
+}
+
+/* ── HERO APPMOCK PREVIEW (floats above the canvas + text glass panel) ── */
+.story-hero-appmock-layout {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: clamp(24px, 5vw, 88px);
+  pointer-events: none;
+}
+
+.story-hero-appmock {
+  position: relative;
+  width: clamp(260px, 23vw, 380px);
+  opacity: 0;
+  will-change: opacity, transform;
+}
+
+.story-scroll-line {
+  width: 1px;
+  height: 36px;
+  background: linear-gradient(180deg, var(--accent), transparent);
+  animation: story-scroll-pulse 1.8s ease-in-out infinite;
+}
+
+@keyframes story-scroll-pulse {
+  0%, 100% { opacity: 0.2; }
+  50% { opacity: 1; }
+}
+
+/* ── REDUCED MOTION: fall back to a normal, non-jacked stacked page ─── */
+.story-reduced .story-wrapper {
+  height: auto !important;
+}
+
+.story-reduced .story-stage {
+  position: static;
+  height: auto;
+  padding: 60px 0 0;
+}
+
+.story-reduced .story-canvas {
+  position: relative;
+  height: 56vh;
+}
+
+.story-reduced .story-grid,
+.story-reduced .story-progress-nav {
+  display: none;
+}
+
+.story-reduced .story-panel {
+  position: static;
+  opacity: 1 !important;
+  transform: none !important;
+  pointer-events: auto !important;
+  padding: 60px clamp(24px, 5vw, 96px);
+}
+
+.story-reduced .story-hero-appmock-layout {
+  position: static;
+  padding: 40px 0 0;
+  justify-content: center;
+  pointer-events: auto;
+}
+
+.story-reduced .story-hero-appmock {
+  opacity: 1 !important;
+  transform: none !important;
+  pointer-events: auto !important;
+}
+
+.story-reduced .story-early-desc {
+  position: static;
+  opacity: 1 !important;
+  margin-bottom: 14px;
+}
+
+.story-reduced .story-early-desc-stack {
+  min-height: auto;
+}
+
+/* Scroll-jacking a pinned story is exactly the kind of motion
+   prefers-reduced-motion asks us to skip — this component only ever
+   renders on desktop; below 1024px HeroMobile + the normal stacked
+   sections handle things without scroll-jacking at all. */
+@media (max-width: 1023px) {
+  .story-root {
+    display: none;
+  }
+}

@@ -24,10 +24,203 @@
   background: linear-gradient(180deg, var(--bg) 0%, #f5fbf9 55%, #ffffff 100%);
 }
 
-.story-canvas {
+/* ── AMBIENT PRESENCE (breathing halo/orb/particles behind every panel;
+   replaces the old Three.js RibbonScene) ────────────────────────────── */
+.story-presence-layer {
   position: absolute;
   inset: 0;
   z-index: 0;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  pointer-events: none;
+  --p-a: var(--accent);
+  --p-b: var(--accent-soft);
+  --p-deep: #087a69;
+}
+
+.story-presence-layer[data-theme="blue"] {
+  --p-a: var(--accent-2);
+  --p-b: #8fd4ec;
+  --p-deep: #1f5f78;
+}
+
+.story-presence-layer[data-theme="amber"] {
+  --p-a: var(--accent-amber);
+  --p-b: #f6c878;
+  --p-deep: #8a5a17;
+}
+
+.presence-stage {
+  position: relative;
+  width: min(58vw, 760px);
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+  transform: translateY(4%);
+}
+
+.presence-halo,
+.presence-orb,
+.presence-particle {
+  position: absolute;
+  border-radius: 50%;
+}
+
+.presence-halo {
+  transition: background 1s ease, border-color 1s ease, box-shadow 1s ease;
+}
+
+.presence-halo--outer {
+  width: 96%;
+  height: 96%;
+  filter: blur(4px);
+  background: radial-gradient(
+    circle,
+    color-mix(in srgb, var(--p-a) 18%, transparent) 0 22%,
+    color-mix(in srgb, var(--p-b) 10%, transparent) 43%,
+    transparent 70%
+  );
+  animation: presence-breathe 4.8s ease-in-out infinite;
+}
+
+.presence-halo--middle {
+  width: 67%;
+  height: 67%;
+  border: 1px solid color-mix(in srgb, var(--p-a) 22%, transparent);
+  box-shadow:
+    0 0 0 18px color-mix(in srgb, var(--p-a) 3.5%, transparent),
+    0 0 0 48px color-mix(in srgb, var(--p-a) 1.8%, transparent);
+  animation: presence-breathe 4.8s ease-in-out 0.35s infinite;
+}
+
+.presence-orb {
+  width: 37%;
+  height: 37%;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 32% 25%, #e8fff9 0 3%, color-mix(in srgb, var(--p-b) 92%, white) 11%, transparent 30%),
+    radial-gradient(circle at 60% 66%, var(--p-b), var(--p-a) 56%, var(--p-deep) 100%);
+  box-shadow:
+    inset -22px -26px 38px rgba(0, 76, 65, 0.28),
+    inset 12px 12px 24px rgba(255, 255, 255, 0.3),
+    0 0 34px color-mix(in srgb, var(--p-a) 50%, transparent),
+    0 0 88px color-mix(in srgb, var(--p-a) 25%, transparent);
+  animation: presence-float 5.4s ease-in-out infinite;
+  transition: background 1s ease, box-shadow 1s ease;
+}
+
+.presence-shine {
+  position: absolute;
+  width: 44%;
+  height: 22%;
+  left: 18%;
+  top: 13%;
+  border-radius: 50%;
+  transform: rotate(-30deg);
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.75), transparent);
+  filter: blur(4px);
+}
+
+.presence-wave {
+  position: absolute;
+  left: -12%;
+  width: 124%;
+  height: 28%;
+  top: 36%;
+  border-radius: 48% 52% 46% 54% / 42% 44% 56% 58%;
+  border: 3px solid rgba(235, 255, 250, 0.78);
+  border-inline-color: transparent;
+  transform: rotate(-4deg) scaleY(0.44);
+  animation: presence-speak 1.9s ease-in-out infinite;
+}
+
+.presence-wave--two {
+  top: 45%;
+  border-width: 2px;
+  opacity: 0.72;
+  animation-delay: -0.48s;
+}
+
+.presence-wave--three {
+  top: 27%;
+  border-width: 1.5px;
+  opacity: 0.48;
+  animation-delay: -0.95s;
+}
+
+.presence-core {
+  position: absolute;
+  inset: 35%;
+  border-radius: 50%;
+  background: #d8fff5;
+  box-shadow: 0 0 22px 8px rgba(216, 255, 245, 0.58);
+  animation: presence-core 1.9s ease-in-out infinite;
+}
+
+.presence-particle {
+  width: 9px;
+  aspect-ratio: 1;
+  background: var(--p-b);
+  box-shadow: 0 0 14px color-mix(in srgb, var(--p-a) 75%, transparent);
+  transition: background 1s ease, box-shadow 1s ease, width 0.4s ease, height 0.4s ease;
+}
+
+.presence-particle--one {
+  transform: translateY(-190%);
+  animation: presence-twinkle 2.3s ease-in-out infinite;
+}
+
+.presence-particle--two {
+  width: 6px;
+  transform: translate(220%, 50%);
+  animation: presence-twinkle 2.8s ease-in-out -0.6s infinite;
+}
+
+.presence-particle--three {
+  width: 5px;
+  transform: translate(-210%, 85%);
+  animation: presence-twinkle 2.5s ease-in-out -1.1s infinite;
+}
+
+.presence-particle.active {
+  width: 13px;
+  box-shadow: 0 0 22px 6px color-mix(in srgb, var(--p-a) 85%, transparent);
+}
+
+.presence-particle--two.active {
+  width: 10px;
+}
+
+.presence-particle--three.active {
+  width: 9px;
+}
+
+@keyframes presence-breathe {
+  0%, 100% { transform: scale(0.94); opacity: 0.58; }
+  50% { transform: scale(1.06); opacity: 1; }
+}
+
+@keyframes presence-float {
+  0%, 100% { transform: translateY(1%) scale(0.98); }
+  50% { transform: translateY(-4%) scale(1.03); }
+}
+
+@keyframes presence-speak {
+  0%, 100% { transform: rotate(-4deg) scaleY(0.3); opacity: 0.48; }
+  45% { transform: rotate(3deg) scaleY(1); opacity: 1; }
+  68% { transform: rotate(-2deg) scaleY(0.58); opacity: 0.72; }
+}
+
+@keyframes presence-core {
+  0%, 100% { transform: scale(0.62); opacity: 0.55; }
+  45% { transform: scale(1.18); opacity: 1; }
+  68% { transform: scale(0.82); opacity: 0.7; }
+}
+
+@keyframes presence-twinkle {
+  0%, 100% { opacity: 0.35; scale: 0.65; }
+  50% { opacity: 1; scale: 1.2; }
 }
 
 .story-grid {
@@ -264,6 +457,22 @@
   color: var(--text-h);
 }
 
+/* ── CARD STACK: all 4 bullet cards in a section share this one grid
+   cell (auto-sized to the tallest card, no manual height needed) instead
+   of each living in its own crossfading panel — the active card animates
+   in and lands on top (see applyStackCard in ScrollStory.tsx); earlier
+   cards stay fully opaque at rest underneath it, simply covered, rather
+   than fading out on every bullet change. ─────────────────────────────── */
+.story-card-stack {
+  display: grid;
+}
+
+.story-card-stack > .story-card {
+  grid-column: 1;
+  grid-row: 1;
+  will-change: opacity, transform;
+}
+
 /* ── CONTENT CARD (problem / solution / who) ───────────────────────── */
 .story-card {
   position: relative;
@@ -396,11 +605,35 @@
 }
 
 /* ── HERO ───────────────────────────────────────────────────────────── */
+/* Card on the left, AppMock preview on the right — a real two-column grid
+   (not story-panel's default single centered flex column, and not the
+   AppMock's old inset:0 overlay) so the two never overlap: each column has
+   its own bounded width, from the 1024px desktop breakpoint (ScrollStory
+   only mounts >=1024px, see App.tsx) up through wide screens. */
+.story-panel-hero {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) minmax(300px, 480px);
+  align-items: center;
+  column-gap: clamp(20px, 3vw, 56px);
+}
+
 .story-panel-hero .story-panel-inner {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
   text-align: center;
+  width: 100%;
+  margin: 0;
+  /* The title/sub font-size below is sized in cqw (container-query width)
+     rather than vw: in the old single-column hero, vw-relative sizing was
+     fine because the text had roughly the full viewport to work with, but
+     now it's confined to this grid column (as little as ~40% of viewport
+     at the 1024px floor) — sizing off the viewport instead of the actual
+     column caused the title to wrap 4-5 lines deep and blow the card past
+     the (non-scrolling, overflow:hidden) viewport height. Querying this
+     container's own inline size ties the font directly to the space it
+     actually has, at every breakpoint. */
+  container-type: inline-size;
 }
 
 .story-hero-textblock {
@@ -411,7 +644,6 @@
   align-items: center;
   text-align: center;
   padding: clamp(28px, 4vw, 48px) clamp(24px, 6vw, 56px);
-  margin-bottom: 8px;
   border-radius: 28px;
   background: var(--glass-bg-strong);
   backdrop-filter: blur(22px);
@@ -424,7 +656,7 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  margin-bottom: 22px;
+  margin-bottom: 16px;
   padding: 9px 18px;
   border-radius: 999px;
   background: var(--glass-bg);
@@ -447,13 +679,13 @@
 }
 
 .story-hero-title {
-  font-size: clamp(2rem, 4.6vw, 3.4rem);
-  line-height: 1.1;
+  font-size: clamp(1.7rem, 9.5cqi, 2.9rem);
+  line-height: 1.14;
   font-weight: 800;
   letter-spacing: -0.02em;
   color: var(--text-h);
   max-width: 780px;
-  margin: 0 0 16px;
+  margin: 0 0 14px;
 }
 
 .story-hero-title span {
@@ -461,11 +693,11 @@
 }
 
 .story-hero-sub {
-  font-size: 1.05rem;
-  line-height: 1.6;
+  font-size: clamp(0.9rem, 2.6cqi, 1.05rem);
+  line-height: 1.55;
   color: var(--text-b);
   max-width: 500px;
-  margin: 0 0 28px;
+  margin: 0 0 20px;
 }
 
 .story-cta-row {
@@ -474,7 +706,7 @@
   justify-content: center;
   gap: 12px;
   flex-wrap: wrap;
-  margin-bottom: 22px;
+  margin-bottom: 16px;
 }
 
 .story-chip-row {
@@ -483,7 +715,7 @@
   justify-content: center;
   gap: 8px;
   flex-wrap: wrap;
-  margin-bottom: 30px;
+  margin-bottom: 18px;
 }
 
 .story-chip {
@@ -512,23 +744,23 @@
   color: var(--text-light);
 }
 
-/* ── HERO APPMOCK PREVIEW (floats above the canvas + text glass panel) ── */
+/* ── HERO APPMOCK PREVIEW (right grid column of story-panel-hero, above
+   the presence layer; nested in story-panel-hero so it shares that panel's
+   own crossfade opacity — see ScrollStory.tsx) ──────────────────────────── */
 .story-hero-appmock-layout {
-  position: absolute;
-  inset: 0;
+  position: relative;
   z-index: 4;
   display: flex;
   align-items: center;
-  justify-content: flex-end;
-  padding-right: clamp(24px, 5vw, 88px);
-  pointer-events: none;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
 }
 
 .story-hero-appmock {
   position: relative;
-  width: clamp(260px, 23vw, 380px);
-  opacity: 0;
-  will-change: opacity, transform;
+  width: clamp(300px, 34vw, 480px);
+  max-width: 100%;
 }
 
 .story-scroll-line {
@@ -554,9 +786,20 @@
   padding: 60px 0 0;
 }
 
-.story-reduced .story-canvas {
+.story-reduced .story-presence-layer {
   position: relative;
   height: 56vh;
+}
+
+/* Honor the OS-level reduced-motion preference that put us in this fallback
+   in the first place — the halo/orb/wave/particle motion is otherwise fully
+   continuous and scroll-independent, so it would keep animating forever. */
+.story-reduced .presence-halo,
+.story-reduced .presence-orb,
+.story-reduced .presence-wave,
+.story-reduced .presence-core,
+.story-reduced .presence-particle {
+  animation: none !important;
 }
 
 .story-reduced .story-grid,
@@ -572,17 +815,17 @@
   padding: 60px clamp(24px, 5vw, 96px);
 }
 
-.story-reduced .story-hero-appmock-layout {
-  position: static;
-  padding: 40px 0 0;
-  justify-content: center;
-  pointer-events: auto;
+.story-reduced .story-panel-hero {
+  display: flex !important;
+  flex-direction: column;
 }
 
-.story-reduced .story-hero-appmock {
-  opacity: 1 !important;
-  transform: none !important;
-  pointer-events: auto !important;
+.story-reduced .story-panel-hero .story-panel-inner {
+  align-items: center;
+}
+
+.story-reduced .story-hero-appmock-layout {
+  padding: 40px 0 0;
 }
 
 .story-reduced .story-early-desc {
@@ -593,6 +836,18 @@
 
 .story-reduced .story-early-desc-stack {
   min-height: auto;
+}
+
+.story-reduced .story-card-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.story-reduced .story-card-stack > .story-card {
+  opacity: 1 !important;
+  transform: none !important;
+  position: static;
 }
 
 /* Scroll-jacking a pinned story is exactly the kind of motion

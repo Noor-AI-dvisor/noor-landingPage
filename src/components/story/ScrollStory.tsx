@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import RibbonScene, { type StoryProgress } from "../hero3d/RibbonScene";
 import EarlyAccessForm from "../EarlyAccessForm";
 import AppMock from "../AppMock";
 import { useStoryScroll } from "../../hooks/useScrollConnect";
@@ -59,22 +58,6 @@ const clamp = (v: number, min: number, max: number) => Math.min(Math.max(v, min)
 const CROSSFADE_SPAN = 0.55;
 const CROSSFADE_HOLD = 0.18;
 
-// The hero's AppMock preview reuses applyCrossfade's own tent (same
-// CROSSFADE_HOLD/CROSSFADE_SPAN shape) rather than a separate opacity
-// system, but scaled onto its own local timeline via APPMOCK_SPEED — the
-// tent's natural width (2 * CROSSFADE_SPAN = 1.1 stepFloat units) doesn't
-// fit inside the hero panel's own ~0.85-unit usable window otherwise. With
-// APPMOCK_CENTER = 0.44 and APPMOCK_SPEED = 1.35: opacity is 0 at stepFloat
-// 0 (no bleed-through under the headline on load), rises through the
-// headline's own fade-out (which starts at CROSSFADE_HOLD = 0.18), reaches
-// full opacity right around stepFloat 0.3 — where RibbonScene's own
-// BOOK_SETTLE_BLEND settles the book — holds through ~0.57 (by which point
-// the headline/text panel has fully faded via its own unrelated panel-level
-// crossfade), then fades back out well before the Problem panel reaches its
-// own hold at stepFloat 0.82.
-const APPMOCK_CENTER = 0.44;
-const APPMOCK_SPEED = 1.35;
-
 function applyCrossfade(el: HTMLElement | null, diff: number, rise = 36) {
   if (!el) return;
   const absDiff = Math.abs(diff);
@@ -87,8 +70,86 @@ function applyCrossfade(el: HTMLElement | null, diff: number, rise = 36) {
   el.style.pointerEvents = absDiff < 0.5 ? "auto" : "none";
 }
 
+// Section-level fade for Problem/Solution/Who: each of these is now ONE
+// persistent panel (header + rail + card stack) per section rather than one
+// panel per bullet. It fades in gradually during the *previous* section's
+// final step (the same timing early-access's own one-sided fade-in already
+// uses below) and fades out during its OWN final step — full opacity, no
+// fading at all, for every step in between. That's the fix for the header/
+// description flickering in and out on every bullet: previously each bullet
+// was a full separate panel with its own copy of the header, crossfading
+// independently: now the header only ever fades at the section boundary.
+function applySectionFade(el: HTMLElement | null, stepFloat: number, startStep: number) {
+  if (!el) return;
+  const fadeIn = clamp(stepFloat - (startStep - 1), 0, 1);
+  const fadeOut = 1 - clamp(stepFloat - (startStep + 3), 0, 1);
+  const opacity = Math.min(fadeIn, fadeOut);
+  el.style.opacity = String(opacity);
+  el.style.pointerEvents = opacity > 0.6 ? "auto" : "none";
+  el.style.transform = `translateY(${(1 - opacity) * 40}px)`;
+}
+
+// Card "stack": all 4 bullet cards in a section occupy the same grid cell
+// (see .story-card-stack in story.css) instead of separate crossfading
+// panels. As `progress` (a section's activeGroup, 0-3) reaches a card's own
+// index it slides/scales up into place, landing at a higher z-index than
+// every earlier card — literally stacking on top of it. A card never fades
+// back out on its own once it has arrived (no `1 - progress` term anywhere
+// below): it just sits there at rest, covered by whichever later card is
+// now on top, until the whole section itself fades away.
+const STACK_ENTER_SPAN = 0.45;
+const STACK_RISE = 44;
+
+function applyStackCard(el: HTMLElement | null, progress: number, index: number) {
+  if (!el) return;
+  const diff = progress - index;
+  const enter = clamp((diff + STACK_ENTER_SPAN) / STACK_ENTER_SPAN, 0, 1);
+  el.style.opacity = String(enter);
+  el.style.transform = `translateY(${(1 - enter) * STACK_RISE}px) scale(${0.95 + enter * 0.05})`;
+  el.style.zIndex = String(index + 1);
+  el.style.pointerEvents = enter > 0.5 ? "auto" : "none";
+}
+
 function scrollToId(id: string) {
   document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+}
+
+// Ambient background presence — a breathing halo/orb/particle CSS treatment
+// (adapted from the noor-learning-animation design reference), replacing the
+// old Three.js RibbonScene. It has no scroll-driven "shape" of its own (the
+// halo/orb/wave/particle motion is continuous CSS, same as the reference);
+// the only scroll-reactive touches are the section color theme (via
+// data-theme, crossfaded by CSS transition rather than a per-frame lerp)
+// and which of the 3 particles flares while a problem/solution/who bullet
+// is active — both driven directly from handleUpdate, same as every other
+// imperative DOM write in this file.
+const SECTION_THEME: Array<"teal" | "blue" | "amber"> = ["teal", "teal", "blue", "amber", "teal"];
+
+function StoryPresence({
+  rootRef,
+  particleRefs,
+}: {
+  rootRef: (el: HTMLDivElement | null) => void;
+  particleRefs: (el: HTMLElement | null, i: number) => void;
+}) {
+  return (
+    <div className="story-presence-layer" data-theme="teal" ref={rootRef} aria-hidden="true">
+      <div className="presence-stage">
+        <div className="presence-halo presence-halo--outer" />
+        <div className="presence-halo presence-halo--middle" />
+        <div className="presence-orb">
+          <div className="presence-shine" />
+          <div className="presence-wave" />
+          <div className="presence-wave presence-wave--two" />
+          <div className="presence-wave presence-wave--three" />
+          <div className="presence-core" />
+        </div>
+        <i className="presence-particle presence-particle--one" ref={(el) => particleRefs(el, 0)} />
+        <i className="presence-particle presence-particle--two" ref={(el) => particleRefs(el, 1)} />
+        <i className="presence-particle presence-particle--three" ref={(el) => particleRefs(el, 2)} />
+      </div>
+    </div>
+  );
 }
 
 function SectionRail({
@@ -208,12 +269,29 @@ function SolutionVisual({ index }: { index: number }) {
 export default function ScrollStory() {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const [reduced, setReduced] = useState(false);
-  const storyRef = useRef<StoryProgress>({ fromStage: 0, toStage: 0, blend: 0, activeGroup: -1 });
 
-  const panelRefs = useRef<(HTMLDivElement | null)[]>(Array(13).fill(null));
-  const appMockRef = useRef<HTMLDivElement>(null);
-  const railFillRefs = useRef<(HTMLDivElement | null)[]>(Array(13).fill(null));
+  const presenceRootRef = useRef<HTMLDivElement>(null);
+  const presenceParticleRefs = useRef<(HTMLElement | null)[]>(Array(3).fill(null));
+
+  const heroPanelRef = useRef<HTMLDivElement>(null);
   const progressDotRefs = useRef<(HTMLButtonElement | null)[]>(Array(NAV_DOTS.length).fill(null));
+
+  // Problem/Solution/Who: one persistent panel each (header + rail + card
+  // stack), replacing the old 4-separate-panels-per-section setup.
+  const problemPanelRef = useRef<HTMLDivElement>(null);
+  const problemRailFillRef = useRef<HTMLDivElement | null>(null);
+  const problemDotRefs = useRef<(HTMLDivElement | null)[]>(Array(4).fill(null));
+  const problemCardRefs = useRef<(HTMLDivElement | null)[]>(Array(4).fill(null));
+
+  const solutionPanelRef = useRef<HTMLDivElement>(null);
+  const solutionRailFillRef = useRef<HTMLDivElement | null>(null);
+  const solutionDotRefs = useRef<(HTMLDivElement | null)[]>(Array(4).fill(null));
+  const solutionCardRefs = useRef<(HTMLDivElement | null)[]>(Array(4).fill(null));
+
+  const whoPanelRef = useRef<HTMLDivElement>(null);
+  const whoRailFillRef = useRef<HTMLDivElement | null>(null);
+  const whoDotRefs = useRef<(HTMLDivElement | null)[]>(Array(4).fill(null));
+  const whoCardRefs = useRef<(HTMLDivElement | null)[]>(Array(4).fill(null));
 
   const earlyPanelRef = useRef<HTMLDivElement>(null);
   const earlyFillRef = useRef<HTMLDivElement | null>(null);
@@ -229,25 +307,41 @@ export default function ScrollStory() {
     const toStage = isLastStepOfSection ? section + 1 : section;
     const blend = isLastStepOfSection ? localT : 0;
 
-    const story = storyRef.current;
-    story.fromStage = fromStage;
-    story.toStage = toStage;
-    story.blend = blend;
-    story.activeGroup = section >= 1 && section <= 3 ? clamp(stepFloat - SECTION_START_STEP[section], 0, 3) : -1;
+    const activeGroup = section >= 1 && section <= 3 ? clamp(stepFloat - SECTION_START_STEP[section], 0, 3) : -1;
 
-    for (let i = 0; i <= 12; i++) applyCrossfade(panelRefs.current[i], stepFloat - i);
-    applyCrossfade(appMockRef.current, (stepFloat - APPMOCK_CENTER) * APPMOCK_SPEED, 24);
+    const presenceSection = blend > 0.5 ? toStage : fromStage;
+    if (presenceRootRef.current) presenceRootRef.current.dataset.theme = SECTION_THEME[presenceSection];
+    const nearestParticle = activeGroup >= 0 ? Math.round(activeGroup) % 3 : -1;
+    presenceParticleRefs.current.forEach((el, i) => el?.classList.toggle("active", i === nearestParticle));
 
-    const setRailFill = (start: number, keys: number[]) => {
-      const frac = clamp((stepFloat - start) / 3, 0, 1);
-      keys.forEach((idx) => {
-        const el = railFillRefs.current[idx];
-        if (el) el.style.height = `${frac * 100}%`;
-      });
+    applyCrossfade(heroPanelRef.current, stepFloat - 0);
+
+    // A section not yet reached holds its cards at their pre-entrance state
+    // (progress -1); one already passed holds them fully settled (progress
+    // 3, i.e. every card's own diff >= 0) — only the CURRENTLY active
+    // section's cards actually track activeGroup live.
+    const sectionProgress = (idx: number) => (section < idx ? -1 : section > idx ? 3 : activeGroup);
+
+    const updateSection = (
+      panelEl: HTMLDivElement | null,
+      startStep: number,
+      railFillEl: HTMLDivElement | null,
+      dotRefs: (HTMLDivElement | null)[],
+      cardRefs: (HTMLDivElement | null)[],
+      sectionIndex: number
+    ) => {
+      applySectionFade(panelEl, stepFloat, startStep);
+      const frac = clamp((stepFloat - startStep) / 3, 0, 1);
+      if (railFillEl) railFillEl.style.height = `${frac * 100}%`;
+      const progress = sectionProgress(sectionIndex);
+      const nearest = Math.round(clamp(progress, 0, 3));
+      dotRefs.forEach((el, j) => el?.classList.toggle("active", j === nearest));
+      cardRefs.forEach((el, j) => applyStackCard(el, progress, j));
     };
-    setRailFill(PROBLEM_START, [1, 2, 3, 4]);
-    setRailFill(SOLUTION_START, [5, 6, 7, 8]);
-    setRailFill(WHO_START, [9, 10, 11, 12]);
+
+    updateSection(problemPanelRef.current, PROBLEM_START, problemRailFillRef.current, problemDotRefs.current, problemCardRefs.current, 1);
+    updateSection(solutionPanelRef.current, SOLUTION_START, solutionRailFillRef.current, solutionDotRefs.current, solutionCardRefs.current, 2);
+    updateSection(whoPanelRef.current, WHO_START, whoRailFillRef.current, whoDotRefs.current, whoCardRefs.current, 3);
 
     const earlyEl = earlyPanelRef.current;
     if (earlyEl) {
@@ -269,31 +363,23 @@ export default function ScrollStory() {
 
   const handleReducedMotion = useCallback(() => {
     setReduced(true);
-    storyRef.current = { fromStage: 4, toStage: 4, blend: 0, activeGroup: -1 };
   }, []);
 
   useStoryScroll(wrapperRef, TOTAL_STEPS, handleUpdate, handleReducedMotion);
 
   useEffect(() => {
     if (!reduced) return;
-    // Static fallback: every panel simply visible, stacked in normal flow (see story-reduced CSS).
-    panelRefs.current.forEach((el) => {
+    // Static fallback: every panel simply visible, stacked in normal flow
+    // (see story-reduced CSS, including the .story-card-stack override that
+    // un-stacks the cards back into normal document flow).
+    [heroPanelRef, problemPanelRef, solutionPanelRef, whoPanelRef, earlyPanelRef].forEach((ref) => {
+      const el = ref.current;
       if (!el) return;
       el.style.opacity = "1";
       el.style.transform = "none";
       el.style.pointerEvents = "auto";
     });
-    if (earlyPanelRef.current) {
-      earlyPanelRef.current.style.opacity = "1";
-      earlyPanelRef.current.style.transform = "none";
-      earlyPanelRef.current.style.pointerEvents = "auto";
-    }
-    if (appMockRef.current) {
-      appMockRef.current.style.opacity = "1";
-      appMockRef.current.style.transform = "none";
-      appMockRef.current.style.pointerEvents = "auto";
-    }
-    earlyDescRefs.current.forEach((el) => {
+    [...problemCardRefs.current, ...solutionCardRefs.current, ...whoCardRefs.current, ...earlyDescRefs.current].forEach((el) => {
       if (!el) return;
       el.style.opacity = "1";
       el.style.transform = "none";
@@ -309,9 +395,10 @@ export default function ScrollStory() {
         <div id="early-access" className="story-anchor" style={{ top: `${(EARLY_START / TOTAL_STEPS) * 100}%` }} />
 
         <div className="story-stage">
-          <div className="story-canvas">
-            <RibbonScene storyRef={storyRef} />
-          </div>
+          <StoryPresence
+            rootRef={(el) => { presenceRootRef.current = el; }}
+            particleRefs={(el, i) => { presenceParticleRefs.current[i] = el; }}
+          />
           <div className="story-grid" aria-hidden="true" />
 
           {!reduced && (
@@ -330,8 +417,12 @@ export default function ScrollStory() {
             </nav>
           )}
 
-          {/* Step 0 — Hero */}
-          <div className="story-panel story-panel-hero" ref={(el) => { panelRefs.current[0] = el; }}>
+          {/* Step 0 — Hero: the glass card and the AppMock preview are both
+              direct descendants of story-panel-hero, so they share exactly
+              the same crossfade opacity (applied to the panel itself below)
+              — one section, appearing and disappearing together, rather
+              than the AppMock having its own separate delayed reveal. */}
+          <div className="story-panel story-panel-hero" ref={heroPanelRef}>
             <div className="story-panel-inner">
               <div className="story-hero-textblock">
                 <div className="story-eyebrow-pill">
@@ -347,178 +438,181 @@ export default function ScrollStory() {
                   An AI-powered advisor that helps students aged 14–18 choose the right subjects,
                   discover their strengths, and build the skills that actually matter for their future.
                 </p>
-              </div>
-              <div className="story-cta-row">
-                <button className="btn-primary" onClick={() => scrollToId("early-access")}>
-                  Request a free demo →
-                </button>
-                <button className="btn-secondary" onClick={() => scrollToId("solution-wrap")}>
-                  See How It Works
-                </button>
-              </div>
-              <div className="story-chip-row">
-                {CHIPS.map(({ Icon, label }) => (
-                  <span key={label} className="story-chip">
-                    <Icon className="w-3.5 h-3.5 text-accent shrink-0" />
-                    {label}
-                  </span>
-                ))}
-              </div>
-              <div className="story-scroll-hint">
-                <span>Scroll to explore</span>
-                <div className="story-scroll-line" />
+                <div className="story-cta-row">
+                  <button className="btn-primary" onClick={() => scrollToId("early-access")}>
+                    Request a free demo →
+                  </button>
+                  <button className="btn-secondary" onClick={() => scrollToId("solution-wrap")}>
+                    See How It Works
+                  </button>
+                </div>
+                <div className="story-chip-row">
+                  {CHIPS.map(({ Icon, label }) => (
+                    <span key={label} className="story-chip">
+                      <Icon className="w-3.5 h-3.5 text-accent shrink-0" />
+                      {label}
+                    </span>
+                  ))}
+                </div>
+                <div className="story-scroll-hint">
+                  <span>Scroll to explore</span>
+                  <div className="story-scroll-line" />
+                </div>
               </div>
             </div>
-          </div>
 
-          {/* AppMock preview: a sibling of every story-panel (not nested in
-              story-panel-hero) so its own crossfade isn't multiplied by the
-              hero panel's opacity — nesting it inside meant its compounded
-              opacity could never exceed the hero panel's own fading-out
-              value, so it never got a real "fully visible" moment. Timing
-              (see APPMOCK_CENTER/APPMOCK_SPEED) keeps it fully transparent
-              at stepFloat 0, has it take over as the text panel fades out
-              (peaking right around the book's own settle point), and fades
-              it back out before the Problem panel reaches its own hold. */}
-          <div className="story-hero-appmock-layout">
-            <div className="story-hero-appmock" ref={appMockRef}>
-              <div className="absolute top-[22%] -left-3 bg-[var(--glass-bg-strong)] backdrop-blur-xl border border-[var(--glass-border)] rounded-xl px-[14px] py-[9px] shadow-badge-float flex flex-col text-[11px] z-10 animate-badge-float">
-                <div className="font-bold text-[var(--text-h)] flex items-center gap-1.5 text-[12px]">
-                  <FlameIcon className="w-3.5 h-3.5 text-[var(--accent-amber)] shrink-0" /> 3-day streak
+            <div className="story-hero-appmock-layout">
+              <div className="story-hero-appmock">
+                <div className="absolute top-[22%] -left-3 bg-[var(--glass-bg-strong)] backdrop-blur-xl border border-[var(--glass-border)] rounded-xl px-[14px] py-[9px] shadow-badge-float flex flex-col text-[11px] z-10 animate-badge-float">
+                  <div className="font-bold text-[var(--text-h)] flex items-center gap-1.5 text-[12px]">
+                    <FlameIcon className="w-3.5 h-3.5 text-[var(--accent-amber)] shrink-0" /> 3-day streak
+                  </div>
+                  <div className="text-[9.5px] font-semibold tracking-[0.06em] uppercase text-[var(--text-light)] mt-0.5">Keep going!</div>
                 </div>
-                <div className="text-[9.5px] font-semibold tracking-[0.06em] uppercase text-[var(--text-light)] mt-0.5">Keep going!</div>
-              </div>
 
-              <div className="absolute -right-3 top-[45%] bg-[var(--text-h)] text-[var(--bg)] rounded-[10px] px-3 py-2 flex items-center gap-[7px] text-[11px] font-bold shadow-badge-float whitespace-nowrap z-10 animate-badge-float [animation-delay:-3s]">
-                <BrainIcon className="w-4 h-4 shrink-0" />
-                <div>
-                  <div>AI matched</div>
-                  <div className="font-medium opacity-65 text-[10px]">3 career paths</div>
-                </div>
-              </div>
-
-              <div className="absolute -bottom-3 -left-3 bg-[var(--glass-bg-strong)] backdrop-blur-xl border border-[var(--glass-border)] rounded-xl px-[13px] py-2 flex items-center gap-2 shadow-badge-float text-[11px] z-10 animate-badge-float [animation-delay:-1.5s]">
-                <div className="w-7 h-7 rounded-lg bg-[#fbe8c8] flex items-center justify-center">
-                  <StarIcon className="w-3.5 h-3.5 text-[var(--accent-amber)]" />
-                </div>
-                <div>
-                  <div className="font-bold text-[var(--text-h)] text-[13px]">120 pts</div>
-                  <div className="text-[9.5px] font-semibold tracking-[0.06em] uppercase text-[var(--text-light)]">This week</div>
-                </div>
-              </div>
-
-              <AppMock compact={false} />
-            </div>
-          </div>
-
-          {/* Steps 1-4 — Problem */}
-          {PROBLEM_ITEMS.map((item, i) => (
-            <div
-              className="story-panel"
-              key={`problem-${item.label}`}
-              ref={(el) => { panelRefs.current[PROBLEM_START + i] = el; }}
-            >
-              <div className="story-panel-inner">
-                <div className="story-header">
-                  <span className="story-eyebrow">The Problem</span>
-                  <h2 className="story-title">
-                    Subject choice is{" "}
-                    <span className="story-title-highlight">broken</span> — and schools know it.
-                  </h2>
-                  <p className="story-sub">
-                    Students make life-defining decisions with one meeting, a PDF booklet, and a guess.
-                  </p>
-                </div>
-                <div className="story-columns">
-                  <SectionRail
-                    items={PROBLEM_ITEMS}
-                    activeIndex={i}
-                    fillRef={(el) => { railFillRefs.current[PROBLEM_START + i] = el; }}
-                  />
-                  <div className={`story-card problem-card tilt-${item.tilt}`}>
-                    <div className="story-card-index" style={{ color: item.tilt === "l" ? "rgba(15,168,143,0.14)" : "rgba(58,159,192,0.16)" }}>
-                      0{i + 1}
-                    </div>
-                    <div className="story-card-badge" style={{ background: item.tilt === "l" ? "rgba(15,168,143,0.1)" : "rgba(58,159,192,0.12)", color: item.color }}>
-                      <item.Icon className="w-3.5 h-3.5" style={{ color: item.color }} />
-                      {item.label}
-                    </div>
-                    <h3 className="story-card-title">{item.title}</h3>
-                    <p className="story-card-desc">{item.desc}</p>
+                <div className="absolute -right-3 top-[45%] bg-[var(--text-h)] text-[var(--bg)] rounded-[10px] px-3 py-2 flex items-center gap-[7px] text-[11px] font-bold shadow-badge-float whitespace-nowrap z-10 animate-badge-float [animation-delay:-3s]">
+                  <BrainIcon className="w-4 h-4 shrink-0" />
+                  <div>
+                    <div>AI matched</div>
+                    <div className="font-medium opacity-65 text-[10px]">3 career paths</div>
                   </div>
                 </div>
+
+                <div className="absolute -bottom-3 -left-3 bg-[var(--glass-bg-strong)] backdrop-blur-xl border border-[var(--glass-border)] rounded-xl px-[13px] py-2 flex items-center gap-2 shadow-badge-float text-[11px] z-10 animate-badge-float [animation-delay:-1.5s]">
+                  <div className="w-7 h-7 rounded-lg bg-[#fbe8c8] flex items-center justify-center">
+                    <StarIcon className="w-3.5 h-3.5 text-[var(--accent-amber)]" />
+                  </div>
+                  <div>
+                    <div className="font-bold text-[var(--text-h)] text-[13px]">120 pts</div>
+                    <div className="text-[9.5px] font-semibold tracking-[0.06em] uppercase text-[var(--text-light)]">This week</div>
+                  </div>
+                </div>
+
+                <AppMock compact={false} />
               </div>
             </div>
-          ))}
+          </div>
+
+          {/* Steps 1-4 — Problem: one persistent panel; header/rail hold
+              steady (see applySectionFade) while the 4 cards stack on top
+              of each other in place as activeGroup advances (see
+              applyStackCard / .story-card-stack). */}
+          <div className="story-panel" ref={problemPanelRef}>
+            <div className="story-panel-inner">
+              <div className="story-header">
+                <span className="story-eyebrow">The Problem</span>
+                <h2 className="story-title">
+                  Subject choice is{" "}
+                  <span className="story-title-highlight">broken</span> — and schools know it.
+                </h2>
+                <p className="story-sub">
+                  Students make life-defining decisions with one meeting, a PDF booklet, and a guess.
+                </p>
+              </div>
+              <div className="story-columns">
+                <SectionRail
+                  items={PROBLEM_ITEMS}
+                  activeIndex={-1}
+                  fillRef={(el) => { problemRailFillRef.current = el; }}
+                  dotRef={(el, i) => { problemDotRefs.current[i] = el; }}
+                />
+                <div className="story-card-stack">
+                  {PROBLEM_ITEMS.map((item, i) => (
+                    <div
+                      className={`story-card problem-card tilt-${item.tilt}`}
+                      key={item.label}
+                      ref={(el) => { problemCardRefs.current[i] = el; }}
+                    >
+                      <div className="story-card-index" style={{ color: item.tilt === "l" ? "rgba(15,168,143,0.14)" : "rgba(58,159,192,0.16)" }}>
+                        0{i + 1}
+                      </div>
+                      <div className="story-card-badge" style={{ background: item.tilt === "l" ? "rgba(15,168,143,0.1)" : "rgba(58,159,192,0.12)", color: item.color }}>
+                        <item.Icon className="w-3.5 h-3.5" style={{ color: item.color }} />
+                        {item.label}
+                      </div>
+                      <h3 className="story-card-title">{item.title}</h3>
+                      <p className="story-card-desc">{item.desc}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
 
           {/* Steps 5-8 — Solution */}
-          {SOLUTION_FEATURES.map((f, i) => (
-            <div
-              className="story-panel"
-              key={`solution-${f.num}`}
-              ref={(el) => { panelRefs.current[SOLUTION_START + i] = el; }}
-            >
-              <div className="story-panel-inner">
-                <div className="story-header">
-                  <span className="story-eyebrow">Our Solution</span>
-                  <h2 className="story-title">
-                    Your school's AI guidance <span className="story-title-highlight">companion</span>
-                  </h2>
-                  <p className="story-sub">Noor means 'light' in Arabic.</p>
-                </div>
-                <div className="story-columns">
-                  <SectionRail
-                    items={SOLUTION_FEATURES.map((s) => ({ label: s.title }))}
-                    activeIndex={i}
-                    fillRef={(el) => { railFillRefs.current[SOLUTION_START + i] = el; }}
-                  />
-                  <div className="story-card story-card--split">
-                    <div>
-                      <div className="story-feature-num">{f.num}</div>
-                      <h3 className="story-card-title">{f.title}</h3>
-                      <p className="story-card-desc">{f.desc}</p>
-                      <p className="story-card-more">{f.more}</p>
+          <div className="story-panel" ref={solutionPanelRef}>
+            <div className="story-panel-inner">
+              <div className="story-header">
+                <span className="story-eyebrow">Our Solution</span>
+                <h2 className="story-title">
+                  Your school's AI guidance <span className="story-title-highlight">companion</span>
+                </h2>
+                <p className="story-sub">Noor means 'light' in Arabic.</p>
+              </div>
+              <div className="story-columns">
+                <SectionRail
+                  items={SOLUTION_FEATURES.map((s) => ({ label: s.title }))}
+                  activeIndex={-1}
+                  fillRef={(el) => { solutionRailFillRef.current = el; }}
+                  dotRef={(el, i) => { solutionDotRefs.current[i] = el; }}
+                />
+                <div className="story-card-stack">
+                  {SOLUTION_FEATURES.map((f, i) => (
+                    <div
+                      className="story-card story-card--split"
+                      key={`solution-${f.num}`}
+                      ref={(el) => { solutionCardRefs.current[i] = el; }}
+                    >
+                      <div>
+                        <div className="story-feature-num">{f.num}</div>
+                        <h3 className="story-card-title">{f.title}</h3>
+                        <p className="story-card-desc">{f.desc}</p>
+                        <p className="story-card-more">{f.more}</p>
+                      </div>
+                      <SolutionVisual index={i} />
                     </div>
-                    <SolutionVisual index={i} />
-                  </div>
+                  ))}
                 </div>
               </div>
             </div>
-          ))}
+          </div>
 
           {/* Steps 9-12 — Who */}
-          {WHO_CARDS.map((card, i) => (
-            <div
-              className="story-panel"
-              key={`who-${card.role}`}
-              ref={(el) => { panelRefs.current[WHO_START + i] = el; }}
-            >
-              <div className="story-panel-inner">
-                <div className="story-header">
-                  <span className="story-eyebrow">Who It's For</span>
-                  <h2 className="story-title">
-                    Designed for <span className="story-title-highlight">everyone</span> in the school ecosystem
-                  </h2>
-                  <p className="story-sub">Whether you're a student, parent, counsellor, or leader.</p>
-                </div>
-                <div className="story-columns">
-                  <SectionRail
-                    items={WHO_CARDS.map((c) => ({ label: c.role }))}
-                    activeIndex={i}
-                    fillRef={(el) => { railFillRefs.current[WHO_START + i] = el; }}
-                  />
-                  <div className="story-card story-who-card">
-                    <div className="story-who-icon" style={{ background: `${card.accent}15`, borderColor: `${card.accent}30` }}>
-                      <card.Icon className="w-7 h-7" style={{ color: card.accent }} />
+          <div className="story-panel" ref={whoPanelRef}>
+            <div className="story-panel-inner">
+              <div className="story-header">
+                <span className="story-eyebrow">Who It's For</span>
+                <h2 className="story-title">
+                  Designed for <span className="story-title-highlight">everyone</span> in the school ecosystem
+                </h2>
+                <p className="story-sub">Whether you're a student, parent, counsellor, or leader.</p>
+              </div>
+              <div className="story-columns">
+                <SectionRail
+                  items={WHO_CARDS.map((c) => ({ label: c.role }))}
+                  activeIndex={-1}
+                  fillRef={(el) => { whoRailFillRef.current = el; }}
+                  dotRef={(el, i) => { whoDotRefs.current[i] = el; }}
+                />
+                <div className="story-card-stack">
+                  {WHO_CARDS.map((card, i) => (
+                    <div
+                      className="story-card story-who-card"
+                      key={`who-${card.role}`}
+                      ref={(el) => { whoCardRefs.current[i] = el; }}
+                    >
+                      <div className="story-who-icon" style={{ background: `${card.accent}15`, borderColor: `${card.accent}30` }}>
+                        <card.Icon className="w-7 h-7" style={{ color: card.accent }} />
+                      </div>
+                      <div className="story-card-badge" style={{ color: card.accent, background: `${card.accent}12` }}>{card.role}</div>
+                      <h3 className="story-card-title">{card.subtitle}</h3>
+                      <p className="story-card-desc">{card.desc}</p>
                     </div>
-                    <div className="story-card-badge" style={{ color: card.accent, background: `${card.accent}12` }}>{card.role}</div>
-                    <h3 className="story-card-title">{card.subtitle}</h3>
-                    <p className="story-card-desc">{card.desc}</p>
-                  </div>
+                  ))}
                 </div>
               </div>
             </div>
-          ))}
+          </div>
 
           {/* Steps 13-16 — Early access (single persistent panel; only the rail highlight advances) */}
           <div className="story-panel story-panel-early" ref={earlyPanelRef}>

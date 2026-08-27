@@ -57,7 +57,7 @@ const Nav: React.FC = () => {
     <>
       {/* ── Nav bar (floating centered pill) */}
       <header className="fixed top-0 left-0 right-0 z-[1000] flex justify-center px-4 pt-4">
-        <nav className="flex items-center gap-3 pl-3 pr-3 py-2 rounded-full bg-[var(--glass-bg-strong)] backdrop-blur-2xl border border-[var(--glass-border)] shadow-nav w-full max-w-[880px]">
+        <nav className="flex items-center gap-3 pl-3 pr-3 py-2 rounded-full bg-[rgba(255,255,255,0.3)] backdrop-blur-2xl backdrop-saturate-150 border border-[rgba(255,255,255,0.35)] shadow-nav-glass w-full max-w-[880px]">
 
           {/* Logo */}
           <div className="flex items-center gap-2 cursor-pointer select-none group shrink-0" onClick={handleBackToTop}>

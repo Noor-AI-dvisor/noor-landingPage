@@ -43,7 +43,7 @@ export default function EarlyAccessForm() {
       >
         ✦
       </div>
-      <h3 className="font-sans text-[clamp(20px,2vw,26px)] font-extrabold leading-[1.2] tracking-[-0.01em] text-[var(--text-h)] mb-2">
+      <h3 className="font-serif text-[clamp(20px,2vw,26px)] font-semibold leading-[1.2] tracking-[-0.01em] text-[var(--text-h)] mb-2">
         Request your free Demo
       </h3>
       <p className="text-[13.5px] text-[var(--text-light)] font-semibold leading-[1.5] mb-7">

@@ -1,19 +1,9 @@
 import React from "react";
 import logo from "../assets/images/logo-primary.png";
 
-interface AppMockProps {
-  compact?: boolean;
-}
-
-const AppMock: React.FC<AppMockProps> = ({ compact = false }) => {
+const AppMock: React.FC = () => {
   return (
-    <div
-      className={`bg-[var(--glass-bg-strong)] backdrop-blur-2xl border border-[var(--glass-border)] rounded-[22px] overflow-hidden text-[13px] transition-all duration-300 ${
-        compact
-          ? "mt-8 shadow-glass"
-          : "w-full shadow-glass-interactive hover:-translate-y-1"
-      }`}
-    >
+    <div className="bg-[var(--glass-bg-strong)] backdrop-blur-2xl border border-[var(--glass-border)] rounded-[22px] overflow-hidden text-[13px] transition-all duration-300 w-full shadow-glass-interactive hover:-translate-y-1">
       {/* Header */}
       <div className="flex items-center justify-between px-4 py-[14px] border-b border-[var(--border)] bg-[var(--mint-bg)]">
         <div className="flex items-center gap-2">
@@ -93,18 +83,16 @@ const AppMock: React.FC<AppMockProps> = ({ compact = false }) => {
           </div>
         </div>
 
-        {/* Skills progress (desktop only) */}
-        {!compact && (
-          <div className="bg-[var(--amber-bg)] rounded-xl px-[14px] py-[11px] border border-[rgba(217,142,43,0.25)]">
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-[11.5px] font-bold text-[var(--amber-text-strong)]">Skills Progress</span>
-              <span className="text-[11.5px] font-bold text-[var(--amber-text-strong)]">3 / 11 domains</span>
-            </div>
-            <div className="h-[5px] bg-[rgba(217,142,43,0.2)] rounded-full overflow-hidden">
-              <div className="h-full w-[27%] rounded-full bg-[var(--accent-amber)]" />
-            </div>
+        {/* Skills progress */}
+        <div className="bg-[var(--amber-bg)] rounded-xl px-[14px] py-[11px] border border-[rgba(217,142,43,0.25)]">
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-[11.5px] font-bold text-[var(--amber-text-strong)]">Skills Progress</span>
+            <span className="text-[11.5px] font-bold text-[var(--amber-text-strong)]">3 / 11 domains</span>
           </div>
-        )}
+          <div className="h-[5px] bg-[rgba(217,142,43,0.2)] rounded-full overflow-hidden">
+            <div className="h-full w-[27%] rounded-full bg-[var(--accent-amber)]" />
+          </div>
+        </div>
 
         {/* Input row */}
         <div className="flex items-center gap-2 px-0.5">

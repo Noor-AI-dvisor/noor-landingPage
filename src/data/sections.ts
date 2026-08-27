@@ -11,25 +11,33 @@ import {
 
 export const PROBLEM_ITEMS = [
   {
-    Icon: HelpCircleIcon, color: "var(--accent)", tilt: "l" as const,
+    Icon: HelpCircleIcon,
+    color: "var(--accent)",
+    tilt: "l" as const,
     label: "Awareness",
     title: "Students guess, not choose",
-    desc: "Most teens pick subjects based on friends or \"what seems easier\" — not a clear link to their strengths or future careers.",
+    desc: 'Most teens pick subjects based on friends or "what seems easier" — not a clear link to their strengths or future careers.',
   },
   {
-    Icon: HourglassIcon, color: "var(--accent-2)", tilt: "r" as const,
+    Icon: HourglassIcon,
+    color: "var(--accent-2)",
+    tilt: "r" as const,
     label: "Capacity",
     title: "Counsellors are stretched",
     desc: "One counsellor supports hundreds of students — repeating the same basic conversations instead of doing meaningful guidance.",
   },
   {
-    Icon: DocumentIcon, color: "var(--accent)", tilt: "l" as const,
+    Icon: DocumentIcon,
+    color: "var(--accent)",
+    tilt: "l" as const,
     label: "Tools",
     title: "Static tools for dynamic choices",
     desc: "Subject options live in long PDFs. There's no interactive way to test the fit between a student's profile and their future options.",
   },
   {
-    Icon: ChartBarIcon, color: "var(--accent-2)", tilt: "r" as const,
+    Icon: ChartBarIcon,
+    color: "var(--accent-2)",
+    tilt: "r" as const,
     label: "Visibility",
     title: "Leadership has no visibility",
     desc: "School leaders can't easily see which cohorts are confident, which domains are in demand, or who still needs support.",
@@ -63,7 +71,12 @@ export const SOLUTION_FEATURES = [
   },
 ];
 
-export const DOMAIN_TAGS = ["Healthcare", "Creative & Media", "Green Energy", "Tech & Data"];
+export const DOMAIN_TAGS = [
+  "Healthcare",
+  "Creative & Media",
+  "Green Energy",
+  "Tech & Data",
+];
 
 export const WHO_CARDS = [
   {

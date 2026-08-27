@@ -308,7 +308,6 @@
 
 .story-panel-inner {
   width: 100%;
-  max-width: 1180px;
   margin: 0 auto;
 }
 
@@ -364,8 +363,9 @@
 }
 
 .story-columns--early {
-  grid-template-columns: 330px 1fr;
-  align-items: start;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(48px, 7vw, 96px);
+  align-items: center;
 }
 
 @media (max-width: 1279px) {
@@ -473,6 +473,110 @@
   will-change: opacity, transform;
 }
 
+/* ── SOLUTION PAIR: 2 cards visible at a time instead of 1 — each pair
+   shares the stack's grid cell just like an individual card does
+   elsewhere (see applyStackCard in ScrollStory.tsx), it just contains 2
+   cards side by side instead of 1. ─────────────────────────────────────── */
+.story-card-stack > .story-solution-pair {
+  grid-column: 1;
+  grid-row: 1;
+  will-change: opacity, transform;
+}
+
+.story-solution-pair {
+  display: flex;
+  gap: 24px;
+  align-items: stretch;
+}
+
+.story-solution-pair > .story-card {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+@media (max-width: 1279px) {
+  .story-solution-pair {
+    flex-direction: column;
+  }
+}
+
+/* ── WHO STACK: unlike problem/solution, the 4 who-cards land side by
+   side in a horizontal row instead of stacking on top of each other —
+   each still animates in on its own scroll-driven delay (applyStackCard
+   in ScrollStory.tsx), so they arrive one after another left to right
+   rather than all appearing at once. ─────────────────────────────────── */
+.story-who-stack {
+  display: flex;
+  gap: 20px;
+  align-items: stretch;
+}
+
+.story-who-stack > .story-card {
+  grid-column: auto;
+  grid-row: auto;
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+@media (max-width: 1279px) {
+  .story-who-stack {
+    flex-wrap: wrap;
+  }
+
+  .story-who-stack > .story-card {
+    flex: 1 1 calc(50% - 10px);
+  }
+}
+
+/* ── PROBLEM STACK: like the who-stack, cards land side by side instead
+   of covering each other — but here a connector line also draws in
+   between each pair as the next card lands (see the problemConnectorRefs
+   loop in ScrollStory.tsx), so the row reads as a single connected
+   timeline once all four cards have arrived. ──────────────────────────── */
+.story-problem-stack {
+  display: flex;
+  align-items: center;
+  gap: 0;
+}
+
+.story-problem-stack > .story-card {
+  grid-column: auto;
+  grid-row: auto;
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+.story-problem-connector {
+  position: relative;
+  flex: 0 0 clamp(16px, 3vw, 40px);
+  height: 2px;
+  border-radius: 2px;
+  background: rgba(15, 168, 143, 0.15);
+  overflow: hidden;
+  align-self: center;
+}
+
+.story-problem-connector-fill {
+  position: absolute;
+  inset: 0;
+  width: 0%;
+  background: linear-gradient(90deg, var(--accent), var(--accent-2));
+}
+
+@media (max-width: 1279px) {
+  .story-problem-stack {
+    flex-wrap: wrap;
+  }
+
+  .story-problem-stack > .story-card {
+    flex: 1 1 calc(50% - 10px);
+  }
+
+  .story-problem-connector {
+    display: none;
+  }
+}
+
 /* ── CONTENT CARD (problem / solution / who) ───────────────────────── */
 .story-card {
   position: relative;
@@ -565,8 +669,6 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  max-width: 420px;
-  margin: 0 auto;
 }
 
 .story-who-icon {
@@ -580,28 +682,63 @@
   margin-bottom: 18px;
 }
 
-/* ── EARLY ACCESS (single persistent panel; rail + desc advance live) */
+/* ── EARLY ACCESS (single persistent panel, static content — no rail) ── */
 .story-panel-early {
   z-index: 3;
 }
 
-.story-early-desc-stack {
-  position: relative;
-  min-height: 76px;
-  margin-top: 22px;
+.story-early-left {
+  text-align: left;
 }
 
-.story-early-desc {
-  position: absolute;
-  inset: 0;
-  font-size: 15px;
-  line-height: 1.65;
+.story-early-title {
+  font-family: "Lora", Georgia, serif;
+  font-weight: 600;
+  font-size: clamp(32px, 3.6vw, 52px);
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  color: var(--text-h);
+  margin: 16px 0 18px;
+}
+
+.story-early-title-accent {
+  font-style: italic;
+}
+
+.story-early-sub {
+  font-size: clamp(15px, 1.1vw, 17px);
+  line-height: 1.75;
   color: var(--text-b);
-  opacity: 0;
+  max-width: 460px;
+  margin: 0 0 32px;
 }
 
-.story-early-desc:first-child {
-  opacity: 1;
+.story-early-checklist {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.story-early-check-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--text-b);
+  line-height: 1.4;
+}
+
+.story-early-check-icon {
+  width: 22px;
+  height: 22px;
+  border-radius: 7px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--accent-dim);
+  color: var(--accent);
 }
 
 /* ── HERO ───────────────────────────────────────────────────────────── */
@@ -612,9 +749,13 @@
    only mounts >=1024px, see App.tsx) up through wide screens. */
 .story-panel-hero {
   display: grid !important;
-  grid-template-columns: minmax(0, 1fr) minmax(300px, 480px);
+  grid-template-columns: minmax(0, 660px) minmax(300px, 480px);
+  justify-content: center;
   align-items: center;
-  column-gap: clamp(20px, 3vw, 56px);
+  /* Same gap scale EarlyAccess uses for its two-column (copy | form) row —
+     this row is the same "two content blocks side by side" pattern, not a
+     row of small chips, so it should read as the same kind of gap. */
+  column-gap: clamp(48px, 7vw, 96px);
 }
 
 .story-panel-hero .story-panel-inner {
@@ -643,6 +784,7 @@
   flex-direction: column;
   align-items: center;
   text-align: center;
+  width: clamp(420px, 44vw, 660px);
   padding: clamp(28px, 4vw, 48px) clamp(24px, 6vw, 56px);
   border-radius: 28px;
   background: var(--glass-bg-strong);
@@ -652,30 +794,28 @@
   box-shadow: var(--glass-shadow);
 }
 
-.story-eyebrow-pill {
+.story-hero-badge {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  margin-bottom: 16px;
-  padding: 9px 18px;
+  margin-bottom: 18px;
+  padding: 8px 18px;
   border-radius: 999px;
-  background: var(--glass-bg);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 1px solid var(--glass-border);
-  box-shadow: 0 8px 20px -12px rgba(15, 168, 143, 0.3);
-  font-size: 13px;
-  font-weight: 600;
+  background: var(--accent-dim);
+  border: 1px solid rgba(15, 168, 143, 0.25);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
   color: var(--accent);
 }
 
-.story-status-dot {
-  width: 7px;
-  height: 7px;
+.story-hero-badge-dot {
+  width: 6px;
+  height: 6px;
   border-radius: 999px;
   background: var(--accent);
   flex-shrink: 0;
-  animation: story-scroll-pulse 1.8s ease-in-out infinite;
 }
 
 .story-hero-title {
@@ -731,6 +871,59 @@
   font-size: 0.78rem;
   font-weight: 500;
   color: var(--text-b);
+}
+
+.story-badge-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.story-mini-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.story-mini-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  flex-shrink: 0;
+}
+
+.story-mini-badge--green {
+  background: var(--accent-dim);
+  border-color: rgba(15, 168, 143, 0.25);
+  color: var(--accent);
+}
+.story-mini-badge--green .story-mini-dot {
+  background: var(--accent);
+}
+
+.story-mini-badge--mint {
+  background: rgba(255, 255, 255, 0.7);
+  border-color: var(--glass-border);
+  color: var(--text-b);
+}
+.story-mini-badge--mint .story-mini-dot {
+  background: var(--accent);
+}
+
+.story-mini-badge--purple {
+  background: rgba(99, 102, 241, 0.1);
+  border-color: rgba(99, 102, 241, 0.25);
+  color: #6366f1;
+}
+.story-mini-badge--purple .story-mini-dot {
+  background: #6366f1;
 }
 
 .story-scroll-hint {
@@ -828,23 +1021,14 @@
   padding: 40px 0 0;
 }
 
-.story-reduced .story-early-desc {
-  position: static;
-  opacity: 1 !important;
-  margin-bottom: 14px;
-}
-
-.story-reduced .story-early-desc-stack {
-  min-height: auto;
-}
-
 .story-reduced .story-card-stack {
   display: flex;
   flex-direction: column;
   gap: 24px;
 }
 
-.story-reduced .story-card-stack > .story-card {
+.story-reduced .story-card-stack > .story-card,
+.story-reduced .story-card-stack > .story-solution-pair {
   opacity: 1 !important;
   transform: none !important;
   position: static;

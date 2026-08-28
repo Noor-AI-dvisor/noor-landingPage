@@ -106,8 +106,31 @@
     inset 12px 12px 24px rgba(255, 255, 255, 0.3),
     0 0 34px color-mix(in srgb, var(--p-a) 50%, transparent),
     0 0 88px color-mix(in srgb, var(--p-a) 25%, transparent);
-  animation: presence-float 5.4s ease-in-out infinite;
+  animation: presence-float 5.4s ease-in-out infinite, presence-morph 24s ease-in-out infinite;
   transition: background 1s ease, box-shadow 1s ease;
+}
+
+/* One continuous border-radius loop cycling through every shape family
+   (circle → blob → teardrop → rounded-square → dome → back to circle) on
+   its own timer, rather than swapping between separate per-section
+   @keyframes: switching *which* keyframe animation is running always
+   restarts it from that keyframe's own 0%, which reads as an abrupt jump
+   the instant a section boundary is crossed. A single animation lets the
+   browser interpolate every step smoothly, so the orb is always
+   continuously — and slowly — reshaping itself, never jumping and never
+   sitting still as a plain circle. */
+@keyframes presence-morph {
+  0%, 100% { border-radius: 50%; }
+  20% { border-radius: 42% 58% 63% 37% / 41% 44% 56% 59%; }
+  40% { border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%; }
+  60% { border-radius: 22%; }
+  80% { border-radius: 50% 50% 20% 20% / 60% 60% 40% 40%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .presence-orb {
+    animation: none !important;
+  }
 }
 
 .presence-shine {

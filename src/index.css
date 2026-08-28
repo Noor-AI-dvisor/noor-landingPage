@@ -136,6 +136,13 @@ body {
     background-size: 300% 300%;
     animation: noorWash 18s ease infinite;
   }
+  /* Elegant italic serif accent for the hero title's middle phrase, set
+     against the surrounding bold sans-serif — see hero reference image. */
+  .font-hero-accent {
+    font-family: "Playfair Display", Georgia, serif;
+    font-style: italic;
+    font-weight: 600;
+  }
 }
 
 /* ── HAMBURGER ANIMATION */

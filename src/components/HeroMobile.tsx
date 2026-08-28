@@ -1,4 +1,3 @@
-import AppMock from "./AppMock";
 import { GraduationCapIcon, BoltIcon, TrophyIcon } from "./Icons";
 import { STORY_STEPS, scrollToSection } from "../lib/storyScroll";
 import { useReveal } from "../hooks/useReveal";
@@ -34,7 +33,7 @@ export default function HeroMobile() {
         </div>
 
         <h1 className="font-sans text-[clamp(1.8rem,6vw,2.8rem)] font-extrabold leading-[1.15] tracking-[-0.02em] mb-4 mt-4 text-[var(--text-h)]">
-          Noor AI Career &amp; Skills
+          Noor <span className="font-hero-accent text-accent">AI Career &amp; Skills</span>
           <br />
           Companion for Schools
         </h1>
@@ -87,8 +86,6 @@ export default function HeroMobile() {
             Career intelligence
           </span>
         </div>
-
-        <AppMock />
       </div>
     </section>
   );

@@ -65,7 +65,12 @@ const Nav: React.FC = () => {
   return (
     <>
       {/* ── Nav bar (floating centered pill) */}
-      <header className="fixed top-0 left-0 right-0 z-[1000] flex justify-center px-4 pt-4">
+      <header
+        className={`fixed top-0 left-0 right-0 z-[1000] flex justify-center px-4 pt-4 transition-opacity duration-200 ${
+          drawerOpen ? "opacity-0 pointer-events-none lg:opacity-100 lg:pointer-events-auto" : "opacity-100"
+        }`}
+      >
+
         <nav className="flex items-center gap-3 pl-3 pr-3 py-2 rounded-full bg-[rgba(255,255,255,0.3)] backdrop-blur-2xl backdrop-saturate-150 border border-[rgba(255,255,255,0.35)] shadow-nav-glass w-full max-w-[880px]">
 
           {/* Logo */}
@@ -136,7 +141,7 @@ const Nav: React.FC = () => {
 
       {/* ── Mobile drawer */}
       <div
-        className={`fixed top-0 right-0 w-[min(320px,85vw)] h-screen bg-[var(--glass-bg-strong)] backdrop-blur-2xl border-l border-[var(--glass-border)] z-[999] flex flex-col p-6 transition-transform duration-[350ms] ease-[cubic-bezier(0.4,0,0.2,1)] lg:hidden ${
+        className={`fixed top-0 right-0 w-[min(320px,85vw)] h-screen bg-[rgba(255,255,255,0.85)] backdrop-blur-2xl backdrop-saturate-50 border-l border-[rgba(255,255,255,0.75)] shadow-nav-glass z-[999] flex flex-col p-6 transition-transform duration-[350ms] ease-[cubic-bezier(0.4,0,0.2,1)] lg:hidden ${
           drawerOpen ? "translate-x-0" : "translate-x-full"
         }`}
       >

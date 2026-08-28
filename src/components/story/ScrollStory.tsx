@@ -466,7 +466,7 @@ export default function ScrollStory() {
               <div className="story-hero-textblock">
                 
                 <h1 className="story-hero-title">
-                  Noor <span>AI Career &amp; Skills</span>
+                  Noor <span className="font-hero-accent">AI Career &amp; Skills</span>
                   <br />
                   Companion for Schools
                 </h1>
@@ -511,10 +511,7 @@ export default function ScrollStory() {
                     Career intelligence
                   </span>
                 </div>
-                <div className="story-scroll-hint">
-                  <span>Scroll to explore</span>
-                  <div className="story-scroll-line" />
-                </div>
+               
               </div>
             </div>
 

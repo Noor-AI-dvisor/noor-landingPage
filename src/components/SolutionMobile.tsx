@@ -1,10 +1,8 @@
 import { SOLUTION_FEATURES } from "../data/sections";
-import { SolutionVisual } from "./SolutionVisual";
 import { useReveal } from "../hooks/useReveal";
 // Reuses story.css's header/card classes directly — see the note in
 // HeroMobile.tsx for why (they're self-contained, no dependency on
-// ScrollStory's pinned-panel layout). .story-card--split in particular
-// already collapses to a single column under 900px on its own.
+// ScrollStory's pinned-panel layout).
 import "./story/story.css";
 
 export default function SolutionMobile() {
@@ -42,24 +40,27 @@ export default function SolutionMobile() {
         <p className="story-sub">Noor means 'light' in Arabic.</p>
       </div>
 
-      <div className="flex flex-col gap-10 max-w-[560px] mx-auto">
+      {/* No <SolutionVisual> preview mockup here — removed for mobile
+          (each one is a tall chat-bubble/stat/mission/dashboard mockup that
+          duplicates what the text next to it already says, and mobile has
+          no room to spare beside it the way desktop's wide split-card
+          layout does). ScrollStory's desktop panel drops it below 1280px
+          for the same reason — see .story-solution-visual in story.css. */}
+      <div className="flex flex-col gap-6 max-w-[560px] mx-auto">
         {SOLUTION_FEATURES.map((f, i) => {
           const { ref, visible } = reveals[i];
           return (
             <div
-              className={`story-card story-card--split transition-all duration-700 ease-out ${
+              className={`story-card transition-all duration-700 ease-out ${
                 visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
               }`}
               ref={ref}
               key={`solution-${f.num}`}
             >
-              <div>
-                <div className="story-feature-num">{f.num}</div>
-                <h3 className="story-card-title">{f.title}</h3>
-                <p className="story-card-desc">{f.desc}</p>
-                <p className="story-card-more">{f.more}</p>
-              </div>
-              <SolutionVisual index={i} />
+              <div className="story-feature-num">{f.num}</div>
+              <h3 className="story-card-title">{f.title}</h3>
+              <p className="story-card-desc">{f.desc}</p>
+              <p className="story-card-more">{f.more}</p>
             </div>
           );
         })}

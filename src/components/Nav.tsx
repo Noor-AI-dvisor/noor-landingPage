@@ -1,11 +1,19 @@
 import React, { useEffect, useRef, useState } from "react";
 import logo from "../assets/images/logo-horizontal.png";
+import { STORY_STEPS, scrollToSection } from "../lib/storyScroll";
 
 const NAV_ITEMS = [
-  { label: "Home", id: "home" },
-  { label: "The Problem", id: "problem" },
-  { label: "Our Solution", id: "solution-wrap" },
-  { label: "Who It's For", id: "who" },
+  // id is the section's own start anchor, used only for scroll-spy
+  // highlighting (so the pill activates the moment the section is entered
+  // during normal scrolling); step is where a *click* actually jumps to —
+  // for Problem and Who that's past where their own scroll-driven card
+  // reveal has already finished, not the section's very first step,
+  // otherwise a click lands with only the first card shown, still waiting
+  // on manual scroll to reveal the rest.
+  { label: "Home", id: "home", step: STORY_STEPS.home },
+  { label: "The Problem", id: "problem", step: STORY_STEPS.problemReveal },
+  { label: "Our Solution", id: "solution-wrap", step: STORY_STEPS.solution },
+  { label: "Who It's For", id: "who", step: STORY_STEPS.whoReveal },
 ];
 
 const Nav: React.FC = () => {
@@ -45,10 +53,11 @@ const Nav: React.FC = () => {
     return () => window.removeEventListener("resize", updateHighlight);
   }, [activeIdx]);
 
-  const handleNavClick = (id: string, idx: number) => {
+  const handleNavClick = (idx: number) => {
+    const item = NAV_ITEMS[idx];
     setActiveIdx(idx);
     setDrawerOpen(false);
-    document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+    scrollToSection(item.id, item.step);
   };
 
   const handleBackToTop = () => window.scrollTo({ top: 0, behavior: "smooth" });
@@ -86,7 +95,7 @@ const Nav: React.FC = () => {
                     ? "text-[var(--text-h)] font-semibold"
                     : "text-[var(--text-b)] font-medium hover:text-[var(--text-h)]"
                 }`}
-                onClick={() => handleNavClick(item.id, i)}
+                onClick={() => handleNavClick(i)}
               >
                 {item.label}
               </button>
@@ -97,7 +106,7 @@ const Nav: React.FC = () => {
           <div className="flex items-center gap-3 ml-auto">
             <button
               className="hidden lg:block px-[22px] py-[10px] bg-gradient-to-br from-accent to-accent-soft text-white border-none rounded-full font-sans text-[13px] font-bold cursor-pointer tracking-[0.01em] shadow-[0_10px_24px_-8px_var(--accent-glow-h)] transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 whitespace-nowrap"
-              onClick={() => document.getElementById("early-access")?.scrollIntoView({ behavior: "smooth" })}
+              onClick={() => scrollToSection("early-access", STORY_STEPS.earlyAccess)}
             >
               Get Early Access →
             </button>
@@ -148,7 +157,7 @@ const Nav: React.FC = () => {
             <button
               key={item.id}
               className="px-4 py-3.5 rounded-xl border-none bg-transparent text-base font-medium text-[var(--text-h)] cursor-pointer text-left transition-all duration-200 hover:bg-[rgba(15,168,143,0.1)] hover:text-accent"
-              onClick={() => handleNavClick(item.id, i)}
+              onClick={() => handleNavClick(i)}
             >
               {item.label}
             </button>
@@ -159,7 +168,7 @@ const Nav: React.FC = () => {
           className="mt-6 px-4 py-3.5 bg-gradient-to-br from-accent to-accent-soft text-white border-none rounded-full text-base font-bold cursor-pointer text-center transition-opacity hover:opacity-90"
           onClick={() => {
             setDrawerOpen(false);
-            document.getElementById("early-access")?.scrollIntoView({ behavior: "smooth" });
+            scrollToSection("early-access", STORY_STEPS.earlyAccess);
           }}
         >
           Get Early Access →

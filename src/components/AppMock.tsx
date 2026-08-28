@@ -25,7 +25,7 @@ const AppMock: React.FC = () => {
       </div>
 
       {/* Body */}
-      <div className="p-4 flex flex-col gap-3">
+      <div className="app-mock-body p-4 flex flex-col gap-3">
         {/* AI message */}
         <div className="flex items-end gap-2.5">
           <span className="shrink-0 w-8 h-8 rounded-full flex items-center justify-center text-white font-extrabold text-[12px] shadow-[0_10px_18px_-6px_var(--accent-glow-h)]" style={{ background: "radial-gradient(circle at 30% 25%, #b6f5e4, var(--accent-soft) 55%, var(--accent))" }}>N</span>
@@ -84,7 +84,7 @@ const AppMock: React.FC = () => {
         </div>
 
         {/* Skills progress */}
-        <div className="bg-[var(--amber-bg)] rounded-xl px-[14px] py-[11px] border border-[rgba(217,142,43,0.25)]">
+        <div className="app-mock-skills bg-[var(--amber-bg)] rounded-xl px-[14px] py-[11px] border border-[rgba(217,142,43,0.25)]">
           <div className="flex items-center justify-between mb-2">
             <span className="text-[11.5px] font-bold text-[var(--amber-text-strong)]">Skills Progress</span>
             <span className="text-[11.5px] font-bold text-[var(--amber-text-strong)]">3 / 11 domains</span>

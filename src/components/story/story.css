@@ -34,6 +34,7 @@
   place-items: center;
   overflow: hidden;
   pointer-events: none;
+  opacity: 0.48;
   --p-a: var(--accent);
   --p-b: var(--accent-soft);
   --p-deep: #087a69;
@@ -57,7 +58,18 @@
   aspect-ratio: 1;
   display: grid;
   place-items: center;
-  transform: translateY(4%);
+  animation: presence-drift 14s ease-in-out infinite;
+}
+
+/* Slow whole-layer drift so the background reads as alive even at low
+   opacity, on top of (not instead of) the orb/halo's own faster breathing —
+   baseline translateY(4%) from the old static transform is folded into
+   every step so the drift doesn't reset that vertical offset. */
+@keyframes presence-drift {
+  0%, 100% { transform: translate(0%, 4%) scale(1); }
+  25% { transform: translate(6%, 0%) scale(1.05); }
+  50% { transform: translate(0%, 9%) scale(0.95); }
+  75% { transform: translate(-6%, 1%) scale(1.03); }
 }
 
 .presence-halo,
@@ -128,7 +140,8 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .presence-orb {
+  .presence-orb,
+  .presence-stage {
     animation: none !important;
   }
 }
@@ -324,6 +337,21 @@
   will-change: opacity, transform;
 }
 
+/* Reclaim vertical room in ScrollStory's narrowest width range: below
+   1280px, Problem/Who's 4 cards wrap to 2 rows instead of 1 (see
+   .story-problem-stack/.story-who-stack below) and Solution's split-cards
+   stack text-over-visual instead of side-by-side (see .story-card--split
+   below), and a fixed-100vh pinned layout with overflow:hidden
+   (.story-stage) has no scroll fallback if that content doesn't fit the
+   viewport height — the excess just gets centered-and-clipped, most
+   visibly cutting into the header under the fixed nav (confirmed at
+   1041x824 for both Who and Solution). */
+@media (max-width: 1279px) {
+  .story-panel {
+    padding: 64px clamp(24px, 5vw, 96px) 24px;
+  }
+}
+
 .story-panel-hero {
   opacity: 1;
   pointer-events: auto;
@@ -338,6 +366,12 @@
   text-align: center;
   max-width: 720px;
   margin: 0 auto 40px;
+}
+
+@media (max-width: 1279px) {
+  .story-header {
+    margin-bottom: 24px;
+  }
 }
 
 .story-eyebrow {
@@ -391,13 +425,21 @@
   align-items: center;
 }
 
-@media (max-width: 1279px) {
-  .story-columns,
-  .story-columns--early {
-    grid-template-columns: 1fr;
-    gap: 28px;
-  }
-}
+/* No responsive breakpoint on .story-columns--early itself — it's shared by
+   two contexts that need opposite behavior at a narrow width: ScrollStory's
+   desktop early-access panel (>=1024px only — a fixed-100vh pinned layout
+   with overflow:hidden, not a normal scrolling page, where collapsing to 1
+   column doesn't reveal more content on scroll, it just doubles the panel's
+   height and gets clipped to an unreadable sliver — confirmed at 1277px
+   wide) needs to STAY 2-column all the way to its own 1024px floor, while
+   EarlyAccessMobile's plain stacked page (<1024px only, capped at 560px
+   wide — see EarlyAccessMobile.tsx) needs to be single-column at every
+   width it ever renders at, or its 2 columns get crushed unreadably narrow
+   (confirmed: the submit button's text wrapped 3 lines deep). No single
+   viewport-width media query threshold satisfies both, so EarlyAccessMobile
+   forces single-column locally instead (an !important Tailwind utility on
+   its own instance of this class), rather than this file trying to guess
+   which of its two very different consumers a given width belongs to. */
 
 /* ── RAIL (numbered list + growing connector line) ─────────────────── */
 .story-rail {
@@ -510,6 +552,11 @@
   display: flex;
   gap: 24px;
   align-items: stretch;
+  /* Same smoothing as .story-card's own transition, and for the same
+     reason — this wrapper is what applyStackCard actually animates for
+     Solution's pairs (see ScrollStory.tsx), not the individual cards
+     inside it. */
+  transition: opacity 0.25s ease-out, transform 0.25s ease-out;
 }
 
 .story-solution-pair > .story-card {
@@ -517,11 +564,13 @@
   min-width: 0;
 }
 
-@media (max-width: 1279px) {
-  .story-solution-pair {
-    flex-direction: column;
-  }
-}
+/* No max-width:1279px "stack to column" breakpoint here (unlike a normal
+   page's responsive pattern) — see the note above .story-columns--early:
+   ScrollStory is a fixed-100vh pinned layout that only ever renders
+   >=1024px, so doubling a pair's height by stacking its 2 cards vertically
+   just gets clipped by .story-stage's overflow:hidden instead of revealing
+   on scroll, rendering as a thin sliver (confirmed at 1277px wide). Staying
+   side-by-side all the way down to 1024px is what's actually safe here. */
 
 /* ── WHO STACK: unlike problem/solution, the 4 who-cards land side by
    side in a horizontal row instead of stacking on top of each other —
@@ -544,10 +593,26 @@
 @media (max-width: 1279px) {
   .story-who-stack {
     flex-wrap: wrap;
+    gap: 14px;
   }
 
   .story-who-stack > .story-card {
-    flex: 1 1 calc(50% - 10px);
+    flex: 1 1 calc(50% - 7px);
+    padding: 22px 20px;
+  }
+
+  /* Wrapping to 2 rows here (rather than 1) roughly doubles this section's
+     content height — see the note above .story-panel's own narrow-width
+     padding reduction for why that's unsafe in a fixed-100vh pinned
+     layout. The icon block is the single biggest lever available per card
+     (64px + margin, versus Problem's cards which have no equivalent and
+     were already confirmed to fit at this breakpoint), so it shrinks here
+     specifically rather than everywhere. */
+  .story-who-icon {
+    width: 46px;
+    height: 46px;
+    border-radius: 14px;
+    margin-bottom: 10px;
   }
 }
 
@@ -612,6 +677,17 @@
   -webkit-backdrop-filter: blur(20px);
   overflow: hidden;
   text-align: left;
+  /* applyStackCard (ScrollStory.tsx) writes opacity/transform straight to
+     el.style every scroll frame — without a transition, a fast or jumpy
+     scroll (trackpad flick, arrow-key repeat, a resize-triggered
+     ScrollTrigger.refresh() snapping progress) makes a card's entrance
+     read as an instant pop rather than an entrance at all. This layers a
+     short smoothing transition on top so it always reads as a fade/rise
+     even between large per-frame jumps, without meaningfully lagging
+     behind normal scroll input. Scoped to cards/pairs only, not
+     .story-panel itself — that section-level crossfade should stay
+     tightly tied to scroll position, not smoothed. */
+  transition: opacity 0.25s ease-out, transform 0.25s ease-out;
 }
 
 .story-card-index {
@@ -666,9 +742,39 @@
   align-items: center;
 }
 
-@media (max-width: 900px) {
+/* 1279px (not the ~900px this single-card breakpoint would otherwise use)
+   because Solution's pairs (the only user of this class on desktop) sit 2
+   side-by-side down to ScrollStory's 1024px floor — each split-card's
+   EFFECTIVE width is roughly half the panel's, so at 1041px wide each one
+   only has ~470px to itself, well past where its own internal 2-column
+   text|visual split needs to collapse (confirmed: without this, that
+   splits again into ~210px sub-columns, wrapping text heavily enough to
+   overflow the section past .story-stage's fixed viewport and clip the
+   header under the nav — same failure mode as the .story-who-icon fix
+   above, different cause). Mobile's SolutionMobile.tsx reuses this same
+   class at a fixed ~560px single-card width, well under 1279px either way,
+   so this doesn't change its (already single-column) behavior. */
+@media (max-width: 1279px) {
   .story-card--split {
     grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .story-card--split.story-card {
+    padding: 22px 24px;
+  }
+
+  /* The SolutionVisual mockup (chat bubbles / domain tags / mission
+     progress / dashboard) is the single largest chunk of a split-card's
+     height, and duplicates what the text next to it already says — at this
+     width it's dropped rather than shrunk, so the full text (title, desc,
+     AND the elaboration paragraph) stays completely readable instead of
+     something having to give. Only this .story-solution-visual wrapper
+     (ScrollStory.tsx's own instance) is targeted — SolutionMobile.tsx
+     renders <SolutionVisual> directly with no such wrapper, since it has a
+     whole scrolling page and no reason to drop it. */
+  .story-solution-visual {
+    display: none;
   }
 }
 
@@ -778,7 +884,7 @@
   /* Same gap scale EarlyAccess uses for its two-column (copy | form) row —
      this row is the same "two content blocks side by side" pattern, not a
      row of small chips, so it should read as the same kind of gap. */
-  column-gap: clamp(48px, 7vw, 96px);
+  column-gap: clamp(60px, 50vw, 280px);
 }
 
 .story-panel-hero .story-panel-inner {
@@ -815,6 +921,36 @@
   -webkit-backdrop-filter: blur(22px);
   border: 1px solid var(--glass-border);
   box-shadow: var(--glass-shadow);
+}
+
+/* Trims this card's own height alongside the AppMock trims below (see the
+   note above .story-hero-appmock) — this one already technically fit at
+   1041x824 (36px to spare) but the goal here is comfortable clearance for
+   both, not a bare pass, since they sit in the same fixed-100vh viewport. */
+@media (max-width: 1279px) {
+  .story-hero-textblock {
+    padding: 22px clamp(24px, 6vw, 56px);
+  }
+
+  .story-hero-badge {
+    margin-bottom: 12px;
+  }
+
+  .story-hero-title {
+    margin-bottom: 10px;
+  }
+
+  .story-hero-sub {
+    margin-bottom: 14px;
+  }
+
+  .story-cta-row {
+    margin-bottom: 12px;
+  }
+
+  .story-chip-row {
+    margin-bottom: 12px;
+  }
 }
 
 .story-hero-badge {
@@ -979,6 +1115,27 @@
   max-width: 100%;
 }
 
+/* Below 1280px, the hero's fixed-100vh viewport (.story-stage's
+   overflow:hidden, same story as every other narrow-width fix in this
+   file) leaves too little height for both the full AppMock preview (chat
+   history + pathway card + skills-progress card) and the text card's full
+   padding/spacing to comfortably fit at once — confirmed overflowing by a
+   few px at 1041x824 before the floating badges' own overhang is even
+   counted. AppMock is also used at full detail by SolutionMobile... no —
+   by HeroMobile.tsx, where it has a whole scrolling page and no such
+   constraint, so these trims are scoped under .story-hero-appmock
+   (ScrollStory's own instance only) rather than touching AppMock.tsx or
+   its default classes. */
+@media (max-width: 1279px) {
+  .story-hero-appmock .app-mock-skills {
+    display: none;
+  }
+
+  .story-hero-appmock .app-mock-body {
+    gap: 8px;
+  }
+}
+
 .story-scroll-line {
   width: 1px;
   height: 36px;
@@ -1010,6 +1167,7 @@
 /* Honor the OS-level reduced-motion preference that put us in this fallback
    in the first place — the halo/orb/wave/particle motion is otherwise fully
    continuous and scroll-independent, so it would keep animating forever. */
+.story-reduced .presence-stage,
 .story-reduced .presence-halo,
 .story-reduced .presence-orb,
 .story-reduced .presence-wave,

@@ -1,6 +1,11 @@
 import { lazy, Suspense, useEffect, useState } from "react";
-import AmbientBackground from "./components/AmbientBackground";
+import AmbientPresence from "./components/AmbientPresence";
 import Nav from "./components/Nav";
+import HeroMobile from "./components/HeroMobile";
+import ProblemMobile from "./components/ProblemMobile";
+import SolutionMobile from "./components/SolutionMobile";
+import WhoMobile from "./components/WhoMobile";
+import EarlyAccessMobile from "./components/EarlyAccessMobile";
 import { useScrollTriggerAutoRefresh } from "./hooks/useScrollConnect";
 
 const ScrollStory = lazy(() => import("./components/story/ScrollStory"));
@@ -26,12 +31,22 @@ function App() {
 
   return (
     <>
-      <AmbientBackground />
+      <AmbientPresence />
       <div className="relative z-10">
         <Nav />
-        <Suspense fallback={null}>
-          <ScrollStory />
-        </Suspense>
+        {isDesktop ? (
+          <Suspense fallback={null}>
+            <ScrollStory />
+          </Suspense>
+        ) : (
+          <>
+            <HeroMobile />
+            <ProblemMobile />
+            <SolutionMobile />
+            <WhoMobile />
+            <EarlyAccessMobile />
+          </>
+        )}
       </div>
     </>
   );

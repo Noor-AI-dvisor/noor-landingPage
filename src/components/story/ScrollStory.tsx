@@ -1,11 +1,17 @@
 import { Fragment, useCallback, useEffect, useRef, useState } from "react";
 import EarlyAccessForm from "../EarlyAccessForm";
 import AppMock from "../AppMock";
+import { SolutionVisual } from "../SolutionVisual";
+import { StoryPresence } from "../StoryPresence";
 import { useStoryScroll } from "../../hooks/useScrollConnect";
+import {
+  STORY_TOTAL_STEPS,
+  STORY_STEPS,
+  scrollToStoryStep,
+} from "../../lib/storyScroll";
 import {
   PROBLEM_ITEMS,
   SOLUTION_FEATURES,
-  DOMAIN_TAGS,
   WHO_CARDS,
 } from "../../data/sections";
 import {
@@ -20,7 +26,7 @@ import {
 import "./story.css";
 
 const STEP_VH = 85;
-const TOTAL_STEPS = 17; // 1 hero + 4 problem + 4 solution + 4 who + 4 early-access
+const TOTAL_STEPS = STORY_TOTAL_STEPS; // 1 hero + 4 problem + 4 solution + 4 who + 4 early-access
 
 const EARLY_ACCESS_CHECKLIST = [
   "Personalised AI guidance for every student",
@@ -46,11 +52,11 @@ const SECTION_START_STEP = [
 ];
 
 const NAV_DOTS = [
-  { label: "Hero", id: "home" },
-  { label: "Problem", id: "problem" },
-  { label: "Solution", id: "solution-wrap" },
-  { label: "Who", id: "who" },
-  { label: "Start", id: "early-access" },
+  { label: "Hero", id: "home", step: STORY_STEPS.home },
+  { label: "Problem", id: "problem", step: STORY_STEPS.problemReveal },
+  { label: "Solution", id: "solution-wrap", step: STORY_STEPS.solution },
+  { label: "Who", id: "who", step: STORY_STEPS.whoReveal },
+  { label: "Start", id: "early-access", step: STORY_STEPS.earlyAccess },
 ];
 
 const CHIPS = [
@@ -105,6 +111,17 @@ function applyCrossfade(el: HTMLElement | null, diff: number, rise = 36) {
   el.style.pointerEvents = absDiff < 0.5 ? "auto" : "none";
 }
 
+// Each section boundary gets its own spin "personality" instead of every
+// transition looking identical — rotate direction, how much skew stands in
+// for a diagonal flip, and how far it scales up from. Sign/magnitude alone
+// is enough variety without reaching for real 3D transforms (which would
+// fight the panel's own backdrop-blur/box-shadow rendering).
+type SpinVariant = { rotate: number; skew: number; scale: number };
+const SPIN_PROBLEM: SpinVariant = { rotate: -7, skew: 0, scale: 0.86 };
+const SPIN_SOLUTION: SpinVariant = { rotate: 7, skew: 0, scale: 0.86 };
+const SPIN_WHO: SpinVariant = { rotate: 0, skew: -8, scale: 0.88 };
+const SPIN_EARLY: SpinVariant = { rotate: -4, skew: 6, scale: 0.9 };
+
 // Section-level fade for Problem/Solution/Who: each of these is now ONE
 // persistent panel (header + card stack) per section rather than one panel
 // per bullet. It fades in gradually during the *previous* section's final
@@ -114,18 +131,25 @@ function applyCrossfade(el: HTMLElement | null, diff: number, rise = 36) {
 // description flickering in and out on every bullet: previously each bullet
 // was a full separate panel with its own copy of the header, crossfading
 // independently: now the header only ever fades at the section boundary.
+// `spin` layers a rotate/skew/scale "square spin" onto the old plain
+// translateY-only fade — it's driven by the same opacity value, so exiting
+// a section spins it away as the mirror image of how it spun in, rather
+// than needing a separate exit animation.
 function applySectionFade(
   el: HTMLElement | null,
   stepFloat: number,
   startStep: number,
+  spin: SpinVariant,
 ) {
   if (!el) return;
   const fadeIn = clamp(stepFloat - (startStep - 1), 0, 1);
   const fadeOut = 1 - clamp(stepFloat - (startStep + 3), 0, 1);
   const opacity = Math.min(fadeIn, fadeOut);
+  const settled = 1 - opacity;
+  const scale = spin.scale + opacity * (1 - spin.scale);
   el.style.opacity = String(opacity);
   el.style.pointerEvents = opacity > 0.6 ? "auto" : "none";
-  el.style.transform = `translateY(${(1 - opacity) * 40}px)`;
+  el.style.transform = `translateY(${settled * 40}px) scale(${scale}) rotate(${settled * spin.rotate}deg) skewX(${settled * spin.skew}deg)`;
 }
 
 // Card "stack": all 4 bullet cards in a section occupy the same grid cell
@@ -153,19 +177,12 @@ function applyStackCard(
   el.style.pointerEvents = enter > 0.5 ? "auto" : "none";
 }
 
-function scrollToId(id: string) {
-  document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
-}
-
-// Ambient background presence — a breathing halo/orb/particle CSS treatment
-// (adapted from the noor-learning-animation design reference), replacing the
-// old Three.js RibbonScene. It has no scroll-driven "shape" of its own (the
-// halo/orb/wave/particle motion is continuous CSS, same as the reference);
-// the only scroll-reactive touches are the section color theme (via
-// data-theme, crossfaded by CSS transition rather than a per-frame lerp)
-// and which of the 3 particles flares while a problem/solution/who bullet
-// is active — both driven directly from handleUpdate, same as every other
-// imperative DOM write in this file.
+// Section color theme (via data-theme, crossfaded by CSS transition) and
+// which of the 3 particles flares while a problem/solution/who bullet is
+// active are the only scroll-reactive touches on the presence layer — both
+// driven directly from handleUpdate below, same as every other imperative
+// DOM write in this file. The shape/motion itself is StoryPresence's own
+// continuous CSS, unrelated to scroll.
 const SECTION_THEME: Array<"teal" | "blue" | "amber"> = [
   "teal",
   "teal",
@@ -173,47 +190,6 @@ const SECTION_THEME: Array<"teal" | "blue" | "amber"> = [
   "amber",
   "teal",
 ];
-
-function StoryPresence({
-  rootRef,
-  particleRefs,
-}: {
-  rootRef: (el: HTMLDivElement | null) => void;
-  particleRefs: (el: HTMLElement | null, i: number) => void;
-}) {
-  return (
-    <div
-      className="story-presence-layer"
-      data-theme="teal"
-      ref={rootRef}
-      aria-hidden="true"
-    >
-      <div className="presence-stage">
-        <div className="presence-halo presence-halo--outer" />
-        <div className="presence-halo presence-halo--middle" />
-        <div className="presence-orb">
-          <div className="presence-shine" />
-          <div className="presence-wave" />
-          <div className="presence-wave presence-wave--two" />
-          <div className="presence-wave presence-wave--three" />
-          <div className="presence-core" />
-        </div>
-        <i
-          className="presence-particle presence-particle--one"
-          ref={(el) => particleRefs(el, 0)}
-        />
-        <i
-          className="presence-particle presence-particle--two"
-          ref={(el) => particleRefs(el, 1)}
-        />
-        <i
-          className="presence-particle presence-particle--three"
-          ref={(el) => particleRefs(el, 2)}
-        />
-      </div>
-    </div>
-  );
-}
 
 function SectionRail({
   items,
@@ -244,171 +220,6 @@ function SectionRail({
             <span className="story-rail-dot-label">{item.label}</span>
           </div>
         ))}
-      </div>
-    </div>
-  );
-}
-
-function SolutionVisual({ index }: { index: number }) {
-  if (index === 0) {
-    return (
-      <div className="rounded-[26px] p-[26px] bg-[var(--glass-bg)] backdrop-blur-xl border border-[var(--glass-border)] shadow-glass flex flex-col gap-3.5">
-        <div className="self-end max-w-[80%] px-[16px] py-[12px] rounded-[16px_16px_4px_16px] bg-gradient-to-br from-accent to-accent-soft text-white text-[14px] leading-[1.55] font-medium">
-          I like designing things but I'm not sure that's a real job…
-        </div>
-        <div className="self-start max-w-[85%] px-[16px] py-[12px] rounded-[16px_16px_16px_4px] bg-white/85 border border-[var(--border)] text-[14px] leading-[1.55] text-[var(--text-b)]">
-          That's a great starting point. Design shows up in more careers than
-          most people think — want to see three that connect to subjects you're
-          already taking?
-        </div>
-        <div className="flex gap-2 flex-wrap">
-          {["Product design", "Architecture", "Game art"].map((t) => (
-            <span
-              key={t}
-              className="px-[13px] py-[7px] rounded-full bg-[var(--accent-dim)] text-accent text-[12px] font-bold"
-            >
-              {t}
-            </span>
-          ))}
-        </div>
-      </div>
-    );
-  }
-  if (index === 1) {
-    return (
-      <div className="relative rounded-[26px] p-6 bg-[var(--glass-bg)] backdrop-blur-xl border border-[var(--glass-border)] shadow-glass">
-        <div
-          className="h-[220px] rounded-2xl flex flex-col items-center justify-center gap-2 text-center"
-          style={{
-            background:
-              "linear-gradient(150deg, rgba(15,168,143,0.14), rgba(58,159,192,0.1))",
-          }}
-        >
-          <div className="text-[48px] font-extrabold text-gradient leading-none">
-            11
-          </div>
-          <div className="text-[12px] font-bold uppercase tracking-[0.1em] text-[var(--text-light)]">
-            Career domains explored
-          </div>
-        </div>
-        <div className="absolute -bottom-[18px] left-6 right-6 flex gap-2 flex-wrap justify-center">
-          {DOMAIN_TAGS.map((t) => (
-            <span
-              key={t}
-              className="px-4 py-[9px] rounded-full bg-white/90 backdrop-blur-md border border-white text-[12px] font-bold text-[var(--text-h)] shadow-[0_10px_24px_-10px_rgba(13,90,80,0.3)]"
-            >
-              {t}
-            </span>
-          ))}
-        </div>
-      </div>
-    );
-  }
-  if (index === 2) {
-    return (
-      <div className="rounded-[26px] p-[26px] bg-[var(--glass-bg)] backdrop-blur-xl border border-[var(--glass-border)] shadow-glass flex flex-col gap-[18px]">
-        <div className="flex justify-between items-center gap-3">
-          <div>
-            <div className="text-[11px] font-bold uppercase tracking-[0.08em] text-accent">
-              Mission · 10 min
-            </div>
-            <div className="text-[16px] font-bold mt-1 text-[var(--text-h)]">
-              Pitch an idea in 60 seconds
-            </div>
-          </div>
-          <div className="px-[14px] py-2 rounded-full bg-[var(--accent-dim)] text-accent text-[13px] font-extrabold whitespace-nowrap">
-            +120 pts
-          </div>
-        </div>
-        <div className="h-[10px] rounded-full bg-[var(--accent-dim)] overflow-hidden">
-          <div
-            className="h-full rounded-full bg-gradient-to-r from-accent to-accent-soft"
-            style={{ width: "68%" }}
-          />
-        </div>
-        <div className="flex gap-3.5 items-center flex-wrap">
-          <span
-            className="w-[46px] h-[46px] rounded-full flex items-center justify-center text-white font-extrabold text-[12px] shadow-[0_8px_18px_-6px_var(--accent-glow-h)]"
-            style={{
-              background:
-                "radial-gradient(circle at 32% 30%, #8ff0da, var(--accent))",
-            }}
-          >
-            Co
-          </span>
-          <span
-            className="w-[46px] h-[46px] rounded-full flex items-center justify-center text-white font-extrabold text-[12px] shadow-[0_8px_18px_-6px_rgba(58,159,192,0.5)]"
-            style={{
-              background:
-                "radial-gradient(circle at 32% 30%, #c9f2ff, var(--accent-2))",
-            }}
-          >
-            Cr
-          </span>
-          <span
-            className="w-[46px] h-[46px] rounded-full flex items-center justify-center font-extrabold text-[12px] text-[var(--text-light)]"
-            style={{
-              background: "rgba(14,47,44,0.06)",
-              border: "1.5px dashed var(--border-s)",
-            }}
-          >
-            Ct
-          </span>
-          <span className="text-[13px] font-semibold text-[var(--text-b)]">
-            Communication · Creativity · Critical thinking
-          </span>
-        </div>
-      </div>
-    );
-  }
-  return (
-    <div className="rounded-[26px] p-[26px] bg-[var(--glass-bg)] backdrop-blur-xl border border-[var(--glass-border)] shadow-glass flex flex-col gap-5">
-      <div className="flex gap-2 flex-wrap">
-        <span className="px-[14px] py-[7px] rounded-full bg-gradient-to-br from-accent to-accent-soft text-white text-[12px] font-bold">
-          Year 10
-        </span>
-        <span className="px-[14px] py-[7px] rounded-full bg-[var(--accent-dim)] text-accent text-[12px] font-bold">
-          Option group B
-        </span>
-        <span className="px-[14px] py-[7px] rounded-full bg-[var(--accent-dim)] text-accent text-[12px] font-bold">
-          At-risk
-        </span>
-      </div>
-      <div className="grid grid-cols-2 gap-3.5">
-        <div className="p-4 rounded-2xl bg-white/80 border border-[var(--border)]">
-          <div className="text-[26px] font-extrabold tracking-[-0.02em] text-[var(--text-h)]">
-            72%
-          </div>
-          <div className="text-[12px] font-semibold text-[var(--text-b)] mt-0.5">
-            Cohort confidence
-          </div>
-        </div>
-        <div className="p-4 rounded-2xl bg-white/80 border border-[var(--border)]">
-          <div className="text-[26px] font-extrabold tracking-[-0.02em] text-[var(--text-h)]">
-            14
-          </div>
-          <div className="text-[12px] font-semibold text-[var(--text-b)] mt-0.5">
-            Students flagged
-          </div>
-        </div>
-      </div>
-      <div className="flex items-end gap-[10px] h-[90px] px-1">
-        {[45, 62, 55, 82, 70, 92].map((h, i) => (
-          <div
-            key={i}
-            className="flex-1 rounded-t-[8px] rounded-b-[4px]"
-            style={{
-              height: `${h}%`,
-              background:
-                h > 75
-                  ? "linear-gradient(180deg, var(--accent-soft), var(--accent))"
-                  : `rgba(15,168,143,${0.22 + h / 300})`,
-            }}
-          />
-        ))}
-      </div>
-      <div className="text-[12px] font-semibold text-[var(--text-b)]">
-        Engagement by domain · last 6 weeks
       </div>
     </div>
   );
@@ -488,8 +299,9 @@ export default function ScrollStory() {
       startStep: number,
       cardRefs: (HTMLDivElement | null)[],
       sectionIndex: number,
+      spin: SpinVariant,
     ) => {
-      applySectionFade(panelEl, stepFloat, startStep);
+      applySectionFade(panelEl, stepFloat, startStep, spin);
       const progress = sectionProgress(sectionIndex);
       cardRefs.forEach((el, j) => applyStackCard(el, progress, j));
     };
@@ -499,15 +311,16 @@ export default function ScrollStory() {
       PROBLEM_START,
       problemCardRefs.current,
       1,
+      SPIN_PROBLEM,
     );
-    updateSection(whoPanelRef.current, WHO_START, whoCardRefs.current, 3);
+    updateSection(whoPanelRef.current, WHO_START, whoCardRefs.current, 3, SPIN_WHO);
 
     // Solution: 2 cards at a time — the 4 features are grouped into 2 pairs
     // (see SOLUTION_PAIR_INDICES) that stack on top of each other the same
     // way individual cards do elsewhere, just spaced 2 index-units apart
     // instead of 1 so each pair gets an even share of the section's scroll
     // range.
-    applySectionFade(solutionPanelRef.current, stepFloat, SOLUTION_START);
+    applySectionFade(solutionPanelRef.current, stepFloat, SOLUTION_START, SPIN_SOLUTION);
     const solutionProgress = sectionProgress(2);
     solutionPairRefs.current.forEach((el, pairIdx) =>
       applyStackCard(el, solutionProgress, pairIdx * 2),
@@ -527,9 +340,11 @@ export default function ScrollStory() {
     const earlyEl = earlyPanelRef.current;
     if (earlyEl) {
       const earlyOpacity = clamp(stepFloat - (EARLY_START - 1), 0, 1);
+      const earlySettled = 1 - earlyOpacity;
+      const earlyScale = SPIN_EARLY.scale + earlyOpacity * (1 - SPIN_EARLY.scale);
       earlyEl.style.opacity = String(earlyOpacity);
       earlyEl.style.pointerEvents = earlyOpacity > 0.6 ? "auto" : "none";
-      earlyEl.style.transform = `translateY(${(1 - earlyOpacity) * 40}px)`;
+      earlyEl.style.transform = `translateY(${earlySettled * 40}px) scale(${earlyScale}) rotate(${earlySettled * SPIN_EARLY.rotate}deg) skewX(${earlySettled * SPIN_EARLY.skew}deg)`;
     }
     const earlyBulletFloat = clamp(stepFloat - EARLY_START, 0, 3);
     if (earlyFillRef.current)
@@ -632,7 +447,7 @@ export default function ScrollStory() {
                     progressDotRefs.current[i] = el;
                   }}
                   className={`story-progress-dot${i === 0 ? " active" : ""}`}
-                  onClick={() => scrollToId(dot.id)}
+                  onClick={() => scrollToStoryStep(dot.step)}
                   aria-label={dot.label}
                 >
                   <span className="story-progress-dot-tip">{dot.label}</span>
@@ -649,10 +464,7 @@ export default function ScrollStory() {
           <div className="story-panel story-panel-hero" ref={heroPanelRef}>
             <div className="story-panel-inner">
               <div className="story-hero-textblock">
-                <div className="story-hero-badge">
-                  <span className="story-hero-badge-dot" />
-                  AI Career &amp; Skills Companion
-                </div>
+                
                 <h1 className="story-hero-title">
                   Noor <span>AI Career &amp; Skills</span>
                   <br />
@@ -666,13 +478,13 @@ export default function ScrollStory() {
                 <div className="story-cta-row">
                   <button
                     className="btn-primary"
-                    onClick={() => scrollToId("early-access")}
+                    onClick={() => scrollToStoryStep(STORY_STEPS.earlyAccess)}
                   >
                     Request a free demo →
                   </button>
                   <button
                     className="btn-secondary"
-                    onClick={() => scrollToId("solution-wrap")}
+                    onClick={() => scrollToStoryStep(STORY_STEPS.solution)}
                   >
                     See How It Works
                   </button>
@@ -857,7 +669,9 @@ export default function ScrollStory() {
                             <p className="story-card-desc">{f.desc}</p>
                             <p className="story-card-more">{f.more}</p>
                           </div>
-                          <SolutionVisual index={i} />
+                          <div className="story-solution-visual">
+                            <SolutionVisual index={i} />
+                          </div>
                         </div>
                       );
                     })}

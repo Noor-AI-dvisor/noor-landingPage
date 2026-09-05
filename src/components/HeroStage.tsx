@@ -9,7 +9,7 @@ const HeroStage: React.FC = () => {
   return (
     <section
       id="hero-stage"
-      className="hidden lg:grid grid-cols-2 items-center min-h-screen bg-[var(--bg)] transition-[background] duration-300 max-w-[2800px] mx-auto"
+      className="hidden lg:grid grid-cols-2 items-center min-h-screen bg-[var(--bg)] transition-[background] duration-300 max-w-[2800px] 3xl:max-w-[1900px] 4xl:max-w-[2000px] mx-auto"
     >
       {/* Left: text */}
       <div className="flex flex-col justify-center px-[clamp(64px,13vw,220px)] pr-[clamp(16px,1.5vw,24px)] pt-[clamp(100px,12vh,140px)] pb-[clamp(80px,10vh,120px)]">
@@ -19,12 +19,12 @@ const HeroStage: React.FC = () => {
           AI Career &amp; Skills Companion
         </div>
 
-        <h1 className="font-sans text-[clamp(34px,4.5vw,58px)] font-bold leading-[1.1] tracking-[-0.025em] text-[var(--text-h)] mb-5">
+        <h1 className="font-sans text-[clamp(34px,4.5vw,58px)] 3xl:text-[66px] 4xl:text-[74px] font-bold leading-[1.1] tracking-[-0.025em] text-[var(--text-h)] mb-5">
           Noor <em className="not-italic font-normal font-display text-accent">AI Career &amp; Skills</em><br />
           Companion for Schools
         </h1>
 
-        <p className="text-[1.05rem] font-normal text-[var(--text-b)] leading-[1.65] max-w-[480px] mb-8">
+        <p className="text-[1.05rem] 3xl:text-[1.15rem] 4xl:text-[1.25rem] font-normal text-[var(--text-b)] leading-[1.65] max-w-[480px] 3xl:max-w-[560px] 4xl:max-w-[620px] mb-8">
           An AI-powered advisor that helps students aged 14–18 choose the right subjects, discover their strengths, and build the skills that actually matter for their future.
         </p>
 
@@ -63,7 +63,7 @@ const HeroStage: React.FC = () => {
 
       {/* Right: app mock */}
       <div className="flex flex-col justify-center items-center pl-[clamp(16px,1.5vw,24px)] pr-[clamp(64px,13vw,220px)] pt-[clamp(100px,12vh,140px)] pb-[clamp(80px,10vh,120px)]">
-        <div className="relative w-full max-w-[480px]">
+        <div className="relative w-full max-w-[480px] 3xl:max-w-[550px] 4xl:max-w-[620px]">
           {/* Streak badge */}
           <div className="absolute -top-4 -right-4 bg-[var(--card-bg)] border border-[var(--border-s)] rounded-xl px-[14px] py-[9px] shadow-card flex flex-col text-[11px] z-10 animate-badge-float">
             <div className="font-bold text-[var(--text-h)] flex items-center gap-1 text-[12px]">🔥 3-day streak</div>

@@ -88,7 +88,7 @@ const SolutionSection: React.FC = () => {
       id="solution-wrap"
       className="py-[clamp(80px,10vh,120px)] px-[clamp(24px,5vw,60px)] bg-[var(--bg)] transition-[background] duration-300"
     >
-      <div className="solution-card max-w-[1200px] mx-auto relative bg-[var(--sol-bg)] dark:bg-[var(--bg)] border border-[var(--gold-dim)] rounded-[32px] px-[clamp(48px,5vw,88px)] py-[clamp(64px,8vh,96px)] shadow-[inset_0_1px_0_rgba(255,255,255,0.65),0_8px_48px_rgba(0,0,0,0.07),0_32px_80px_rgba(0,0,0,0.05),0_0_0_1px_var(--gold-dim)]" ref={cardRef}>
+      <div className="solution-card max-w-[1200px] 3xl:max-w-[1680px] 4xl:max-w-[1900px] mx-auto relative bg-[var(--sol-bg)] dark:bg-[var(--bg)] border border-[var(--gold-dim)] rounded-[32px] px-[clamp(48px,5vw,88px)] 3xl:px-[110px] 4xl:px-[130px] py-[clamp(64px,8vh,96px)] 3xl:py-[110px] shadow-[inset_0_1px_0_rgba(255,255,255,0.65),0_8px_48px_rgba(0,0,0,0.07),0_32px_80px_rgba(0,0,0,0.05),0_0_0_1px_var(--gold-dim)]" ref={cardRef}>
 
         {/* Eyebrow */}
         <div className="flex justify-start mb-10">
@@ -101,7 +101,7 @@ const SolutionSection: React.FC = () => {
         <div className="text-center mb-14">
           {/* Arc heading */}
           <div className="relative inline-flex items-center justify-center mb-5">
-            <h2 className="font-display text-[clamp(2.4rem,4.5vw,3.6rem)] font-medium text-[var(--text-h)] relative z-10">
+            <h2 className="font-display text-[clamp(2.4rem,4.5vw,3.6rem)] 3xl:text-[4.2rem] 4xl:text-[4.6rem] font-medium text-[var(--text-h)] relative z-10">
               Meet{' '}
               <span className="relative inline-block">
                 <em className="italic" style={{ color: 'var(--gold)' }}>Noor</em>
@@ -124,7 +124,7 @@ const SolutionSection: React.FC = () => {
           </div>
 
           {/* Typewriter */}
-          <p className="text-[1.25rem] text-[var(--text-b)] leading-[1.65] max-w-[640px] mx-auto mb-3">
+          <p className="text-[1.25rem] 3xl:text-[1.4rem] 4xl:text-[1.5rem] text-[var(--text-b)] leading-[1.65] max-w-[640px] 3xl:max-w-[740px] 4xl:max-w-[800px] mx-auto mb-3">
             {typewriterText}
             <span style={{ display: 'inline-block', width: 2, height: '1em', background: 'var(--gold)', marginLeft: 1, animation: 'pulse 1s ease-in-out infinite', verticalAlign: 'text-bottom' }} />
           </p>
@@ -132,11 +132,11 @@ const SolutionSection: React.FC = () => {
         </div>
 
         {/* Feature grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 3xl:gap-6">
           {FEATURES.map((f, i) => (
             <div
               key={i}
-              className="bg-[var(--card-bg)] border border-[var(--card-border)] rounded-2xl p-[22px_20px] relative overflow-hidden cursor-pointer transition-all duration-200 hover:-translate-y-[3px] hover:shadow-[0_8px_32px_rgba(0,0,0,0.1)] border-l-[3px]"
+              className="bg-[var(--card-bg)] border border-[var(--card-border)] rounded-2xl p-[22px_20px] 3xl:p-[28px_26px] relative overflow-hidden cursor-pointer transition-all duration-200 hover:-translate-y-[3px] hover:shadow-[0_8px_32px_rgba(0,0,0,0.1)] border-l-[3px]"
               style={{ borderLeftColor: f.borderColor }}
               onClick={() => toggleCard(i)}
             >

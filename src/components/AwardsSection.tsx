@@ -352,9 +352,9 @@ const AwardsSection: React.FC = () => {
         style={{ background: 'radial-gradient(ellipse at center, var(--gold-dim) 0%, transparent 70%)' }}
       />
 
-      <div className="relative max-w-[1180px] mx-auto">
+      <div className="relative max-w-[1180px] 3xl:max-w-[1660px] 4xl:max-w-[1880px] mx-auto">
         <div className="flex flex-col items-center text-center mb-[clamp(48px,7vh,80px)]">
-          <div ref={trophyRef} className="trophy-enter animate-badge-float w-[190px] sm:w-[230px] mb-8" style={{ animationDuration: '7s' }}>
+          <div ref={trophyRef} className="trophy-enter animate-badge-float w-[190px] sm:w-[230px] 3xl:w-[260px] 4xl:w-[290px] mb-8" style={{ animationDuration: '7s' }}>
             <img
               src={trophyImg}
               alt="The Orange Social Venture Prize trophy awarded to Noor"
@@ -382,11 +382,11 @@ const AwardsSection: React.FC = () => {
             International recognition
           </span>
 
-          <h2 className="font-display text-[clamp(32px,4vw,52px)] font-normal leading-[1.15] tracking-[-0.015em] mb-5 text-[var(--text-h)]">
+          <h2 className="font-display text-[clamp(32px,4vw,52px)] 3xl:text-[58px] 4xl:text-[64px] font-normal leading-[1.15] tracking-[-0.015em] mb-5 text-[var(--text-h)]">
             Four juries, four countries —<br className="hidden sm:block" /> the same verdict.
           </h2>
 
-          <p className="text-[clamp(15px,1.1vw,17px)] leading-[1.75] max-w-[540px] text-[var(--text-b)]">
+          <p className="text-[clamp(15px,1.1vw,17px)] 3xl:text-[19px] 4xl:text-[20px] leading-[1.75] max-w-[540px] 3xl:max-w-[620px] text-[var(--text-b)]">
             Cyprus, Paris, Berlin, and Egypt each looked at Noor independently over the past year. All four said yes.
           </p>
         </div>
@@ -399,7 +399,7 @@ const AwardsSection: React.FC = () => {
           }}
         />
 
-        <div ref={gridRef} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        <div ref={gridRef} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 3xl:gap-7">
           {AWARDS.map((award, i) => (
             <Plaque key={award.id} award={award} index={i} />
           ))}

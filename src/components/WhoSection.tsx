@@ -36,16 +36,16 @@ export default function WhoSection() {
       className="py-28 px-[clamp(24px,5vw,64px)] bg-[var(--bg)] text-center transition-[background] duration-300"
     >
       {/* Header */}
-      <div className="max-w-[700px] mx-auto mb-14">
+      <div className="max-w-[700px] 3xl:max-w-[820px] mx-auto mb-14">
         <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-[var(--amber-bg)] border border-[rgba(245,158,11,0.2)] rounded-full text-[0.78rem] font-semibold text-accent-amber tracking-[0.08em] uppercase mb-5">
           Who It's For
         </span>
 
-        <h2 className="font-display text-[clamp(1.75rem,3.2vw,2.6rem)] font-medium leading-[1.3] text-[var(--text-h)] mb-5">
+        <h2 className="font-display text-[clamp(1.75rem,3.2vw,2.6rem)] 3xl:text-[3rem] 4xl:text-[3.3rem] font-medium leading-[1.3] text-[var(--text-h)] mb-5">
           Designed for <em className="italic">everyone</em> inside the school ecosystem.
         </h2>
 
-        <p className="text-[1.05rem] leading-[1.75] text-[var(--text-b)]">
+        <p className="text-[1.05rem] 3xl:text-[1.15rem] leading-[1.75] text-[var(--text-b)]">
           Whether you're a student, parent, counsellor, or school leader — Noor was built with your needs in mind.
         </p>
       </div>

@@ -4,7 +4,9 @@ import path from "path";
 
 export default defineConfig({
   plugins: [react()],
-  base: "/noor-landingPage/",
+  // Cloudflare Pages builds set CF_PAGES=1 and serve from the domain root;
+  // GitHub Pages serves this repo from a /noor-landingPage/ subpath.
+  base: process.env.CF_PAGES ? "/" : "/noor-landingPage/",
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),

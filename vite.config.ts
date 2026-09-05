@@ -4,9 +4,10 @@ import path from "path";
 
 export default defineConfig({
   plugins: [react()],
-  // Cloudflare Pages builds set CF_PAGES=1 and serve from the domain root;
-  // GitHub Pages serves this repo from a /noor-landingPage/ subpath.
-  base: process.env.CF_PAGES ? "/" : "/noor-landingPage/",
+  // Every host (Cloudflare Workers/Pages, custom domains, etc.) serves this
+  // from the domain root. Only the GitHub Pages deploy (see package.json's
+  // "predeploy" script) needs the /noor-landingPage/ subpath.
+  base: process.env.GH_PAGES ? "/noor-landingPage/" : "/",
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),

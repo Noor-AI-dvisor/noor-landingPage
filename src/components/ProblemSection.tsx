@@ -77,7 +77,7 @@ const ProblemSection: React.FC = () => {
     <section
       id="problem"
       ref={sectionRef}
-      className="min-h-screen bg-[var(--bg)] grid grid-cols-1 md:grid-cols-2 items-center gap-[clamp(40px,6vw,100px)] px-[clamp(24px,6vw,80px)] md:px-0 md:pl-[clamp(100px,17vw,300px)] md:pr-[clamp(64px,13vw,220px)] py-[clamp(48px,6vh,72px)] pb-[100px] relative overflow-hidden transition-[background] duration-300 max-w-[2800px] mx-auto"
+      className="min-h-screen bg-[var(--bg)] grid grid-cols-1 md:grid-cols-2 items-center gap-[clamp(40px,6vw,100px)] px-[clamp(24px,6vw,80px)] md:px-0 md:pl-[clamp(100px,17vw,300px)] md:pr-[clamp(64px,13vw,220px)] py-[clamp(48px,6vh,72px)] pb-[100px] relative overflow-hidden transition-[background] duration-300 max-w-[2800px] 3xl:max-w-[1950px] 4xl:max-w-[2050px] mx-auto"
     >
 
       {/* Left */}
@@ -87,11 +87,11 @@ const ProblemSection: React.FC = () => {
           The Problem
         </div>
 
-        <h2 className="font-display text-[clamp(38px,4.2vw,62px)] font-normal leading-[1.12] tracking-[-0.02em] text-[var(--text-h)] mb-5">
+        <h2 className="font-display text-[clamp(38px,4.2vw,62px)] 3xl:text-[70px] 4xl:text-[78px] font-normal leading-[1.12] tracking-[-0.02em] text-[var(--text-h)] mb-5">
           Subject choice is broken —<br /><em className="italic text-accent">and schools know it.</em>
         </h2>
 
-        <p className="text-[clamp(16px,1.2vw,19px)] leading-[1.75] text-[var(--text-b)] max-w-[420px] font-normal">
+        <p className="text-[clamp(16px,1.2vw,19px)] 3xl:text-[21px] 4xl:text-[23px] leading-[1.75] text-[var(--text-b)] max-w-[420px] 3xl:max-w-[480px] 4xl:max-w-[520px] font-normal">
           Students make life-defining decisions with one meeting, a PDF booklet, and a guess. The current system is failing them — and counsellors.
         </p>
       </div>
@@ -114,10 +114,10 @@ const ProblemSection: React.FC = () => {
             <div className="text-[12px] font-bold tracking-[0.08em] uppercase mb-[5px] opacity-70" style={{ color: item.color }}>
               {item.label}
             </div>
-            <div className="text-[clamp(18px,1.6vw,22px)] font-bold text-[var(--text-h)] leading-[1.25] mb-[7px]">
+            <div className="text-[clamp(18px,1.6vw,22px)] 3xl:text-[25px] 4xl:text-[27px] font-bold text-[var(--text-h)] leading-[1.25] mb-[7px]">
               {item.title}
             </div>
-            <div className="text-[15.5px] leading-[1.7] text-[var(--text-b)] max-w-[380px]">
+            <div className="text-[15.5px] 3xl:text-[17px] 4xl:text-[18px] leading-[1.7] text-[var(--text-b)] max-w-[380px] 3xl:max-w-[440px] 4xl:max-w-[480px]">
               {item.desc}
             </div>
           </div>

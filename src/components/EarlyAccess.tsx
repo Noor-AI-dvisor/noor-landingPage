@@ -70,7 +70,7 @@ const EarlyAccessSection: React.FC = () => {
       {/* Decorative radial */}
       <div className="absolute -bottom-[120px] -left-[120px] w-[480px] h-[480px] rounded-full pointer-events-none" style={{ background: 'radial-gradient(circle, rgba(29,158,117,0.07) 0%, transparent 70%)' }} />
 
-      <div className="max-w-[1100px] mx-auto grid grid-cols-1 md:grid-cols-2 gap-[clamp(48px,7vw,96px)] items-center">
+      <div className="max-w-[1100px] 3xl:max-w-[1560px] 4xl:max-w-[1780px] mx-auto grid grid-cols-1 md:grid-cols-2 gap-[clamp(48px,7vw,96px)] items-center">
 
         {/* Left: copy */}
         <div className="ea-left flex flex-col" ref={leftRef}>
@@ -78,11 +78,11 @@ const EarlyAccessSection: React.FC = () => {
             ✦ Limited Early Access
           </div>
 
-          <h2 className="font-display text-[clamp(36px,4vw,58px)] font-normal leading-[1.1] tracking-[-0.02em] text-[var(--text-h)] mb-5">
+          <h2 className="font-display text-[clamp(36px,4vw,58px)] 3xl:text-[64px] 4xl:text-[70px] font-normal leading-[1.1] tracking-[-0.02em] text-[var(--text-h)] mb-5">
             Ready to bring <em className="italic text-accent">Noor</em><br />to your school?
           </h2>
 
-          <p className="text-[clamp(15px,1.1vw,17px)] leading-[1.75] text-[var(--text-b)] max-w-[420px] mb-9">
+          <p className="text-[clamp(15px,1.1vw,17px)] 3xl:text-[19px] 4xl:text-[20px] leading-[1.75] text-[var(--text-b)] max-w-[420px] 3xl:max-w-[480px] mb-9">
             We're running free Demos with selected schools right now. Be among the first to see Noor in action — no commitment required.
           </p>
 
@@ -102,7 +102,7 @@ const EarlyAccessSection: React.FC = () => {
 
         {/* Right: form card */}
         <div className="ea-right" ref={rightRef}>
-          <div className="bg-[var(--sol-bg)] border border-[var(--sol-border)] rounded-[28px] px-10 py-11 shadow-[inset_0_1px_0_rgba(255,255,255,0.6),0_8px_48px_rgba(0,0,0,0.07),0_0_0_1px_var(--sol-border)]">
+          <div className="bg-[var(--sol-bg)] border border-[var(--sol-border)] rounded-[28px] px-10 3xl:px-14 py-11 3xl:py-14 shadow-[inset_0_1px_0_rgba(255,255,255,0.6),0_8px_48px_rgba(0,0,0,0.07),0_0_0_1px_var(--sol-border)]">
             <div className="text-center mb-7">
               <div className="text-[32px] mb-3">🌟</div>
               <h3 className="font-display text-[clamp(20px,2vw,26px)] font-medium leading-[1.2] text-[var(--text-h)] mb-2">

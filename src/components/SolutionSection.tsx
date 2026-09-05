@@ -88,7 +88,7 @@ const SolutionSection: React.FC = () => {
       id="solution-wrap"
       className="py-[clamp(80px,10vh,120px)] px-[clamp(24px,5vw,60px)] bg-[var(--bg)] transition-[background] duration-300"
     >
-      <div className="solution-card max-w-[1200px] mx-auto relative bg-[var(--sol-bg)] border border-[var(--sol-border)] rounded-[32px] px-[clamp(48px,5vw,88px)] py-[clamp(64px,8vh,96px)] shadow-[inset_0_1px_0_rgba(255,255,255,0.65),0_8px_48px_rgba(0,0,0,0.07),0_32px_80px_rgba(0,0,0,0.05),0_0_0_1px_var(--sol-border)]" ref={cardRef}>
+      <div className="solution-card max-w-[1200px] mx-auto relative bg-[var(--sol-bg)] dark:bg-[var(--bg)] border border-[var(--gold-dim)] rounded-[32px] px-[clamp(48px,5vw,88px)] py-[clamp(64px,8vh,96px)] shadow-[inset_0_1px_0_rgba(255,255,255,0.65),0_8px_48px_rgba(0,0,0,0.07),0_32px_80px_rgba(0,0,0,0.05),0_0_0_1px_var(--gold-dim)]" ref={cardRef}>
 
         {/* Eyebrow */}
         <div className="flex justify-start mb-10">
@@ -104,7 +104,7 @@ const SolutionSection: React.FC = () => {
             <h2 className="font-display text-[clamp(2.4rem,4.5vw,3.6rem)] font-medium text-[var(--text-h)] relative z-10">
               Meet{' '}
               <span className="relative inline-block">
-                <em className="italic text-accent">Noor</em>
+                <em className="italic" style={{ color: 'var(--gold)' }}>Noor</em>
                 <svg className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 overflow-visible pointer-events-none" width="120" height="120" viewBox="0 0 120 120">
                   <circle className="arc-track-circle" cx="60" cy="60" r="54" />
                   <circle className="arc-draw-circle" ref={arcCircleRef} cx="60" cy="60" r="54" transform="rotate(-90 60 60)" />
@@ -126,7 +126,7 @@ const SolutionSection: React.FC = () => {
           {/* Typewriter */}
           <p className="text-[1.25rem] text-[var(--text-b)] leading-[1.65] max-w-[640px] mx-auto mb-3">
             {typewriterText}
-            <span style={{ display: 'inline-block', width: 2, height: '1em', background: 'var(--accent)', marginLeft: 1, animation: 'pulse 1s ease-in-out infinite', verticalAlign: 'text-bottom' }} />
+            <span style={{ display: 'inline-block', width: 2, height: '1em', background: 'var(--gold)', marginLeft: 1, animation: 'pulse 1s ease-in-out infinite', verticalAlign: 'text-bottom' }} />
           </p>
           <p className="text-[0.92rem] text-[var(--text-light)] italic">Noor means 'light' in Arabic.</p>
         </div>
@@ -153,7 +153,7 @@ const SolutionSection: React.FC = () => {
               </div>
 
               <button
-                className="inline-flex items-center gap-1 mt-2.5 text-[0.83rem] font-medium text-accent bg-none border-none cursor-pointer p-0 transition-colors hover:text-[#179065] relative z-10"
+                className="inline-flex items-center gap-1 mt-2.5 text-[0.83rem] font-medium text-[var(--gold)] bg-none border-none cursor-pointer p-0 transition-colors hover:text-[var(--gold-2)] relative z-10"
                 onClick={e => { e.stopPropagation(); toggleCard(i) }}
               >
                 {openCard === i ? 'Show less ↑' : 'Learn more ↓'}

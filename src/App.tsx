@@ -6,6 +6,7 @@ import ProblemSection from "./components/ProblemSection";
 import SolutionSection from "./components/SolutionSection";
 import EarlyAccessSection from "./components/EarlyAccess";
 import WhoSection from "./components/WhoSection";
+import AwardsSection from "./components/AwardsSection";
 import Footer from "./components/Footer";
 
 type Theme = "light" | "dark";
@@ -13,10 +14,7 @@ type Theme = "light" | "dark";
 function App() {
   const [theme, setTheme] = useState<Theme>(() => {
     const stored = localStorage.getItem("noor-theme") as Theme | null;
-    if (stored) return stored;
-    // if (window.matchMedia("(prefers-color-scheme: dark)").matches)
-    //   return "dark";
-    return "light";
+    return stored ?? "light";
   });
 
   useEffect(() => {
@@ -38,6 +36,7 @@ function App() {
       <ProblemSection />
       <SolutionSection />
       <WhoSection />
+      <AwardsSection />
       <EarlyAccessSection />
       <Footer theme={theme} />
     </>

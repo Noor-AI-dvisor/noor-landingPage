@@ -12,6 +12,7 @@ const NAV_ITEMS = [
   { label: "The Problem", id: "problem" },
   { label: "Our Solution", id: "solution-wrap" },
   { label: "Who It's For", id: "who" },
+  { label: "Awards", id: "awards" },
 ];
 
 const Nav: React.FC<NavProps> = ({ theme, toggleTheme }) => {

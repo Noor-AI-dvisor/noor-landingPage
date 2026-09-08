@@ -22,8 +22,8 @@ interface Award {
   location: string
   detail?: string
   stats?: Stat[]
-  url: string
-  linkLabel: string
+  url?: string
+  linkLabel?: string
 }
 
 const AWARDS: Award[] = [
@@ -36,8 +36,6 @@ const AWARDS: Award[] = [
     title: '2nd Place — DigiEduHack 2025',
     org: 'EduDataHack · European Commission initiative, University of Cyprus',
     location: 'Cyprus',
-    url: 'https://digieduhack.com/solutions/noor-an-ai-career-and-skills-companion-for-gen-alpha',
-    linkLabel: 'View submission',
   },
   {
     id: 'learning-planet',
@@ -297,23 +295,25 @@ const Plaque: React.FC<{ award: Award; index: number }> = ({ award, index }) => 
           </svg>
           {award.location}
         </span>
-        <a
-          href={award.url}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex items-center gap-1 text-[12px] font-semibold text-[var(--text-h)] hover:text-[var(--gold)] transition-colors"
-        >
-          {award.linkLabel}
-          <svg width="11" height="11" viewBox="0 0 24 24" fill="none">
-            <path
-              d="M7 17L17 7M9 7h8v8"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
-        </a>
+        {award.url && (
+          <a
+            href={award.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1 text-[12px] font-semibold text-[var(--text-h)] hover:text-[var(--gold)] transition-colors"
+          >
+            {award.linkLabel}
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none">
+              <path
+                d="M7 17L17 7M9 7h8v8"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </a>
+        )}
       </div>
     </div>
   )
@@ -383,11 +383,11 @@ const AwardsSection: React.FC = () => {
           </span>
 
           <h2 className="font-display text-[clamp(32px,4vw,52px)] 3xl:text-[58px] 4xl:text-[64px] font-normal leading-[1.15] tracking-[-0.015em] mb-5 text-[var(--text-h)]">
-            Four juries, four countries —<br className="hidden sm:block" /> the same verdict.
+            Noor Recognized Beyond Borders
           </h2>
 
           <p className="text-[clamp(15px,1.1vw,17px)] 3xl:text-[19px] 4xl:text-[20px] leading-[1.75] max-w-[540px] 3xl:max-w-[620px] text-[var(--text-b)]">
-            Cyprus, Paris, Berlin, and Egypt each looked at Noor independently over the past year. All four said yes.
+            Recognized by leading global education, innovation, and entrepreneurship programs.
           </p>
         </div>
 

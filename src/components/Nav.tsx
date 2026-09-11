@@ -114,10 +114,10 @@ const Nav: React.FC<NavProps> = ({ theme, toggleTheme }) => {
           </button>
 
           <button
-            className="hidden lg:block px-[22px] py-[9px] bg-accent text-white border-none rounded-full font-sans text-[13px] font-semibold cursor-pointer tracking-[0.01em] shadow-[0_2px_12px_var(--accent-glow)] transition-all duration-200 hover:scale-[1.04] hover:shadow-[0_6px_22px_var(--accent-glow-h)] active:scale-[0.97] whitespace-nowrap"
+            className="btn-primary hidden lg:inline-flex px-[22px] py-[9px] text-[13px]"
             onClick={() => document.getElementById("early-access")?.scrollIntoView({ behavior: "smooth" })}
           >
-            Get Early Access →
+            Get Early Access
           </button>
 
           <button
@@ -194,13 +194,13 @@ const Nav: React.FC<NavProps> = ({ theme, toggleTheme }) => {
         </div>
 
         <button
-          className="mt-6 px-4 py-3.5 bg-accent text-white border-none rounded-xl text-base font-semibold cursor-pointer text-center transition-opacity hover:opacity-90"
+          className="btn-primary mt-6 w-full text-base"
           onClick={() => {
             setDrawerOpen(false);
             document.getElementById("early-access")?.scrollIntoView({ behavior: "smooth" });
           }}
         >
-          Get Early Access →
+          Get Early Access
         </button>
       </div>
 

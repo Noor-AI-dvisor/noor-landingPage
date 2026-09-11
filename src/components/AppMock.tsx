@@ -15,20 +15,20 @@ const AppMock: React.FC<AppMockProps> = ({ compact = false }) => {
       }`}
     >
       {/* Header */}
-      <div className="flex items-center justify-between px-4 py-[14px] border-b border-[var(--border)] bg-[var(--mint-bg)] transition-[background] duration-300">
-        <div className="flex items-center gap-2">
+      <div className="flex items-center justify-between flex-wrap gap-y-1.5 px-4 py-[14px] border-b border-[var(--border)] bg-[var(--mint-bg)] transition-[background] duration-300">
+        <div className="flex items-center gap-2 shrink-0">
           <img src={logo} alt="Noor" className="w-8 h-8 rounded-lg" />
           <div>
             <div className="font-bold text-[13px] text-[var(--text-h)] leading-[1.15]">Noor AI</div>
             <div className="text-[9px] font-semibold tracking-[0.09em] uppercase text-accent">Career Companion</div>
           </div>
         </div>
-        <div className="flex items-center gap-2">
-          <div className="flex items-center gap-[5px] text-[11px] font-semibold text-accent">
-            <div className="w-1.5 h-1.5 rounded-full bg-accent animate-[pulse_2s_infinite]" />
+        <div className="flex items-center gap-2 shrink-0">
+          <div className="flex items-center gap-[5px] text-[11px] font-semibold text-accent whitespace-nowrap">
+            <div className="w-1.5 h-1.5 rounded-full bg-accent animate-[pulse_2s_infinite] shrink-0" />
             AI Online
           </div>
-          <div className="px-[10px] py-1 rounded-full bg-[var(--accent-dim)] text-accent text-[10px] font-bold border border-[rgba(29,158,117,0.2)]">
+          <div className="px-[10px] py-1 rounded-full bg-[var(--accent-dim)] text-accent text-[10px] font-bold border border-[rgba(29,158,117,0.2)] whitespace-nowrap">
             Student
           </div>
         </div>
@@ -55,7 +55,7 @@ const AppMock: React.FC<AppMockProps> = ({ compact = false }) => {
           <div className="px-[13px] py-[10px] rounded-[4px_12px_12px_12px] text-[12.5px] leading-[1.55] text-[var(--text-h)] bg-[var(--mint-bg)] max-w-[88%] transition-[background] duration-300">
             That's a great combination! Based on your interests, you'd thrive in the{" "}
             <strong style={{ color: "var(--accent)" }}>Mind &amp; Health Heroes</strong>{" "}
-            domain — think <strong>medicine, psychology, biotech</strong>. Want to see your personalised Study Pathway Card?
+            domain, think <strong>medicine, psychology, biotech</strong>. Want to see your personalised Study Pathway Card?
           </div>
         </div>
 

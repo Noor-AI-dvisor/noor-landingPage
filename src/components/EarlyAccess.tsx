@@ -65,25 +65,21 @@ const EarlyAccessSection: React.FC = () => {
     <section
       id="early-access"
       ref={sectionRef}
-      className="py-[clamp(80px,12vh,140px)] px-[clamp(24px,6vw,80px)] md:px-[clamp(64px,13vw,220px)] bg-[var(--bg)] border-t border-[var(--border)] relative overflow-hidden transition-[background] duration-300"
+      className="py-[clamp(80px,12vh,140px)] px-[clamp(24px,6vw,80px)] lg:px-[clamp(64px,13vw,220px)] bg-[var(--surface)] backdrop-blur-xl border-t border-[var(--border)] relative overflow-hidden transition-[background] duration-300"
     >
       {/* Decorative radial */}
-      <div className="absolute -bottom-[120px] -left-[120px] w-[480px] h-[480px] rounded-full pointer-events-none" style={{ background: 'radial-gradient(circle, rgba(29,158,117,0.07) 0%, transparent 70%)' }} />
+      <div className="absolute -bottom-[120px] -left-[120px] w-[480px] h-[480px] rounded-full pointer-events-none" style={{ background: 'radial-gradient(circle, var(--ea-blob) 0%, transparent 70%)' }} />
 
-      <div className="max-w-[1100px] 3xl:max-w-[1560px] 4xl:max-w-[1780px] mx-auto grid grid-cols-1 md:grid-cols-2 gap-[clamp(48px,7vw,96px)] items-center">
+      <div className="max-w-[1100px] 3xl:max-w-[1560px] 4xl:max-w-[1780px] mx-auto grid grid-cols-1 lg:grid-cols-2 gap-[clamp(48px,7vw,96px)] items-center">
 
         {/* Left: copy */}
         <div className="ea-left flex flex-col" ref={leftRef}>
-          <div className="inline-flex items-center gap-1.5 px-[14px] py-[5px] bg-[var(--accent-dim)] border border-[rgba(29,158,117,0.22)] rounded-full text-[11px] font-bold text-accent tracking-[0.1em] uppercase mb-6 w-fit">
-            ✦ Limited Early Access
-          </div>
-
           <h2 className="font-display text-[clamp(36px,4vw,58px)] 3xl:text-[64px] 4xl:text-[70px] font-normal leading-[1.1] tracking-[-0.02em] text-[var(--text-h)] mb-5">
             Ready to bring <em className="italic text-accent">Noor</em><br />to your school?
           </h2>
 
           <p className="text-[clamp(15px,1.1vw,17px)] 3xl:text-[19px] 4xl:text-[20px] leading-[1.75] text-[var(--text-b)] max-w-[420px] 3xl:max-w-[480px] mb-9">
-            We're running free Demos with selected schools right now. Be among the first to see Noor in action — no commitment required.
+            We're running free Demos with selected schools right now. Be among the first to see Noor in action, no commitment required.
           </p>
 
           <div className="flex flex-col gap-3.5">
@@ -102,7 +98,7 @@ const EarlyAccessSection: React.FC = () => {
 
         {/* Right: form card */}
         <div className="ea-right" ref={rightRef}>
-          <div className="bg-[var(--sol-bg)] border border-[var(--sol-border)] rounded-[28px] px-10 3xl:px-14 py-11 3xl:py-14 shadow-[inset_0_1px_0_rgba(255,255,255,0.6),0_8px_48px_rgba(0,0,0,0.07),0_0_0_1px_var(--sol-border)]">
+          <div className="bg-[var(--sol-bg)] border border-[var(--sol-border)] rounded-[28px] px-6 sm:px-10 3xl:px-14 py-8 sm:py-11 3xl:py-14 shadow-[inset_0_1px_0_rgba(255,255,255,0.6),0_8px_48px_rgba(0,0,0,0.07),0_0_0_1px_var(--sol-border)]">
             <div className="text-center mb-7">
               <div className="text-[32px] mb-3">🌟</div>
               <h3 className="font-display text-[clamp(20px,2vw,26px)] font-medium leading-[1.2] text-[var(--text-h)] mb-2">
@@ -126,10 +122,10 @@ const EarlyAccessSection: React.FC = () => {
               />
               <button
                 type="submit"
-                className="btn-primary w-full text-center justify-center rounded-xl text-[15px] py-4"
+                className="btn-primary w-full"
                 disabled={sending || inputDisabled}
               >
-                {sending ? 'Sending…' : 'Request Free Demo →'}
+                {sending ? 'Sending…' : 'Request Free Demo'}
               </button>
               {msg && (
                 <p className="text-[13px] font-medium text-center" style={{ color: msg.color }}>

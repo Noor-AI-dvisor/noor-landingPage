@@ -3,7 +3,7 @@ const CARDS = [
     emoji: "🎒",
     role: "Students",
     subtitle: "Grade 9–12 Students",
-    desc: "Get a personalised study plan and unlock gamified skill missions tied to your actual future — not just exam results.",
+    desc: "Get a personalised study plan and unlock gamified skill missions tied to your actual future, not just exam results.",
     accent: "var(--accent)",
   },
   {
@@ -24,7 +24,7 @@ const CARDS = [
     emoji: "👨‍👩‍👧",
     role: "Parents",
     subtitle: "Parents & Families",
-    desc: "See your child's pathway, skill progress, and subject choices in one place — with AI-backed clarity, not guesswork.",
+    desc: "See your child's pathway, skill progress, and subject choices in one place, with AI-backed clarity, not guesswork.",
     accent: "var(--accent-amber)",
   },
 ];
@@ -33,29 +33,25 @@ export default function WhoSection() {
   return (
     <section
       id="who"
-      className="py-28 px-[clamp(24px,5vw,64px)] bg-[var(--bg)] text-center transition-[background] duration-300"
+      className="py-28 px-[clamp(24px,5vw,64px)] bg-[var(--surface)] backdrop-blur-xl text-center transition-[background] duration-300"
     >
       {/* Header */}
       <div className="max-w-[700px] 3xl:max-w-[820px] mx-auto mb-14">
-        <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-[var(--amber-bg)] border border-[rgba(245,158,11,0.2)] rounded-full text-[0.78rem] font-semibold text-accent-amber tracking-[0.08em] uppercase mb-5">
-          Who It's For
-        </span>
-
         <h2 className="font-display text-[clamp(1.75rem,3.2vw,2.6rem)] 3xl:text-[3rem] 4xl:text-[3.3rem] font-medium leading-[1.3] text-[var(--text-h)] mb-5">
           Designed for <em className="italic">everyone</em> inside the school ecosystem.
         </h2>
 
         <p className="text-[1.05rem] 3xl:text-[1.15rem] leading-[1.75] text-[var(--text-b)]">
-          Whether you're a student, parent, counsellor, or school leader — Noor was built with your needs in mind.
+          Whether you're a student, parent, counsellor, or school leader, Noor was built with your needs in mind.
         </p>
       </div>
 
       {/* Cards grid — full width, 4 equal columns on large screens */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5">
+      <div className="flex overflow-x-auto snap-x snap-mandatory no-scrollbar -mx-[clamp(24px,5vw,64px)] px-[clamp(24px,5vw,64px)] pb-1 gap-5 text-left sm:mx-0 sm:px-0 sm:pb-0 sm:overflow-visible sm:grid sm:grid-cols-2 xl:grid-cols-4">
         {CARDS.map((card, i) => (
           <div
             key={card.role}
-            className="relative bg-[var(--card-bg)] border border-[var(--card-border)] rounded-[18px] p-8 text-left overflow-hidden shadow-card transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_14px_44px_rgba(0,0,0,0.12)] opacity-0 translate-y-[30px] scale-[0.97] animate-fade-up-scale"
+            className="shrink-0 w-[78%] snap-center sm:w-auto relative bg-[var(--card-bg)] border border-[var(--card-border)] rounded-[18px] p-8 text-left overflow-hidden shadow-card transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_14px_44px_rgba(0,0,0,0.12)] opacity-0 translate-y-[30px] scale-[0.97] animate-fade-up-scale"
             style={{ animationDelay: `${0.2 + i * 0.15}s` }}
           >
             {/* Accent bar */}

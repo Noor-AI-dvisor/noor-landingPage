@@ -7,13 +7,13 @@ const ITEMS = [
     emoji: '😕', color: '#F97316',
     label: 'Awareness',
     title: 'Students guess, not choose',
-    desc: 'Most teens pick subjects based on friends or "what seems easier" — not a clear link to their strengths or future careers.',
+    desc: 'Most teens pick subjects based on friends or "what seems easier," not a clear link to their strengths or future careers.',
   },
   {
     emoji: '⏳', color: '#EF4444',
     label: 'Capacity',
     title: 'Counsellors are stretched',
-    desc: 'One counsellor supports hundreds of students — repeating the same basic conversations instead of doing meaningful guidance.',
+    desc: 'One counsellor supports hundreds of students, repeating the same basic conversations instead of doing meaningful guidance.',
   },
   {
     emoji: '📄', color: '#8B5CF6',
@@ -77,22 +77,17 @@ const ProblemSection: React.FC = () => {
     <section
       id="problem"
       ref={sectionRef}
-      className="min-h-screen bg-[var(--bg)] grid grid-cols-1 md:grid-cols-2 items-center gap-[clamp(40px,6vw,100px)] px-[clamp(24px,6vw,80px)] md:px-0 md:pl-[clamp(100px,17vw,300px)] md:pr-[clamp(64px,13vw,220px)] py-[clamp(48px,6vh,72px)] pb-[100px] relative overflow-hidden transition-[background] duration-300 max-w-[2800px] 3xl:max-w-[1950px] 4xl:max-w-[2050px] mx-auto"
+      className="min-h-screen bg-[var(--surface)] backdrop-blur-xl grid grid-cols-1 md:grid-cols-2 items-start gap-[clamp(40px,6vw,100px)] px-[clamp(24px,6vw,80px)] md:px-0 md:pl-[clamp(100px,17vw,300px)] md:pr-[clamp(64px,13vw,220px)] pt-[clamp(120px,16vh,180px)] pb-[100px] relative overflow-hidden transition-[background] duration-300 max-w-[2800px] 3xl:max-w-[1950px] 4xl:max-w-[2050px] mx-auto"
     >
 
       {/* Left */}
       <div className="problem-left flex flex-col" ref={leftRef}>
-        <div className="problem-eyebrow-pill inline-flex items-center gap-[7px] px-[13px] py-[5px] rounded-full text-[11px] font-bold tracking-[0.12em] uppercase mb-6 w-fit border" style={{ background: 'rgba(43,67,189,0.1)', color: '#2b43bd', borderColor: 'rgba(43,67,189,0.2)' }}>
-          <svg width="7" height="7" viewBox="0 0 7 7"><circle cx="3.5" cy="3.5" r="3.5" fill="currentColor"/></svg>
-          The Problem
-        </div>
-
         <h2 className="font-display text-[clamp(38px,4.2vw,62px)] 3xl:text-[70px] 4xl:text-[78px] font-normal leading-[1.12] tracking-[-0.02em] text-[var(--text-h)] mb-5">
-          Subject choice is broken —<br /><em className="italic text-accent">and schools know it.</em>
+          Subject choice is broken.<br /><em className="italic text-accent">And schools know it.</em>
         </h2>
 
         <p className="text-[clamp(16px,1.2vw,19px)] 3xl:text-[21px] 4xl:text-[23px] leading-[1.75] text-[var(--text-b)] max-w-[420px] 3xl:max-w-[480px] 4xl:max-w-[520px] font-normal">
-          Students make life-defining decisions with one meeting, a PDF booklet, and a guess. The current system is failing them — and counsellors.
+          Students make life-defining decisions with one meeting, a PDF booklet, and a guess. The current system is failing them, and counsellors too.
         </p>
       </div>
 

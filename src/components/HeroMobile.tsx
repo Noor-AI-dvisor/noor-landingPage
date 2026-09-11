@@ -5,7 +5,7 @@ const HeroMobile: React.FC = () => {
   return (
     <section
       id="hero-mobile"
-      className="lg:hidden flex flex-col min-h-screen px-6 pt-[100px] pb-[60px] relative overflow-hidden bg-[var(--surface)] backdrop-blur-xl transition-[background] duration-300"
+      className="lg:hidden flex flex-col min-h-screen px-6 pt-[100px] pb-[60px] relative overflow-hidden transition-[background] duration-300"
     >
 
       <div className="relative z-10 max-w-[480px] mx-auto w-full">
@@ -36,7 +36,7 @@ const HeroMobile: React.FC = () => {
 
         <div className="flex flex-wrap gap-2 mb-7">
           {['🎓 Ages 14–18', '⚡ 10-min missions', '🏆 11 skill domains'].map((chip) => (
-            <span key={chip} className="px-3 py-[5px] bg-[var(--card-bg)] border border-[var(--border-s)] rounded-full text-[0.78rem] font-medium text-[var(--text-b)]">
+            <span key={chip} className="px-3 py-[5px] bg-[var(--card-bg)] backdrop-blur-md border border-[var(--border-s)] rounded-full text-[0.78rem] font-medium text-[var(--text-b)]">
               {chip}
             </span>
           ))}

@@ -23,7 +23,7 @@
   --text-b: #4a5568;
   --text-light: #8896a6;
   --muted: #8896a6;
-  --card-bg: #ffffff;
+  --card-bg: rgba(255, 255, 255, 0.62);
   --card-border: rgba(0, 0, 0, 0.08);
   --card-shadow: 0 4px 24px rgba(0, 0, 0, 0.07);
   --pill-bg: rgba(248, 250, 252, 0.8);
@@ -58,7 +58,7 @@
   --text-h: #f0f0ec;
   --text-b: #8d9db0;
   --text-light: #5a6678;
-  --card-bg: #1a1f2e;
+  --card-bg: rgba(26, 31, 46, 0.58);
   --card-border: rgba(255, 255, 255, 0.09);
   --card-shadow: 0 4px 24px rgba(0, 0, 0, 0.35);
   --pill-bg: rgba(30, 35, 48, 0.8);
@@ -95,6 +95,11 @@ body {
   background: var(--bg);
   color: var(--text-h);
   overflow-x: hidden;
+  /* Establishes body's own stacking context so the fixed, negative-z-index
+     .ambient-bg layer paints above the page canvas instead of sinking
+     behind it (a well-known position:fixed + z-index:-1 gotcha). */
+  position: relative;
+  z-index: 0;
   transition:
     background 0.3s,
     color 0.3s;
@@ -462,29 +467,13 @@ body {
   pointer-events: none;
   display: flex;
   align-items: center;
-  justify-content: flex-end;
-}
-
-.ambient-bg-grid {
-  position: absolute;
-  inset: 0;
-  background-image:
-    linear-gradient(rgba(15, 168, 143, 0.07) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(15, 168, 143, 0.07) 1px, transparent 1px);
-  background-size: 46px 46px;
-  opacity: 0.6;
-}
-[data-theme="dark"] .ambient-bg-grid {
-  background-image:
-    linear-gradient(rgba(217, 172, 108, 0.08) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(217, 172, 108, 0.08) 1px, transparent 1px);
+  justify-content: center;
 }
 
 .presence-stage {
   position: relative;
   width: min(58vw, 760px);
   aspect-ratio: 1;
-  margin-right: clamp(-120px, -4vw, 40px);
   opacity: 0.48;
   --p-a: var(--accent);
   --p-b: #8fe0c4;

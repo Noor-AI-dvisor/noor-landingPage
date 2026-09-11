@@ -33,7 +33,7 @@ export default function WhoSection() {
   return (
     <section
       id="who"
-      className="py-28 px-[clamp(24px,5vw,64px)] bg-[var(--surface)] backdrop-blur-xl text-center transition-[background] duration-300"
+      className="py-28 px-[clamp(24px,5vw,64px)] text-center transition-[background] duration-300"
     >
       {/* Header */}
       <div className="max-w-[700px] 3xl:max-w-[820px] mx-auto mb-14">
@@ -51,7 +51,7 @@ export default function WhoSection() {
         {CARDS.map((card, i) => (
           <div
             key={card.role}
-            className="shrink-0 w-[78%] snap-center sm:w-auto relative bg-[var(--card-bg)] border border-[var(--card-border)] rounded-[18px] p-8 text-left overflow-hidden shadow-card transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_14px_44px_rgba(0,0,0,0.12)] opacity-0 translate-y-[30px] scale-[0.97] animate-fade-up-scale"
+            className="shrink-0 w-[78%] snap-center sm:w-auto relative bg-[var(--card-bg)] backdrop-blur-xl border border-[var(--card-border)] rounded-[18px] p-8 text-left overflow-hidden shadow-card transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_14px_44px_rgba(0,0,0,0.12)] opacity-0 translate-y-[30px] scale-[0.97] animate-fade-up-scale"
             style={{ animationDelay: `${0.2 + i * 0.15}s` }}
           >
             {/* Accent bar */}

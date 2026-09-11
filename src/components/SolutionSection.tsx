@@ -80,7 +80,7 @@ const SolutionCard: React.FC<{
         onMouseLeave={handleLeave}
         onClick={onToggle}
         onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onToggle() } }}
-        className="group relative h-full rounded-[28px] bg-[var(--card-bg)] border border-[var(--card-border)] p-[26px] 3xl:p-8 cursor-pointer overflow-hidden"
+        className="group relative h-full rounded-[28px] bg-[var(--card-bg)] backdrop-blur-xl border border-[var(--card-border)] p-[26px] 3xl:p-8 cursor-pointer overflow-hidden"
         style={{
           transformStyle: 'preserve-3d',
           transform: `rotateX(${rot.x}deg) rotateY(${rot.y}deg) translateY(${hovering ? -8 : 0}px)`,
@@ -216,7 +216,7 @@ const SolutionSection: React.FC = () => {
   return (
     <section
       id="solution-wrap"
-      className="relative overflow-hidden py-[clamp(80px,10vh,120px)] px-[clamp(24px,6vw,80px)] bg-[var(--surface)] backdrop-blur-xl transition-[background] duration-300"
+      className="relative overflow-hidden py-[clamp(80px,10vh,120px)] px-[clamp(24px,6vw,80px)] transition-[background] duration-300"
     >
       <div className="solution-reveal relative z-10 w-full" ref={revealRef}>
 

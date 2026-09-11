@@ -182,7 +182,7 @@ const AwardCube: React.FC<{ image: string; alt: string; fit: 'contain' | 'cover'
 const Plaque: React.FC<{ award: Award; index: number }> = ({ award, index }) => {
   return (
     <div
-      className="plaque-enter relative rounded-[16px] border border-[var(--card-border)] bg-[var(--card-bg)] shadow-card p-6 text-left overflow-hidden transition-[transform,box-shadow] duration-300 hover:-translate-y-1 hover:shadow-[0_14px_44px_rgba(0,0,0,0.14)]"
+      className="plaque-enter relative rounded-[16px] border border-[var(--card-border)] bg-[var(--card-bg)] backdrop-blur-xl shadow-card p-6 text-left overflow-hidden transition-[transform,box-shadow] duration-300 hover:-translate-y-1 hover:shadow-[0_14px_44px_rgba(0,0,0,0.14)]"
       style={{ transitionDelay: `${index * 0.12}s` }}
     >
       <div
@@ -282,7 +282,7 @@ const AwardsSection: React.FC = () => {
     <section
       id="awards"
       ref={sectionRef}
-      className="relative overflow-hidden py-[clamp(72px,10vh,120px)] px-[clamp(24px,6vw,80px)] bg-[var(--surface)] backdrop-blur-xl border-t border-[var(--border)] transition-[background] duration-300"
+      className="relative overflow-hidden py-[clamp(72px,10vh,120px)] px-[clamp(24px,6vw,80px)] border-t border-[var(--border)] transition-[background] duration-300"
     >
       <div
         className="absolute top-0 left-1/2 -translate-x-1/2 w-[900px] h-[600px] pointer-events-none"

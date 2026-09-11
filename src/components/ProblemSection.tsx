@@ -77,7 +77,7 @@ const ProblemSection: React.FC = () => {
     <section
       id="problem"
       ref={sectionRef}
-      className="min-h-screen bg-[var(--surface)] backdrop-blur-xl grid grid-cols-1 md:grid-cols-2 items-start gap-[clamp(40px,6vw,100px)] px-[clamp(24px,6vw,80px)] md:px-0 md:pl-[clamp(100px,17vw,300px)] md:pr-[clamp(64px,13vw,220px)] pt-[clamp(120px,16vh,180px)] pb-[100px] relative overflow-hidden transition-[background] duration-300 max-w-[2800px] 3xl:max-w-[1950px] 4xl:max-w-[2050px] mx-auto"
+      className="min-h-screen grid grid-cols-1 md:grid-cols-2 items-start gap-[clamp(40px,6vw,100px)] px-[clamp(24px,6vw,80px)] md:px-0 md:pl-[clamp(100px,17vw,300px)] md:pr-[clamp(64px,13vw,220px)] pt-[clamp(120px,16vh,180px)] pb-[100px] relative overflow-hidden transition-[background] duration-300 max-w-[2800px] 3xl:max-w-[1950px] 4xl:max-w-[2050px] mx-auto"
     >
 
       {/* Left */}

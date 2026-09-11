@@ -65,7 +65,7 @@ const EarlyAccessSection: React.FC = () => {
     <section
       id="early-access"
       ref={sectionRef}
-      className="py-[clamp(80px,12vh,140px)] px-[clamp(24px,6vw,80px)] lg:px-[clamp(64px,13vw,220px)] bg-[var(--surface)] backdrop-blur-xl border-t border-[var(--border)] relative overflow-hidden transition-[background] duration-300"
+      className="py-[clamp(80px,12vh,140px)] px-[clamp(24px,6vw,80px)] lg:px-[clamp(64px,13vw,220px)] border-t border-[var(--border)] relative overflow-hidden transition-[background] duration-300"
     >
       {/* Decorative radial */}
       <div className="absolute -bottom-[120px] -left-[120px] w-[480px] h-[480px] rounded-full pointer-events-none" style={{ background: 'radial-gradient(circle, var(--ea-blob) 0%, transparent 70%)' }} />
@@ -98,7 +98,7 @@ const EarlyAccessSection: React.FC = () => {
 
         {/* Right: form card */}
         <div className="ea-right" ref={rightRef}>
-          <div className="bg-[var(--sol-bg)] border border-[var(--sol-border)] rounded-[28px] px-6 sm:px-10 3xl:px-14 py-8 sm:py-11 3xl:py-14 shadow-[inset_0_1px_0_rgba(255,255,255,0.6),0_8px_48px_rgba(0,0,0,0.07),0_0_0_1px_var(--sol-border)]">
+          <div className="bg-[var(--sol-bg)] backdrop-blur-xl border border-[var(--sol-border)] rounded-[28px] px-6 sm:px-10 3xl:px-14 py-8 sm:py-11 3xl:py-14 shadow-[inset_0_1px_0_rgba(255,255,255,0.6),0_8px_48px_rgba(0,0,0,0.07),0_0_0_1px_var(--sol-border)]">
             <div className="text-center mb-7">
               <div className="text-[32px] mb-3">🌟</div>
               <h3 className="font-display text-[clamp(20px,2vw,26px)] font-medium leading-[1.2] text-[var(--text-h)] mb-2">

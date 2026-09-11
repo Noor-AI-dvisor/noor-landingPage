@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
+import AmbientPresence from "./components/AmbientPresence";
 import Nav from "./components/Nav";
 import HeroStage from "./components/HeroStage";
 import HeroMobile from "./components/HeroMobile";
@@ -28,6 +29,7 @@ function App() {
 
   return (
     <>
+      <AmbientPresence />
       <Nav theme={theme} toggleTheme={toggleTheme} />
       <div id="home">
         <HeroStage />

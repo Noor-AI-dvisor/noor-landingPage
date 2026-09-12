@@ -33,7 +33,7 @@ const HeroStage: React.FC = () => {
         </div>
 
         <div className="flex flex-wrap gap-2 mb-7">
-          {['🎓 Ages 14–18', '⚡ 10-min missions', '🏆 11 skill domains'].map((chip) => (
+          {['🎓 B2B solution for schools', '⚡ AI-assisted guidance', '🏆 Career Exploration'].map((chip) => (
             <span key={chip} className="px-3 py-[5px] bg-[var(--card-bg)] backdrop-blur-md border border-[var(--border-s)] rounded-full text-[0.78rem] font-medium text-[var(--text-b)]">
               {chip}
             </span>

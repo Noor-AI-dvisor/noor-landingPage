@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from 'react'
 const BENEFITS = [
   'Personalised AI guidance for every student',
   'Counsellor dashboard with real-time cohort insights',
-  'Gamified skills journeys across 11 career domains',
+  'Multidisciplinary gamified missions',
   'Instant Study Pathway Card generation',
 ]
 

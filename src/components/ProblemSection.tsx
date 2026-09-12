@@ -83,7 +83,7 @@ const ProblemSection: React.FC = () => {
       {/* Left */}
       <div className="problem-left flex flex-col" ref={leftRef}>
         <h2 className="font-display text-[clamp(38px,4.2vw,62px)] 3xl:text-[70px] 4xl:text-[78px] font-normal leading-[1.12] tracking-[-0.02em] text-[var(--text-h)] mb-5">
-          Subject choice is broken.<br /><em className="italic text-accent">And schools know it.</em>
+          Schools track grades,<br /><em className="italic text-accent">but not students' potential.</em>
         </h2>
 
         <p className="text-[clamp(16px,1.2vw,19px)] 3xl:text-[21px] 4xl:text-[23px] leading-[1.75] text-[var(--text-b)] max-w-[420px] 3xl:max-w-[480px] 4xl:max-w-[520px] font-normal">

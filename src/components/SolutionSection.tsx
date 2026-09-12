@@ -21,7 +21,7 @@ const FEATURES: Feature[] = [
     num: '02', icon: '🌐',
     borderColor: '#22c55e',
     title: 'Career domains that feel real',
-    desc: 'Explore 11 real-world career domains with authentic stories, day-in-the-life experiences, and subject pathway maps.',
+    desc: 'Explore real-world career domains with authentic stories, day-in-the-life experiences, and subject pathway maps.',
     more: "Each domain is curated with UK-specific labour market data, growth projections, and diverse role models. Students discover careers they never knew existed and connect them to subjects they're studying today.",
   },
   {

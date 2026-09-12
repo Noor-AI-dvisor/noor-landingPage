@@ -27,6 +27,17 @@ interface Award {
 }
 
 const AWARDS: Award[] = [
+
+    {
+    id: 'digieduhack',
+    image: digiCert,
+    imageAlt: 'DigiEduHack 2025 certificate awarding 2nd place to Team Noor',
+    fit: 'cover',
+    medal: '🥈',
+    title: '2nd Place: DigiEduHack 2025',
+    org: 'EduDataHack · European Commission initiative, University of Cyprus',
+    location: 'Cyprus',
+  },
   {
     id: 'learning-planet',
     image: lpiLogo,
@@ -36,7 +47,7 @@ const AWARDS: Award[] = [
     title: 'Top 60 Worldwide: Learning Planet YDC 2025–26',
     org: 'Learning Planet Institute, Paris',
     location: 'Paris',
-    detail: 'Finalist training bootcamp completed.',
+   // detail: 'Finalist training bootcamp completed.',
     stats: [
       { value: '702', label: 'projects' },
       { value: '109', label: 'countries' },
@@ -44,19 +55,6 @@ const AWARDS: Award[] = [
     ],
     url: 'https://projects.learning-planet.org/projects/noor-an-ai-career-and-skills-companion-for-ge/summary',
     linkLabel: 'View project',
-  },
-  {
-    id: 'mena-dss',
-    image: menaLogo,
-    imageAlt: 'MENA Digital Summer School logo',
-    fit: 'contain',
-    medal: '🏅',
-    title: 'Selected Participant: MENA Digital Summer School 2026',
-    org: 'MENA Digital Summer School, Berlin',
-    location: 'Berlin',
-    detail: 'One of a select cohort chosen from across the Middle East and North Africa.',
-    url: 'https://www.mena-ds.com/',
-    linkLabel: 'Visit programme',
   },
   {
     id: 'orange-osvp',
@@ -67,18 +65,21 @@ const AWARDS: Award[] = [
     title: "National Women's Prize: Orange Social Venture Prize 2026",
     org: 'Orange Egypt · 16th edition',
     location: 'Egypt',
-    url: 'https://www.orange.com/en/our-news/young-entrepreneurs-africa-and-middle-east-apply-2026-osvp',
-    linkLabel: 'Read announcement',
+   // url: 'https://www.orange.com/en/our-news/young-entrepreneurs-africa-and-middle-east-apply-2026-osvp',
+    //linkLabel: 'Read announcement',
   },
   {
-    id: 'digieduhack',
-    image: digiCert,
-    imageAlt: 'DigiEduHack 2025 certificate awarding 2nd place to Team Noor',
-    fit: 'cover',
-    medal: '🥈',
-    title: '2nd Place: DigiEduHack 2025',
-    org: 'EduDataHack · European Commission initiative, University of Cyprus',
-    location: 'Cyprus',
+    id: 'mena-dss',
+    image: menaLogo,
+    imageAlt: 'MENA Digital Summer School logo',
+    fit: 'contain',
+    medal: '🏅',
+    title: 'Selected Participant: MENA Digital Summer School 2026',
+    org: 'MENA Digital Summer School, Berlin',
+    location: 'Berlin',
+  //  detail: 'One of a select cohort chosen from across the Middle East and North Africa.',
+    url: 'https://www.instagram.com/p/DcvvSH3jRFx/?img_index=1&stkn=ZDRmeDQ5dmFvbW1p',
+    linkLabel: 'Visit programme',
   },
 ]
 

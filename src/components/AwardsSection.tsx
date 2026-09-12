@@ -27,13 +27,14 @@ interface Award {
 }
 
 const AWARDS: Award[] = [
-  {
+
+    {
     id: 'digieduhack',
     image: digiCert,
     imageAlt: 'DigiEduHack 2025 certificate awarding 2nd place to Team Noor',
     fit: 'cover',
     medal: '🥈',
-    title: '2nd Place — DigiEduHack 2025',
+    title: '2nd Place: DigiEduHack 2025',
     org: 'EduDataHack · European Commission initiative, University of Cyprus',
     location: 'Cyprus',
   },
@@ -43,10 +44,10 @@ const AWARDS: Award[] = [
     imageAlt: 'Learning Planet Institute logo',
     fit: 'contain',
     medal: '🏆',
-    title: 'Top 60 Worldwide — Learning Planet YDC 2025–26',
+    title: 'Top 60 Worldwide: Learning Planet YDC 2025–26',
     org: 'Learning Planet Institute, Paris',
     location: 'Paris',
-    detail: 'Finalist training bootcamp completed.',
+   // detail: 'Finalist training bootcamp completed.',
     stats: [
       { value: '702', label: 'projects' },
       { value: '109', label: 'countries' },
@@ -56,46 +57,47 @@ const AWARDS: Award[] = [
     linkLabel: 'View project',
   },
   {
-    id: 'mena-dss',
-    image: menaLogo,
-    imageAlt: 'MENA Digital Summer School logo',
-    fit: 'contain',
-    medal: '🏅',
-    title: 'Selected Participant — MENA Digital Summer School 2026',
-    org: 'MENA Digital Summer School, Berlin',
-    location: 'Berlin',
-    detail: 'One of a select cohort chosen from across the Middle East and North Africa.',
-    url: 'https://www.mena-ds.com/',
-    linkLabel: 'Visit programme',
-  },
-  {
     id: 'orange-osvp',
     image: orangeCert,
     imageAlt: "Orange Social Venture Prize 2026 certificate, National Women's Prize",
     fit: 'cover',
     medal: '🏆',
-    title: "National Women's Prize — Orange Social Venture Prize 2026",
+    title: "National Women's Prize: Orange Social Venture Prize 2026",
     org: 'Orange Egypt · 16th edition',
     location: 'Egypt',
-    url: 'https://www.orange.com/en/our-news/young-entrepreneurs-africa-and-middle-east-apply-2026-osvp',
-    linkLabel: 'Read announcement',
+   // url: 'https://www.orange.com/en/our-news/young-entrepreneurs-africa-and-middle-east-apply-2026-osvp',
+    //linkLabel: 'Read announcement',
+  },
+  {
+    id: 'mena-dss',
+    image: menaLogo,
+    imageAlt: 'MENA Digital Summer School logo',
+    fit: 'contain',
+    medal: '🏅',
+    title: 'Selected Participant: MENA Digital Summer School 2026',
+    org: 'MENA Digital Summer School, Berlin',
+    location: 'Berlin',
+  //  detail: 'One of a select cohort chosen from across the Middle East and North Africa.',
+    url: 'https://www.instagram.com/p/DcvvSH3jRFx/?img_index=1&stkn=ZDRmeDQ5dmFvbW1p',
+    linkLabel: 'Visit programme',
   },
 ]
 
 const prefersReducedMotion = () =>
   typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
-const REST_ROT = { x: -9, y: 17 }
+const REST_ROT = { x: 0, y: 0 }
 
-const AwardCube: React.FC<{ image: string; alt: string; fit: 'contain' | 'cover'; medal: string }> = ({
+const AwardCube: React.FC<{ image: string; alt: string; fit: 'contain' | 'cover'; medal: string; index?: number }> = ({
   image,
   alt,
   fit,
-  medal,
+  index = 0,
 }) => {
   const sceneRef = useRef<HTMLDivElement>(null)
-  const [box, setBox] = useState({ w: 260, h: 162.5, d: 30 })
+  const [box, setBox] = useState({ w: 260, h: 162.5 })
   const [rot, setRot] = useState(REST_ROT)
+  const [floatY, setFloatY] = useState(0)
 
   useEffect(() => {
     const el = sceneRef.current
@@ -103,13 +105,28 @@ const AwardCube: React.FC<{ image: string; alt: string; fit: 'contain' | 'cover'
     const update = () => {
       const w = el.offsetWidth
       const h = (w * 10) / 16
-      setBox({ w, h, d: Math.max(20, w * 0.12) })
+      setBox({ w, h })
     }
     update()
     const ro = new ResizeObserver(update)
     ro.observe(el)
     return () => ro.disconnect()
   }, [])
+
+  useEffect(() => {
+    if (prefersReducedMotion()) return
+    const period = 4000
+    const phaseOffset = index * -900
+    let id: number
+    const tick = () => {
+      const t = (performance.now() + phaseOffset) % period
+      const angle = (t / period) * Math.PI * 2
+      setFloatY(-5 + Math.sin(angle) * 5)
+    }
+    tick()
+    id = window.setInterval(tick, 100)
+    return () => window.clearInterval(id)
+  }, [index])
 
   const handleMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (prefersReducedMotion()) return
@@ -123,17 +140,7 @@ const AwardCube: React.FC<{ image: string; alt: string; fit: 'contain' | 'cover'
 
   const handleLeave = () => setRot(REST_ROT)
 
-  const { w, h, d } = box
-  const sideLeft = (w - d) / 2
-  const topOffset = (h - d) / 2
-
-  const face: React.CSSProperties = {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    backfaceVisibility: 'hidden',
-    border: '1px solid var(--gold-dim)',
-  }
+  const { w, h } = box
 
   return (
     <div
@@ -147,95 +154,26 @@ const AwardCube: React.FC<{ image: string; alt: string; fit: 'contain' | 'cover'
       {/* grounding shadow */}
       <div
         className="absolute left-1/2 -translate-x-1/2 rounded-full pointer-events-none"
-        style={{ bottom: -d * 0.55, width: w * 0.75, height: d * 0.6, background: 'rgba(0,0,0,0.16)', filter: 'blur(10px)' }}
+        style={{ bottom: -12, width: w * 0.75, height: 16, background: 'rgba(0,0,0,0.16)', filter: 'blur(10px)' }}
       />
 
+      {/* flat image — tilts on hover, floats continuously */}
       <div
-        className="relative w-full h-full"
+        className="overflow-hidden rounded-lg"
         style={{
-          transformStyle: 'preserve-3d',
-          transform: `rotateX(${rot.x}deg) rotateY(${rot.y}deg)`,
+          width: w,
+          height: h,
+          background: 'var(--case-mat)',
+          border: '1px solid var(--gold-dim)',
+          transform: `translateY(${floatY}px) rotateX(${rot.x}deg) rotateY(${rot.y}deg)`,
           transition: 'transform 0.5s cubic-bezier(0.2,0.8,0.2,1)',
         }}
       >
-        {/* front — the actual proof */}
-        <div
-          className="overflow-hidden"
-          style={{ ...face, width: w, height: h, background: 'var(--case-mat)', transform: `translateZ(${d / 2}px)` }}
-        >
-          <img
-            src={image}
-            alt={alt}
-            className={`w-full h-full ${fit === 'contain' ? 'object-contain p-5' : 'object-cover'}`}
-            loading="lazy"
-          />
-        </div>
-
-        {/* back */}
-        <div
-          className="flex items-center justify-center text-[30px]"
-          style={{
-            ...face,
-            width: w,
-            height: h,
-            background: 'linear-gradient(135deg, var(--gold-dim), var(--card-bg))',
-            transform: `rotateY(180deg) translateZ(${d / 2}px)`,
-          }}
-          aria-hidden="true"
-        >
-          {medal}
-        </div>
-
-        {/* right */}
-        <div
-          style={{
-            ...face,
-            left: sideLeft,
-            width: d,
-            height: h,
-            background: 'linear-gradient(90deg, var(--gold-dim), rgba(0,0,0,0.08))',
-            transform: `rotateY(90deg) translateZ(${w / 2}px)`,
-          }}
-          aria-hidden="true"
-        />
-
-        {/* left */}
-        <div
-          style={{
-            ...face,
-            left: sideLeft,
-            width: d,
-            height: h,
-            background: 'linear-gradient(90deg, rgba(255,255,255,0.5), var(--gold-dim))',
-            transform: `rotateY(-90deg) translateZ(${w / 2}px)`,
-          }}
-          aria-hidden="true"
-        />
-
-        {/* top */}
-        <div
-          style={{
-            ...face,
-            top: topOffset,
-            width: w,
-            height: d,
-            background: 'linear-gradient(180deg, rgba(255,255,255,0.55), var(--gold-dim))',
-            transform: `rotateX(90deg) translateZ(${h / 2}px)`,
-          }}
-          aria-hidden="true"
-        />
-
-        {/* bottom */}
-        <div
-          style={{
-            ...face,
-            top: topOffset,
-            width: w,
-            height: d,
-            background: 'rgba(0,0,0,0.22)',
-            transform: `rotateX(-90deg) translateZ(${h / 2}px)`,
-          }}
-          aria-hidden="true"
+        <img
+          src={image}
+          alt={alt}
+          className={`w-full h-full ${fit === 'contain' ? 'object-contain p-5' : 'object-cover'}`}
+          loading="lazy"
         />
       </div>
     </div>
@@ -245,7 +183,7 @@ const AwardCube: React.FC<{ image: string; alt: string; fit: 'contain' | 'cover'
 const Plaque: React.FC<{ award: Award; index: number }> = ({ award, index }) => {
   return (
     <div
-      className="plaque-enter relative rounded-[16px] border border-[var(--card-border)] bg-[var(--card-bg)] shadow-card p-6 text-left overflow-hidden transition-[transform,box-shadow] duration-300 hover:-translate-y-1 hover:shadow-[0_14px_44px_rgba(0,0,0,0.14)]"
+      className="plaque-enter relative rounded-[16px] border border-[var(--card-border)] bg-[var(--card-bg)] backdrop-blur-xl shadow-card p-6 text-left overflow-hidden transition-[transform,box-shadow] duration-300 hover:-translate-y-1 hover:shadow-[0_14px_44px_rgba(0,0,0,0.14)]"
       style={{ transitionDelay: `${index * 0.12}s` }}
     >
       <div
@@ -253,7 +191,7 @@ const Plaque: React.FC<{ award: Award; index: number }> = ({ award, index }) => 
         style={{ background: 'linear-gradient(90deg, transparent, var(--gold), transparent)' }}
       />
 
-      <AwardCube image={award.image} alt={award.imageAlt} fit={award.fit} medal={award.medal} />
+      <AwardCube image={award.image} alt={award.imageAlt} fit={award.fit} medal={award.medal} index={index} />
 
       <div className="flex items-start gap-2.5 mb-1.5">
         <span className="text-[17px] leading-none mt-0.5 shrink-0" aria-hidden="true">
@@ -345,7 +283,7 @@ const AwardsSection: React.FC = () => {
     <section
       id="awards"
       ref={sectionRef}
-      className="relative overflow-hidden py-[clamp(72px,10vh,120px)] px-[clamp(24px,6vw,80px)] bg-[var(--bg)] border-t border-[var(--border)] transition-[background] duration-300"
+      className="relative overflow-hidden py-[clamp(72px,10vh,120px)] px-[clamp(24px,6vw,80px)] border-t border-[var(--border)] transition-[background] duration-300"
     >
       <div
         className="absolute top-0 left-1/2 -translate-x-1/2 w-[900px] h-[600px] pointer-events-none"
@@ -399,9 +337,14 @@ const AwardsSection: React.FC = () => {
           }}
         />
 
-        <div ref={gridRef} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 3xl:gap-7">
+        <div
+          ref={gridRef}
+          className="flex overflow-x-auto snap-x snap-mandatory no-scrollbar -mx-[clamp(24px,6vw,80px)] px-[clamp(24px,6vw,80px)] pb-1 gap-5 sm:mx-0 sm:px-0 sm:pb-0 sm:overflow-visible sm:grid sm:grid-cols-2 lg:grid-cols-4 3xl:gap-7"
+        >
           {AWARDS.map((award, i) => (
-            <Plaque key={award.id} award={award} index={i} />
+            <div key={award.id} className="shrink-0 w-[78%] snap-center sm:w-auto sm:shrink">
+              <Plaque award={award} index={i} />
+            </div>
           ))}
         </div>
       </div>

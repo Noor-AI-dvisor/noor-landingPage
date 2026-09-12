@@ -5,15 +5,10 @@ const HeroMobile: React.FC = () => {
   return (
     <section
       id="hero-mobile"
-      className="lg:hidden flex flex-col justify-center min-h-screen px-6 pt-[100px] pb-[60px] relative overflow-hidden bg-[var(--bg)] transition-[background] duration-300"
+      className="lg:hidden flex flex-col min-h-screen px-6 pt-[100px] pb-[60px] relative overflow-hidden transition-[background] duration-300"
     >
 
       <div className="relative z-10 max-w-[480px] mx-auto w-full">
-
-        <div className="inline-flex items-center gap-2 px-[14px] py-[6px] bg-[var(--accent-dim)] border border-[rgba(29,158,117,0.2)] rounded-full text-[0.75rem] font-semibold text-accent tracking-[0.08em] uppercase mb-4 w-fit">
-          <span className="w-1.5 h-1.5 rounded-full bg-accent animate-status-pulse shrink-0" />
-          AI Career &amp; Skills Companion
-        </div>
 
         <h1 className="font-display text-[clamp(1.8rem,6vw,2.8rem)] font-medium leading-[1.2] mb-4 text-[var(--text-h)]">
           Noor <em className="italic text-accent">AI Career &amp; Skills</em><br />
@@ -29,7 +24,7 @@ const HeroMobile: React.FC = () => {
             className="btn-primary text-center"
             onClick={() => document.getElementById('early-access')?.scrollIntoView({ behavior: 'smooth' })}
           >
-            Request a Free Demo →
+            Request a Free Demo
           </button>
           <button
             className="btn-secondary text-center"
@@ -41,7 +36,7 @@ const HeroMobile: React.FC = () => {
 
         <div className="flex flex-wrap gap-2 mb-7">
           {['🎓 Ages 14–18', '⚡ 10-min missions', '🏆 11 skill domains'].map((chip) => (
-            <span key={chip} className="px-3 py-[5px] bg-[var(--card-bg)] border border-[var(--border-s)] rounded-full text-[0.78rem] font-medium text-[var(--text-b)]">
+            <span key={chip} className="px-3 py-[5px] bg-[var(--card-bg)] backdrop-blur-md border border-[var(--border-s)] rounded-full text-[0.78rem] font-medium text-[var(--text-b)]">
               {chip}
             </span>
           ))}

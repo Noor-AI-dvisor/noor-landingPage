@@ -10,37 +10,7 @@
     <link rel="icon" type="image/png" sizes="16x16" href="%BASE_URL%favicon-16.png" />
     <link rel="apple-touch-icon" sizes="180x180" href="%BASE_URL%apple-touch-icon.png" />
 
-    <script>
-      (function () {
-        var isTouchPrimary = window.matchMedia("(pointer: coarse)").matches;
-        if (isTouchPrimary) return;
-
-        function applyZoom() {
-          var dpr = window.devicePixelRatio || 1;
-          var isFractional = dpr > 1 && Math.abs(dpr - Math.round(dpr)) > 0.01;
-          document.documentElement.style.zoom = isFractional
-            ? String(1 / dpr)
-            : "1";
-        }
-
-        applyZoom();
-
-        (function watchDpr() {
-          var mq = window.matchMedia(
-            "(resolution: " + window.devicePixelRatio + "dppx)",
-          );
-          mq.addEventListener(
-            "change",
-            function () {
-              applyZoom();
-              watchDpr();
-            },
-            { once: true },
-          );
-        })();
-      })();
-    </script>
-    <title>Noor — AI Career & Skills Companion</title>
+    <title>Noor: AI Career & Skills Companion</title>
     <meta
       name="description"
       content="NOOR helps students navigate subject choices and career paths with AI guidance."

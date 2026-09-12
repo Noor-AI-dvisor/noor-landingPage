@@ -9,15 +9,10 @@ const HeroStage: React.FC = () => {
   return (
     <section
       id="hero-stage"
-      className="hidden lg:grid grid-cols-2 items-center min-h-screen bg-[var(--bg)] transition-[background] duration-300 max-w-[2800px] 3xl:max-w-[1900px] 4xl:max-w-[2000px] mx-auto"
+      className="hidden lg:grid grid-cols-2 items-start min-h-screen transition-[background] duration-300 max-w-[2800px] 3xl:max-w-[1900px] 4xl:max-w-[2000px] mx-auto"
     >
       {/* Left: text */}
-      <div className="flex flex-col justify-center px-[clamp(64px,13vw,220px)] pr-[clamp(16px,1.5vw,24px)] pt-[clamp(100px,12vh,140px)] pb-[clamp(80px,10vh,120px)]">
-
-        <div className="inline-flex items-center gap-2 px-[14px] py-[6px] bg-[var(--accent-dim)] border border-[rgba(29,158,117,0.2)] rounded-full text-[0.75rem] font-semibold text-accent tracking-[0.08em] uppercase mb-5 w-fit">
-          <span className="w-1.5 h-1.5 rounded-full bg-accent animate-status-pulse shrink-0" />
-          AI Career &amp; Skills Companion
-        </div>
+      <div className="flex flex-col self-center px-[clamp(64px,13vw,220px)] pr-[clamp(16px,1.5vw,24px)] py-16">
 
         <h1 className="font-sans text-[clamp(34px,4.5vw,58px)] 3xl:text-[66px] 4xl:text-[74px] font-bold leading-[1.1] tracking-[-0.025em] text-[var(--text-h)] mb-5">
           Noor <em className="not-italic font-normal font-display text-accent">AI Career &amp; Skills</em><br />
@@ -30,7 +25,7 @@ const HeroStage: React.FC = () => {
 
         <div className="flex items-center gap-3 mb-8 flex-wrap">
           <button className="btn-primary" onClick={() => scrollTo('early-access')}>
-            Request a free demo →
+            Request a free demo
           </button>
           <button className="btn-secondary" onClick={() => scrollTo('solution-wrap')}>
             See How It Works
@@ -38,8 +33,8 @@ const HeroStage: React.FC = () => {
         </div>
 
         <div className="flex flex-wrap gap-2 mb-7">
-          {['🎓 Ages 14–18', '⚡ 10-min missions', '🏆 11 skill domains'].map((chip) => (
-            <span key={chip} className="px-3 py-[5px] bg-[var(--card-bg)] border border-[var(--border-s)] rounded-full text-[0.78rem] font-medium text-[var(--text-b)]">
+          {['🎓 B2B solution for schools', '⚡ AI-assisted guidance', '🏆 Career Exploration'].map((chip) => (
+            <span key={chip} className="px-3 py-[5px] bg-[var(--card-bg)] backdrop-blur-md border border-[var(--border-s)] rounded-full text-[0.78rem] font-medium text-[var(--text-b)]">
               {chip}
             </span>
           ))}
@@ -62,16 +57,16 @@ const HeroStage: React.FC = () => {
       </div>
 
       {/* Right: app mock */}
-      <div className="flex flex-col justify-center items-center pl-[clamp(16px,1.5vw,24px)] pr-[clamp(64px,13vw,220px)] pt-[clamp(100px,12vh,140px)] pb-[clamp(80px,10vh,120px)]">
+      <div className="flex flex-col items-center pl-[clamp(16px,1.5vw,24px)] pr-[clamp(64px,13vw,220px)] pt-[clamp(120px,16vh,180px)] pb-[clamp(80px,10vh,120px)]">
         <div className="relative w-full max-w-[480px] 3xl:max-w-[550px] 4xl:max-w-[620px]">
           {/* Streak badge */}
-          <div className="absolute -top-4 -right-4 bg-[var(--card-bg)] border border-[var(--border-s)] rounded-xl px-[14px] py-[9px] shadow-card flex flex-col text-[11px] z-10 animate-badge-float">
+          <div className="absolute -top-9 -right-4 bg-[var(--card-bg)] backdrop-blur-md border border-[var(--border-s)] rounded-xl px-[14px] py-[9px] shadow-card flex flex-col text-[11px] z-10 animate-badge-float">
             <div className="font-bold text-[var(--text-h)] flex items-center gap-1 text-[12px]">🔥 3-day streak</div>
             <div className="text-[9.5px] font-semibold tracking-[0.06em] uppercase text-[var(--text-light)] mt-0.5">Keep going!</div>
           </div>
 
           {/* Match badge */}
-          <div className="absolute -right-3 top-[45%] bg-[var(--text-h)] text-[var(--bg)] rounded-[10px] px-3 py-2 flex items-center gap-[7px] text-[11px] font-bold shadow-card whitespace-nowrap z-10 animate-badge-float [animation-delay:-3s] transition-[background,color] duration-300">
+          <div className="absolute left-full -ml-3 top-[22%] bg-[var(--text-h)] text-[var(--bg)] rounded-[10px] px-3 py-2 flex items-center gap-[7px] text-[11px] font-bold shadow-card whitespace-nowrap z-10 animate-badge-float [animation-delay:-3s] transition-[background,color] duration-300">
             <span className="text-[16px]">🧠</span>
             <div>
               <div>AI matched</div>
@@ -80,7 +75,7 @@ const HeroStage: React.FC = () => {
           </div>
 
           {/* Points badge */}
-          <div className="absolute -bottom-3 -left-3 bg-[var(--card-bg)] border border-[var(--border-s)] rounded-xl px-[13px] py-2 flex items-center gap-2 shadow-card text-[11px] z-10 animate-badge-float [animation-delay:-1.5s]">
+          <div className="absolute -bottom-3 -left-3 bg-[var(--card-bg)] backdrop-blur-md border border-[var(--border-s)] rounded-xl px-[13px] py-2 flex items-center gap-2 shadow-card text-[11px] z-10 animate-badge-float [animation-delay:-1.5s]">
             <div className="w-7 h-7 rounded-lg bg-[#fef3c7] flex items-center justify-center text-sm">⭐</div>
             <div>
               <div className="font-bold text-[var(--text-h)] text-[13px]">120 pts</div>

@@ -1,5 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react'
 
+const GOOGLE_FORM_URL =
+  'https://docs.google.com/forms/d/e/1FAIpQLSemKZKGoKLmQDEs5tN0HVLL-ypd9JHyvlSbAgSuSuuHWUrM1Q/formResponse'
+const GOOGLE_FORM_ENTRY = 'entry.1848590352' // "Email" question
+
 const BENEFITS = [
   'Personalised AI guidance for every student',
   'Counsellor dashboard with real-time cohort insights',
@@ -42,27 +46,19 @@ const EarlyAccessSection: React.FC = () => {
     setSending(true)
     setMsg({ text: 'Sending…', color: 'var(--muted)' })
     try {
-      const res = await fetch('https://formspree.io/f/xrpqpvye', {
+      // Google Form: posts straight to the form's formResponse endpoint.
+      // "no-cors" means the browser can't read Google's reply, so a resolved
+      // request is treated as success (network failures still throw below).
+      const body = new URLSearchParams({ [GOOGLE_FORM_ENTRY]: email })
+      await fetch(GOOGLE_FORM_URL, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-        body: JSON.stringify({
-          _subject: `Noor: new free Demo request from ${email}`,
-          _replyto: email,
-          email,
-          request_type: 'Free Demo request (Early Access form)',
-          source: 'Noor landing page',
-          page_url: window.location.href,
-          submitted_at: new Date().toLocaleString('en-GB', { dateStyle: 'full', timeStyle: 'short' }),
-          note: 'A school/visitor asked for a free Demo of Noor. Reply to this email to contact them (promised within 48 hrs).',
-        }),
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body,
       })
-      if (res.ok) {
-        setMsg({ text: "🎉 Thank you! We'll be in touch within 48 hours.", color: '#2EC4B6' })
-        setEmail('')
-        setInputDisabled(true)
-      } else {
-        setMsg({ text: '⚠️ Something went wrong. Please email us directly at nooraiadvisor@gmail.com.', color: '#F5C842' })
-      }
+      setMsg({ text: "🎉 Thank you! We'll be in touch within 48 hours.", color: '#2EC4B6' })
+      setEmail('')
+      setInputDisabled(true)
     } catch {
       setMsg({ text: '⚠️ Network error. Please email us at nooraiadvisor@gmail.com.', color: '#F5C842' })
     } finally {

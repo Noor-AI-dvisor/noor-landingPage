@@ -11,34 +11,38 @@ interface Feature {
 
 const FEATURES: Feature[] = [
   {
-    num: '01', icon: '💬',
+    num: '01',
+    icon: '💬',
     borderColor: '#1d9e75',
-    title: 'AI-guided conversation',
-    desc: 'Noor engages students through natural, adaptive dialogue that uncovers interests, strengths, and aspirations at their own pace.',
-    more: "Unlike static quizzes, Noor's conversations evolve. Each session builds on the last, creating a rich, longitudinal picture of every student's journey. Students feel heard, not assessed.",
+    title: 'AI-Powered Student Discovery',
+    desc: 'Noor uses AI-guided conversations to help students identify their interests, strengths, and aspirations, building a clearer picture of who they are and what matters to them.',
+    more: "Rather than relying on a one-time assessment, Noor guides students through a personalised process of self-discovery. Their responses help shape recommendations that reflect their individual interests, aspirations, and educational context.",
   },
   {
-    num: '02', icon: '🌐',
+    num: '02',
+    icon: '🌐',
     borderColor: '#22c55e',
-    title: 'Career domains that feel real',
-    desc: 'Explore real-world career domains with authentic stories, day-in-the-life experiences, and subject pathway maps.',
-    more: "Each domain is curated with UK-specific labour market data, growth projections, and diverse role models. Students discover careers they never knew existed and connect them to subjects they're studying today.",
+    title: 'Personalised Career Pathways',
+    desc: 'Noor connects students with relevant career domains and shows how these relate to subject choices, potential university pathways, and future job opportunities.',
+    more: 'Students can see how the choices they make at school relate to possible future directions. This helps turn career discovery into more informed conversations about subjects, university options, and the steps they can take next.',
   },
   {
-    num: '03', icon: '⭐',
+    num: '03',
+    icon: '⭐',
     borderColor: '#f59e0b',
-    title: 'Gamified skills journeys',
-    desc: 'Bite-sized 10-minute missions build transferable skills across communication, critical thinking, creativity, and more.',
-    more: 'Students earn points, unlock badges, and track their progress across a skills map that schools can see. Completion rates are dramatically higher than traditional career learning programmes.',
+    title: 'Skills Development Journeys',
+    desc: 'Students take part in short, multidisciplinary learning missions that develop skills such as AI literacy, creativity, critical thinking, entrepreneurship, and design thinking.',
+    more: 'Each personalised journey gives students opportunities to practise skills through engaging activities, earn badges, and document their learning in a Digital Skills Passport — building evidence of what they can do, not just what they know.',
   },
   {
-    num: '04', icon: '📊',
+    num: '04',
+    icon: '📊',
     borderColor: '#3b82f6',
-    title: 'Counsellor dashboard',
-    desc: 'Powerful analytics give counsellors and leaders real-time visibility into student career readiness and engagement.',
-    more: 'Filter by year group, subject option group, or at-risk students. Spot intervention opportunities early, evidence destination data, and demonstrate the impact of your careers programme, all in one place.',
+    title: 'Student Progress & Counsellor Insights',
+    desc: 'A school-facing dashboard brings together student profiles, career interests, subject considerations, and progress across personalised learning journeys.',
+    more: "Counsellors can monitor student development, review learning progress, record notes, and identify where additional guidance is needed. Noor supports the counsellor's work by making student information easier to access and follow up — without replacing the human guidance students need.",
   },
-]
+];
 
 const prefersReducedMotion = () =>
   typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches

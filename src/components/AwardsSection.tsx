@@ -97,7 +97,6 @@ const AwardCube: React.FC<{ image: string; alt: string; fit: 'contain' | 'cover'
   const sceneRef = useRef<HTMLDivElement>(null)
   const [box, setBox] = useState({ w: 260, h: 162.5 })
   const [rot, setRot] = useState(REST_ROT)
-  const [floatY, setFloatY] = useState(0)
 
   useEffect(() => {
     const el = sceneRef.current
@@ -112,21 +111,6 @@ const AwardCube: React.FC<{ image: string; alt: string; fit: 'contain' | 'cover'
     ro.observe(el)
     return () => ro.disconnect()
   }, [])
-
-  useEffect(() => {
-    if (prefersReducedMotion()) return
-    const period = 4000
-    const phaseOffset = index * -900
-    let id: number
-    const tick = () => {
-      const t = (performance.now() + phaseOffset) % period
-      const angle = (t / period) * Math.PI * 2
-      setFloatY(-5 + Math.sin(angle) * 5)
-    }
-    tick()
-    id = window.setInterval(tick, 100)
-    return () => window.clearInterval(id)
-  }, [index])
 
   const handleMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (prefersReducedMotion()) return
@@ -157,7 +141,11 @@ const AwardCube: React.FC<{ image: string; alt: string; fit: 'contain' | 'cover'
         style={{ bottom: -12, width: w * 0.75, height: 16, background: 'rgba(0,0,0,0.16)', filter: 'blur(10px)' }}
       />
 
-      {/* flat image — tilts on hover, floats continuously */}
+      {/* flat image — floats via CSS (compositor), tilts on hover */}
+      <div
+        className="plaque-float"
+        style={{ width: w, height: h, transformStyle: 'preserve-3d', animationDelay: `${index * -0.9}s` }}
+      >
       <div
         className="overflow-hidden rounded-lg"
         style={{
@@ -165,7 +153,7 @@ const AwardCube: React.FC<{ image: string; alt: string; fit: 'contain' | 'cover'
           height: h,
           background: 'var(--case-mat)',
           border: '1px solid var(--gold-dim)',
-          transform: `translateY(${floatY}px) rotateX(${rot.x}deg) rotateY(${rot.y}deg)`,
+          transform: `rotateX(${rot.x}deg) rotateY(${rot.y}deg)`,
           transition: 'transform 0.5s cubic-bezier(0.2,0.8,0.2,1)',
         }}
       >
@@ -176,6 +164,7 @@ const AwardCube: React.FC<{ image: string; alt: string; fit: 'contain' | 'cover'
           loading="lazy"
         />
       </div>
+      </div>
     </div>
   )
 }
@@ -183,7 +172,7 @@ const AwardCube: React.FC<{ image: string; alt: string; fit: 'contain' | 'cover'
 const Plaque: React.FC<{ award: Award; index: number }> = ({ award, index }) => {
   return (
     <div
-      className="plaque-enter relative rounded-[16px] border border-[var(--card-border)] bg-[var(--card-bg)] backdrop-blur-xl shadow-card p-6 text-left overflow-hidden transition-[transform,box-shadow] duration-300 hover:-translate-y-1 hover:shadow-[0_14px_44px_rgba(0,0,0,0.14)]"
+      className="plaque-enter relative rounded-[16px] border border-[var(--card-border)] bg-[var(--card-bg)] backdrop-blur-sm shadow-card p-6 text-left overflow-hidden transition-[transform,box-shadow] duration-300 hover:-translate-y-1 hover:shadow-[0_14px_44px_rgba(0,0,0,0.14)]"
       style={{ transitionDelay: `${index * 0.12}s` }}
     >
       <div

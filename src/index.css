@@ -110,8 +110,8 @@ body {
   .btn-primary {
     @apply inline-flex items-center justify-center gap-1.5 font-sans px-8 py-[15px] rounded-full text-[15px] font-semibold text-accent tracking-[0.01em] cursor-pointer whitespace-nowrap border transition-all duration-300;
     border-color: rgba(29, 158, 117, 0.28);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
     background: linear-gradient(to bottom right, var(--accent-dim), var(--accent-dim2));
     box-shadow:
       inset 0 1px 0 rgba(255, 255, 255, 0.45),
@@ -146,8 +146,8 @@ body {
   .btn-secondary {
     @apply inline-flex items-center justify-center gap-1.5 font-sans px-8 py-[15px] rounded-full text-[15px] font-semibold text-[var(--text-h)] tracking-[0.01em] cursor-pointer whitespace-nowrap border transition-all duration-300;
     border-color: var(--border-s);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
     background: linear-gradient(to bottom right, var(--pill-active), var(--pill-bg));
     box-shadow:
       inset 0 1px 0 rgba(255, 255, 255, 0.35),
@@ -468,9 +468,12 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+  contain: strict;
+  transform: translateZ(0);
 }
 
 .presence-stage {
+  will-change: transform;
   position: relative;
   width: min(58vw, 760px);
   aspect-ratio: 1;
@@ -513,7 +516,6 @@ body {
 
 .presence-halo--outer {
   inset: 2%;
-  filter: blur(4px);
   background: radial-gradient(
     circle,
     color-mix(in srgb, var(--p-a) 18%, transparent) 0 22%,
@@ -543,9 +545,8 @@ body {
     inset 12px 12px 24px rgba(255, 255, 255, 0.3),
     0 0 34px color-mix(in srgb, var(--p-a) 50%, transparent),
     0 0 88px color-mix(in srgb, var(--p-a) 25%, transparent);
-  animation:
-    presence-float 5.4s ease-in-out infinite,
-    presence-morph 24s ease-in-out infinite;
+  animation: presence-float 5.4s ease-in-out infinite;
+  will-change: transform;
   transition:
     background 1s ease,
     box-shadow 1s ease;
@@ -579,7 +580,6 @@ body {
   border-radius: 50%;
   transform: rotate(-30deg);
   background: linear-gradient(90deg, rgba(255, 255, 255, 0.75), transparent);
-  filter: blur(4px);
 }
 
 .presence-wave {
@@ -707,6 +707,15 @@ body {
   }
 }
 
+/* PERF: inner presence animations are frozen; only .presence-stage drifts */
+.presence-halo,
+.presence-orb,
+.presence-wave,
+.presence-core,
+.presence-particle {
+  animation: none !important;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .presence-stage,
   .presence-halo,
@@ -726,6 +735,25 @@ body {
 }
 
 /* ── KEYFRAMES */
+/* PERF: backdrop-filter forces the GPU to re-blur everything behind each
+   element on every frame; disabled globally (card backgrounds are already
+   semi-opaque, so the look is nearly unchanged). */
+[class*="backdrop-blur"],
+.btn-primary,
+.btn-secondary {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+@keyframes plaqueFloat {
+  0%, 100% { transform: translateY(-5px); }
+  50% { transform: translateY(-10px); }
+  25% { transform: translateY(0); }
+  75% { transform: translateY(-10px); }
+}
+.plaque-float { animation: plaqueFloat 4s ease-in-out infinite; will-change: transform; }
+@media (prefers-reduced-motion: reduce) { .plaque-float { animation: none; } }
+
 @keyframes statusPulse {
   0%,
   100% {

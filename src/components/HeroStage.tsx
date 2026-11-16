@@ -34,7 +34,7 @@ const HeroStage: React.FC = () => {
 
         <div className="flex flex-wrap gap-2 mb-7">
           {['🎓 B2B solution for schools', '⚡ AI-assisted guidance', '🏆 Career Exploration'].map((chip) => (
-            <span key={chip} className="px-3 py-[5px] bg-[var(--card-bg)] backdrop-blur-md border border-[var(--border-s)] rounded-full text-[0.78rem] font-medium text-[var(--text-b)]">
+            <span key={chip} className="px-3 py-[5px] bg-[var(--card-bg)] backdrop-blur-sm border border-[var(--border-s)] rounded-full text-[0.78rem] font-medium text-[var(--text-b)]">
               {chip}
             </span>
           ))}
@@ -60,7 +60,7 @@ const HeroStage: React.FC = () => {
       <div className="flex flex-col items-center pl-[clamp(16px,1.5vw,24px)] pr-[clamp(64px,13vw,220px)] pt-[clamp(120px,16vh,180px)] pb-[clamp(80px,10vh,120px)]">
         <div className="relative w-full max-w-[480px] 3xl:max-w-[550px] 4xl:max-w-[620px]">
           {/* Streak badge */}
-          <div className="absolute -top-9 -right-4 bg-[var(--card-bg)] backdrop-blur-md border border-[var(--border-s)] rounded-xl px-[14px] py-[9px] shadow-card flex flex-col text-[11px] z-10 animate-badge-float">
+          <div className="absolute -top-9 -right-4 bg-[var(--card-bg)] backdrop-blur-sm border border-[var(--border-s)] rounded-xl px-[14px] py-[9px] shadow-card flex flex-col text-[11px] z-10 animate-badge-float">
             <div className="font-bold text-[var(--text-h)] flex items-center gap-1 text-[12px]">🔥 3-day streak</div>
             <div className="text-[9.5px] font-semibold tracking-[0.06em] uppercase text-[var(--text-light)] mt-0.5">Keep going!</div>
           </div>
@@ -75,7 +75,7 @@ const HeroStage: React.FC = () => {
           </div>
 
           {/* Points badge */}
-          <div className="absolute -bottom-3 -left-3 bg-[var(--card-bg)] backdrop-blur-md border border-[var(--border-s)] rounded-xl px-[13px] py-2 flex items-center gap-2 shadow-card text-[11px] z-10 animate-badge-float [animation-delay:-1.5s]">
+          <div className="absolute -bottom-3 -left-3 bg-[var(--card-bg)] backdrop-blur-sm border border-[var(--border-s)] rounded-xl px-[13px] py-2 flex items-center gap-2 shadow-card text-[11px] z-10 animate-badge-float [animation-delay:-1.5s]">
             <div className="w-7 h-7 rounded-lg bg-[#fef3c7] flex items-center justify-center text-sm">⭐</div>
             <div>
               <div className="font-bold text-[var(--text-h)] text-[13px]">120 pts</div>

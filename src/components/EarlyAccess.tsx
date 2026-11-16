@@ -42,10 +42,19 @@ const EarlyAccessSection: React.FC = () => {
     setSending(true)
     setMsg({ text: 'Sending…', color: 'var(--muted)' })
     try {
-      const res = await fetch('https://formspree.io/f/xgonkjne', {
+      const res = await fetch('https://formspree.io/f/xrpqpvye', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-        body: JSON.stringify({ email }),
+        body: JSON.stringify({
+          _subject: `Noor: new free Demo request from ${email}`,
+          _replyto: email,
+          email,
+          request_type: 'Free Demo request (Early Access form)',
+          source: 'Noor landing page',
+          page_url: window.location.href,
+          submitted_at: new Date().toLocaleString('en-GB', { dateStyle: 'full', timeStyle: 'short' }),
+          note: 'A school/visitor asked for a free Demo of Noor. Reply to this email to contact them (promised within 48 hrs).',
+        }),
       })
       if (res.ok) {
         setMsg({ text: "🎉 Thank you! We'll be in touch within 48 hours.", color: '#2EC4B6' })
@@ -98,7 +107,7 @@ const EarlyAccessSection: React.FC = () => {
 
         {/* Right: form card */}
         <div className="ea-right" ref={rightRef}>
-          <div className="bg-[var(--sol-bg)] backdrop-blur-xl border border-[var(--sol-border)] rounded-[28px] px-6 sm:px-10 3xl:px-14 py-8 sm:py-11 3xl:py-14 shadow-[inset_0_1px_0_rgba(255,255,255,0.6),0_8px_48px_rgba(0,0,0,0.07),0_0_0_1px_var(--sol-border)]">
+          <div className="bg-[var(--sol-bg)] backdrop-blur-sm border border-[var(--sol-border)] rounded-[28px] px-6 sm:px-10 3xl:px-14 py-8 sm:py-11 3xl:py-14 shadow-[inset_0_1px_0_rgba(255,255,255,0.6),0_8px_48px_rgba(0,0,0,0.07),0_0_0_1px_var(--sol-border)]">
             <div className="text-center mb-7">
               <div className="text-[32px] mb-3">🌟</div>
               <h3 className="font-display text-[clamp(20px,2vw,26px)] font-medium leading-[1.2] text-[var(--text-h)] mb-2">

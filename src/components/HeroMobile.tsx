@@ -36,7 +36,7 @@ const HeroMobile: React.FC = () => {
 
         <div className="flex flex-wrap gap-2 mb-7">
           {['🎓 Ages 14–18', '⚡ 10-min missions', '🏆 11 skill domains'].map((chip) => (
-            <span key={chip} className="px-3 py-[5px] bg-[var(--card-bg)] backdrop-blur-md border border-[var(--border-s)] rounded-full text-[0.78rem] font-medium text-[var(--text-b)]">
+            <span key={chip} className="px-3 py-[5px] bg-[var(--card-bg)] backdrop-blur-sm border border-[var(--border-s)] rounded-full text-[0.78rem] font-medium text-[var(--text-b)]">
               {chip}
             </span>
           ))}

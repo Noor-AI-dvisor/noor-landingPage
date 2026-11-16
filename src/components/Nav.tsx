@@ -31,6 +31,10 @@ const Nav: React.FC<NavProps> = ({ theme, toggleTheme }) => {
       sections.forEach((sec, i) => {
         if (sec && sec.getBoundingClientRect().top <= 120) current = i;
       });
+      // On the contact / early-access section (or below), no tab is highlighted
+      const contact = document.getElementById("early-access");
+      const atBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 4;
+      if ((contact && contact.getBoundingClientRect().top <= window.innerHeight * 0.5) || atBottom) current = -1;
       setActiveIdx(current);
     };
     window.addEventListener("scroll", onScroll, { passive: true });
@@ -40,7 +44,9 @@ const Nav: React.FC<NavProps> = ({ theme, toggleTheme }) => {
   useEffect(() => {
     const pill = pillRefs.current[activeIdx];
     const container = pillsRef.current;
-    if (pill && container) {
+    if (activeIdx < 0) {
+      setHighlightStyle((h) => ({ ...h, width: 0 }));
+    } else if (pill && container) {
       const cr = container.getBoundingClientRect();
       const pr = pill.getBoundingClientRect();
       setHighlightStyle({ left: pr.left - cr.left, width: pr.width });
@@ -58,7 +64,7 @@ const Nav: React.FC<NavProps> = ({ theme, toggleTheme }) => {
   return (
     <>
       {/* ── Nav bar */}
-      <nav className="fixed top-0 left-0 right-0 z-[1000] h-16 px-6 flex items-center justify-between bg-[var(--surface-s)] backdrop-blur-xl border-b border-[var(--border)] shadow-nav transition-transform duration-300">
+      <nav className="fixed top-0 left-0 right-0 z-[1000] h-16 px-6 flex items-center justify-between bg-[var(--surface-s)] backdrop-blur-md border-b border-[var(--border)] shadow-nav transition-transform duration-300">
 
         {/* Logo */}
         <div className="flex items-center gap-2 cursor-pointer select-none group" onClick={handleBackToTop}>
@@ -144,7 +150,7 @@ const Nav: React.FC<NavProps> = ({ theme, toggleTheme }) => {
 
       {/* ── Mobile drawer */}
       <div
-        className={`fixed top-0 right-0 w-[min(320px,85vw)] h-screen bg-[var(--surface-s)] backdrop-blur-2xl border-l border-[var(--border)] z-[999] flex flex-col p-6 transition-transform duration-[350ms] ease-[cubic-bezier(0.4,0,0.2,1)] lg:hidden ${
+        className={`fixed top-0 right-0 w-[min(320px,85vw)] h-screen bg-[var(--surface-s)] backdrop-blur-md border-l border-[var(--border)] z-[999] flex flex-col p-6 transition-transform duration-[350ms] ease-[cubic-bezier(0.4,0,0.2,1)] lg:hidden ${
           drawerOpen ? "translate-x-0" : "translate-x-full"
         }`}
       >

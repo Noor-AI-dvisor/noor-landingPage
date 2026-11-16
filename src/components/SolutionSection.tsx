@@ -80,7 +80,7 @@ const SolutionCard: React.FC<{
         onMouseLeave={handleLeave}
         onClick={onToggle}
         onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onToggle() } }}
-        className="group relative h-full rounded-[28px] bg-[var(--card-bg)] backdrop-blur-xl border border-[var(--card-border)] p-[26px] 3xl:p-8 cursor-pointer overflow-hidden"
+        className="group relative h-full rounded-[28px] bg-[var(--card-bg)] backdrop-blur-sm border border-[var(--card-border)] p-[26px] 3xl:p-8 cursor-pointer overflow-hidden"
         style={{
           transformStyle: 'preserve-3d',
           transform: `rotateX(${rot.x}deg) rotateY(${rot.y}deg) translateY(${hovering ? -8 : 0}px)`,

@@ -516,6 +516,35 @@ body {
 [data-theme="dark"] .rising-item {
   color: #8fe0c4;
 }
+/* Mobile / tablet: icons scale with viewport width (≈35px on iPhone 13, ≈70px at 767px) and are lighter */
+@keyframes rise-soft {
+  0% {
+    transform: translateY(105vh) rotate(-8deg);
+    opacity: 0;
+  }
+  10%,
+  90% {
+    opacity: 0.1;
+  }
+  100% {
+    transform: translateY(-15vh) rotate(8deg);
+    opacity: 0;
+  }
+}
+@media (max-width: 767px) {
+  .rising-item {
+    animation-name: rise-soft;
+    color: color-mix(in srgb, var(--accent) 55%, white);
+  }
+  [data-theme="dark"] .rising-item {
+    color: color-mix(in srgb, #8fe0c4 70%, white);
+  }
+  .rising-item svg,
+  .rising-item img {
+    width: calc(var(--k, 1) * 9vw);
+    height: calc(var(--k, 1) * 9vw);
+  }
+}
 @media (prefers-reduced-motion: reduce) {
   .rising-item {
     animation: none;

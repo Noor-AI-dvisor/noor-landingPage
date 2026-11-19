@@ -69,6 +69,7 @@ const RisingBackdrop: React.FC = () => (
         key={i}
         className="rising-item"
         style={{
+          ['--k' as string]: it.size / 34,
           insetInlineStart: `${it.x}%`,
           animationDuration: `${it.dur}s`,
           animationDelay: `${it.delay}s`,

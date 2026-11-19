@@ -274,11 +274,6 @@ const AwardsSection: React.FC = () => {
       ref={sectionRef}
       className="relative overflow-hidden py-[clamp(72px,10vh,120px)] px-[clamp(24px,6vw,80px)] border-t border-[var(--border)] transition-[background] duration-300"
     >
-      <div
-        className="absolute top-0 left-1/2 -translate-x-1/2 w-[900px] h-[600px] pointer-events-none"
-        style={{ background: 'radial-gradient(ellipse at center, var(--gold-dim) 0%, transparent 70%)' }}
-      />
-
       <div className="relative max-w-[1180px] 3xl:max-w-[1660px] 4xl:max-w-[1880px] mx-auto">
         <div className="flex flex-col items-center text-center mb-[clamp(48px,7vh,80px)]">
           <div ref={trophyRef} className="trophy-enter animate-badge-float w-[190px] sm:w-[230px] 3xl:w-[260px] 4xl:w-[290px] mb-8" style={{ animationDuration: '7s' }}>

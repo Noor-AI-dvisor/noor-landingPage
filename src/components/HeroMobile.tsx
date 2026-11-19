@@ -24,7 +24,7 @@ const HeroMobile: React.FC = () => {
             className="btn-primary text-center"
             onClick={() => document.getElementById('early-access')?.scrollIntoView({ behavior: 'smooth' })}
           >
-            Request a Free Demo
+            Get Early Access
           </button>
           <button
             className="btn-secondary text-center"

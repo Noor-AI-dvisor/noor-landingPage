@@ -12,9 +12,9 @@ const HeroStage: React.FC = () => {
       className="hidden lg:grid grid-cols-2 items-start min-h-screen transition-[background] duration-300 max-w-[2800px] 3xl:max-w-[1900px] 4xl:max-w-[2000px] mx-auto"
     >
       {/* Left: text */}
-      <div className="flex flex-col self-center px-[clamp(64px,13vw,220px)] pr-[clamp(16px,1.5vw,24px)] py-16">
+      <div className="hero-copy flex flex-col self-center px-[clamp(64px,13vw,220px)] pr-[clamp(16px,1.5vw,24px)] py-16">
 
-        <h1 className="font-sans text-[clamp(34px,4.5vw,58px)] 3xl:text-[66px] 4xl:text-[74px] font-bold leading-[1.1] tracking-[-0.025em] text-[var(--text-h)] mb-5">
+        <h1 className="hero-title font-sans font-bold leading-[1.1] tracking-[-0.025em] text-[var(--text-h)] mb-5">
           Noor <em className="not-italic font-normal font-display text-accent">AI Career &amp; Skills</em><br />
           Companion for Schools
         </h1>
@@ -25,7 +25,7 @@ const HeroStage: React.FC = () => {
 
         <div className="flex items-center gap-3 mb-8 flex-wrap">
           <button className="btn-primary" onClick={() => scrollTo('early-access')}>
-            Request a free demo
+            Get Early Access
           </button>
           <button className="btn-secondary" onClick={() => scrollTo('solution-wrap')}>
             See How It Works
@@ -58,7 +58,7 @@ const HeroStage: React.FC = () => {
 
       {/* Right: app mock */}
       <div className="flex flex-col items-center pl-[clamp(16px,1.5vw,24px)] pr-[clamp(64px,13vw,220px)] pt-[clamp(120px,16vh,180px)] pb-[clamp(80px,10vh,120px)]">
-        <div className="relative w-full max-w-[480px] 3xl:max-w-[550px] 4xl:max-w-[620px]">
+        <div className="relative w-full max-w-[480px]">
           {/* Streak badge */}
           <div className="absolute -top-9 -right-4 bg-[var(--card-bg)] backdrop-blur-sm border border-[var(--border-s)] rounded-xl px-[14px] py-[9px] shadow-card flex flex-col text-[11px] z-10 animate-badge-float">
             <div className="font-bold text-[var(--text-h)] flex items-center gap-1 text-[12px]">🔥 3-day streak</div>

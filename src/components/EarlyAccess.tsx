@@ -84,7 +84,7 @@ const EarlyAccessSection: React.FC = () => {
           </h2>
 
           <p className="text-[clamp(15px,1.1vw,17px)] 3xl:text-[19px] 4xl:text-[20px] leading-[1.75] text-[var(--text-b)] max-w-[420px] 3xl:max-w-[480px] mb-9">
-            We're running free Demos with selected schools right now. Be among the first to see Noor in action, no commitment required.
+            We're opening early access to selected schools right now. Be among the first to see Noor in action, no commitment required.
           </p>
 
           <div className="flex flex-col gap-3.5">
@@ -105,9 +105,28 @@ const EarlyAccessSection: React.FC = () => {
         <div className="ea-right" ref={rightRef}>
           <div className="bg-[var(--sol-bg)] backdrop-blur-sm border border-[var(--sol-border)] rounded-[28px] px-6 sm:px-10 3xl:px-14 py-8 sm:py-11 3xl:py-14 shadow-[inset_0_1px_0_rgba(255,255,255,0.6),0_8px_48px_rgba(0,0,0,0.07),0_0_0_1px_var(--sol-border)]">
             <div className="text-center mb-7">
-              <div className="text-[32px] mb-3">🌟</div>
+              <div className="mb-3 mt-4">
+                <span className="relative inline-block text-[32px] leading-none">
+                  🌟
+                  {/* graduation cap worn by the star */}
+                  <svg
+                    className="absolute -top-[26px] left-1/2 w-[48px] h-[48px] pointer-events-none drop-shadow-[0_3px_4px_rgba(0,0,0,0.3)]"
+                    style={{ transform: 'translateX(-50%) rotate(-12deg)' }}
+                    viewBox="0 0 96 96"
+                    fill="none"
+                    aria-hidden="true"
+                  >
+                    <path d="M26 44v16c0 7 10 12 22 12s22-5 22-12V44L48 54z" fill="var(--accent)" opacity="0.85" />
+                    <path d="M48 20L8 38l40 18 40-18z" fill="var(--accent)" stroke="var(--bg)" strokeWidth="2" strokeLinejoin="round" />
+                    <path d="M48 20L8 38l40 18" fill="rgba(255,255,255,0.18)" />
+                    <path d="M84 40v22" stroke="var(--gold)" strokeWidth="2.5" strokeLinecap="round" />
+                    <circle cx="84" cy="64" r="4" fill="var(--gold)" />
+                    <circle cx="48" cy="38" r="2.5" fill="var(--gold)" />
+                  </svg>
+                </span>
+              </div>
               <h3 className="font-display text-[clamp(20px,2vw,26px)] font-medium leading-[1.2] text-[var(--text-h)] mb-2">
-                Request your free Demo
+                Get Early Access
               </h3>
               <p className="text-[13px] text-[var(--text-light)] font-medium leading-[1.5]">
                 No credit card · No setup fee · Reply within 48 hrs
@@ -130,7 +149,7 @@ const EarlyAccessSection: React.FC = () => {
                 className="btn-primary w-full"
                 disabled={sending || inputDisabled}
               >
-                {sending ? 'Sending…' : 'Request Free Demo'}
+                {sending ? 'Sending…' : 'Get Early Access'}
               </button>
               {msg && (
                 <p className="text-[13px] font-medium text-center" style={{ color: msg.color }}>

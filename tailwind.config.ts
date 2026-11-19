@@ -51,7 +51,9 @@ export default {
       },
       screens: {
         '3xl': '1920px',
-        '4xl': '2560px',
+        // 4xl (2560px) styles are disabled on purpose: screens wider than 1920px are
+      // scaled proportionally by the page zoom in src/main.tsx instead.
+      '4xl': '100000px',
       },
     },
   },

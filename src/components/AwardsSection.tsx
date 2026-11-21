@@ -4,6 +4,7 @@ import trophyImgDark from '../assets/images/awards/trophy-hero-dark.png'
 import digiCert from '../assets/images/awards/digieduhack-certificate.jpg'
 import lpiLogo from '../assets/images/awards/learning-planet-logo.png'
 import menaLogo from '../assets/images/awards/mena-dss-logo.png'
+import gesaCert from '../assets/images/awards/gesa-africa-top50.jpg'
 import orangeCert from '../assets/images/awards/orange-osvp-certificate.jpg'
 
 interface Stat {
@@ -27,6 +28,17 @@ interface Award {
 }
 
 const AWARDS: Award[] = [
+  {
+    id: 'gesa-africa-top50',
+    image: gesaCert,
+    imageAlt: 'GESAwards Africa 2026 Top 50 badge for Noor EdTech, Egypt',
+    fit: 'cover',
+    medal: '🌍',
+    title: 'Africa Top 50: GESAwards 2026',
+    org: 'Africa EdTech Exchange · Mindcet Labs',
+    location: 'Africa',
+    detail: 'Selected to represent Egypt from 171 eligible EdTech startups across 31 countries.',
+  },
 
     {
     id: 'digieduhack',
@@ -172,7 +184,7 @@ const AwardCube: React.FC<{ image: string; alt: string; fit: 'contain' | 'cover'
 const Plaque: React.FC<{ award: Award; index: number }> = ({ award, index }) => {
   return (
     <div
-      className="plaque-enter relative rounded-[16px] border border-[var(--card-border)] bg-[var(--card-bg)] backdrop-blur-sm shadow-card p-6 text-left overflow-hidden transition-[transform,box-shadow] duration-300 hover:-translate-y-1 hover:shadow-[0_14px_44px_rgba(0,0,0,0.14)]"
+      className="plaque-enter relative flex flex-col h-full rounded-[16px] border border-[var(--card-border)] bg-[var(--card-bg)] backdrop-blur-sm shadow-card p-6 text-left overflow-hidden transition-[transform,box-shadow] duration-300 hover:-translate-y-1 hover:shadow-[0_14px_44px_rgba(0,0,0,0.14)]"
       style={{ transitionDelay: `${index * 0.12}s` }}
     >
       <div
@@ -210,7 +222,7 @@ const Plaque: React.FC<{ award: Award; index: number }> = ({ award, index }) => 
         <p className="text-[13px] leading-[1.6] mb-4 pl-[27px] text-[var(--text-b)]">{award.detail}</p>
       )}
 
-      <div className="flex items-center justify-between pl-[27px] pt-3 border-t border-[var(--border)]">
+      <div className="mt-auto flex items-center justify-between pl-[27px] pt-3 border-t border-[var(--border)]">
         <span className="inline-flex items-center gap-1.5 text-[12px] font-semibold" style={{ color: 'var(--gold)' }}>
           <svg width="10" height="10" viewBox="0 0 24 24" fill="none">
             <path
@@ -274,7 +286,7 @@ const AwardsSection: React.FC = () => {
       ref={sectionRef}
       className="relative overflow-hidden py-[clamp(72px,10vh,120px)] px-[clamp(24px,6vw,80px)] border-t border-[var(--border)] transition-[background] duration-300"
     >
-      <div className="relative max-w-[1180px] 3xl:max-w-[1660px] 4xl:max-w-[1880px] mx-auto">
+      <div className="relative max-w-[1400px] 3xl:max-w-[1760px] 4xl:max-w-[1960px] mx-auto">
         <div className="flex flex-col items-center text-center mb-[clamp(48px,7vh,80px)]">
           <div ref={trophyRef} className="trophy-enter animate-badge-float w-[190px] sm:w-[230px] 3xl:w-[260px] 4xl:w-[290px] mb-8" style={{ animationDuration: '7s' }}>
             <img
@@ -323,10 +335,10 @@ const AwardsSection: React.FC = () => {
 
         <div
           ref={gridRef}
-          className="flex overflow-x-auto snap-x snap-mandatory no-scrollbar -mx-[clamp(24px,6vw,80px)] px-[clamp(24px,6vw,80px)] pb-1 gap-5 sm:mx-0 sm:px-0 sm:pb-0 sm:overflow-visible sm:grid sm:grid-cols-2 lg:grid-cols-4 3xl:gap-7"
+          className="flex overflow-x-auto snap-x snap-mandatory no-scrollbar -mx-[clamp(24px,6vw,80px)] px-[clamp(24px,6vw,80px)] pb-1 gap-5 sm:mx-0 sm:px-0 sm:pb-0 sm:overflow-visible sm:grid sm:grid-cols-2 lg:grid-cols-5 lg:gap-4 3xl:gap-7"
         >
           {AWARDS.map((award, i) => (
-            <div key={award.id} className="shrink-0 w-[78%] snap-center sm:w-auto sm:shrink">
+            <div key={award.id} className="h-full shrink-0 w-[78%] snap-center sm:w-auto sm:shrink">
               <Plaque award={award} index={i} />
             </div>
           ))}
